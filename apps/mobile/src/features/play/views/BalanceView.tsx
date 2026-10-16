@@ -4,10 +4,10 @@ import { StyleSheet, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
-import { useT } from '@/i18n';
+import { useT, type TFunction } from '@/i18n';
 import type { GameViewProps } from '../types';
 import { OptionGrid } from './controls';
-import { SHAPE_NAMES, Shape } from './shapes';
+import { SHAPE_KEYS, Shape } from './shapes';
 
 /** Balance shape ids 0..3 map to circle, square, triangle, star. Light-theme steps keep ≥3:1 on white. */
 const SHAPE_COLORS_DARK = ['#F472B6', '#60A5FA', '#FBBF24', '#34D399'] as const;
@@ -38,8 +38,8 @@ function Terms({ terms }: { terms: BalanceTerm[] }) {
   );
 }
 
-const describe = (terms: BalanceTerm[]) =>
-  terms.map((t) => `${t.count} ${SHAPE_NAMES[t.shape]?.toLowerCase()}${t.count === 1 ? '' : 's'}`).join(' plus ');
+const describe = (t: TFunction, terms: BalanceTerm[]) =>
+  terms.map((term) => t(`shapes.${SHAPE_KEYS[term.shape % SHAPE_KEYS.length] ?? 'circle'}`, { count: term.count })).join(` ${t('a11y.plus')} `);
 
 function Scale({ eq }: { eq: BalanceEquation }) {
   const { colors } = useTheme();
@@ -48,7 +48,7 @@ function Scale({ eq }: { eq: BalanceEquation }) {
     <View
       style={[styles.scale, { backgroundColor: colors.surface, borderColor: colors.border }]}
       accessible
-      accessibilityLabel={t('a11y.balances', { left: describe(eq.left), right: describe(eq.right) })}
+      accessibilityLabel={t('a11y.balances', { left: describe(t, eq.left), right: describe(t, eq.right) })}
     >
       <View style={styles.pan}>
         <Terms terms={eq.left} />

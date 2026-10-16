@@ -1,7 +1,8 @@
 import Svg, { Circle, Path, Polygon, Rect } from 'react-native-svg';
 
 /** Shapes used across games; ids are stable because trials reference them. */
-export const SHAPE_NAMES = ['Circle', 'Square', 'Triangle', 'Star', 'Hexagon', 'Diamond', 'Cross', 'Ring'] as const;
+export const SHAPE_KEYS = ['circle', 'square', 'triangle', 'star', 'hexagon', 'diamond', 'cross', 'ring'] as const;
+export type ShapeKey = (typeof SHAPE_KEYS)[number];
 
 const STAR = '50,8 61,38 93,38 67,57 77,89 50,70 23,89 33,57 7,38 39,38';
 const HEX = '50,6 88,28 88,72 50,94 12,72 12,28';
@@ -21,7 +22,7 @@ export function Shape({
 }) {
   const paint = filled ? { fill: color } : { fill: 'none', stroke: color, strokeWidth, strokeLinejoin: 'round' as const };
   let el;
-  switch (id % SHAPE_NAMES.length) {
+  switch (id % SHAPE_KEYS.length) {
     case 0:
       el = <Circle cx={50} cy={50} r={40} {...paint} />;
       break;

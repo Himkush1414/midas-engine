@@ -3,24 +3,30 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
-import { useT } from '@/i18n';
+import { useLanguage, useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 import { BinaryChoice } from './controls';
 import { Shape } from './shapes';
 
 /** Colour mode: chosen to stay distinguishable for most colour-vision types; shape mode avoids colour entirely. */
-const COLOR_NAMES = ['RED', 'BLUE', 'YELLOW', 'GREEN', 'PURPLE'] as const;
+const COLOR_KEYS = ['red', 'blue', 'yellow', 'green', 'purple'] as const;
 const COLOR_VALUES = ['#EF4444', '#3B82F6', '#FACC15', '#22C55E', '#A855F7'] as const;
-const SHAPE_WORDS = ['CIRCLE', 'SQUARE', 'TRIANGLE', 'STAR', 'HEXAGON'] as const;
+const SHAPE_KEYS = ['circle', 'square', 'triangle', 'star', 'hexagon'] as const;
 
 export function ClashView({ trial, onInputOpen, onAnswer, locked, shapeMode, demo }: GameViewProps<ClashTrial, boolean>) {
   const { colors } = useTheme();
   const t = useT();
+  const lang = useLanguage();
   useEffect(() => {
     onInputOpen();
   }, [onInputOpen]);
 
-  const words = shapeMode ? SHAPE_WORDS : COLOR_NAMES;
+  const keys = shapeMode ? SHAPE_KEYS : COLOR_KEYS;
+  const word = (i: number) => {
+    const key = keys[i];
+    return key ? t(`words.${key}`) : '';
+  };
+  const lower = (i: number) => word(i).toLocaleLowerCase(lang);
   const askLabel = trial.ask === 'ink' ? (shapeMode ? t('play.clashShape') : t('play.clashInk')) : t('play.clashMeaning');
   const answer = clashAnswer(trial);
 
@@ -37,8 +43,8 @@ export function ClashView({ trial, onInputOpen, onAnswer, locked, shapeMode, dem
         accessible
         accessibilityLabel={
           shapeMode
-            ? t('a11y.clashShape', { word: words[trial.word] ?? '', ink: SHAPE_WORDS[trial.ink]?.toLowerCase() ?? '' })
-            : t('a11y.clashColour', { word: words[trial.word] ?? '', ink: COLOR_NAMES[trial.ink]?.toLowerCase() ?? '' })
+            ? t('a11y.clashShape', { word: word(trial.word), ink: lower(trial.ink) })
+            : t('a11y.clashColour', { word: word(trial.word), ink: lower(trial.ink) })
         }
       >
         {shapeMode ? (
@@ -48,19 +54,19 @@ export function ClashView({ trial, onInputOpen, onAnswer, locked, shapeMode, dem
                 <Shape id={trial.ink} size={150} color={colors.textMuted} filled={false} strokeWidth={5} />
               </View>
             </View>
-            <Text variant="title" align="center">
-              {words[trial.word]}
+            <Text variant="title" align="center" numberOfLines={1} adjustsFontSizeToFit>
+              {word(trial.word)}
             </Text>
           </View>
         ) : (
-          <Text variant="hero" align="center" style={{ color: COLOR_VALUES[trial.ink] }}>
-            {words[trial.word]}
+          <Text variant="hero" align="center" numberOfLines={1} adjustsFontSizeToFit style={[styles.word, { color: COLOR_VALUES[trial.ink] }]}>
+            {word(trial.word)}
           </Text>
         )}
       </View>
       <View style={[styles.card, styles.probe, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-        <Text variant="title" align="center" accessibilityLabel={t('a11y.bottomWord', { word: words[trial.probe] ?? '' })}>
-          {words[trial.probe]}
+        <Text variant="title" align="center" accessibilityLabel={t('a11y.bottomWord', { word: word(trial.probe) })}>
+          {word(trial.probe)}
         </Text>
       </View>
       <View style={styles.actions}>
@@ -80,6 +86,7 @@ const styles = StyleSheet.create({
   cue: { alignSelf: 'center', paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, borderRadius: radii.pill },
   card: { height: 170, borderRadius: radii.xl, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   probe: { height: 100 },
+  word: { paddingHorizontal: spacing.md },
   shapeWrap: { width: 220, height: 160, alignItems: 'center', justifyContent: 'center' },
   shapeCenter: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   actions: { marginTop: 'auto', marginBottom: spacing.lg },
