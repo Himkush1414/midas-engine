@@ -37,8 +37,8 @@ export function ClashView({ trial, onInputOpen, onAnswer, locked, shapeMode, dem
         accessible
         accessibilityLabel={
           shapeMode
-            ? `Top: the word ${words[trial.word]} inside a ${SHAPE_WORDS[trial.ink]?.toLowerCase()}`
-            : `Top: the word ${words[trial.word]} written in ${COLOR_NAMES[trial.ink]?.toLowerCase()}`
+            ? t('a11y.clashShape', { word: words[trial.word] ?? '', ink: SHAPE_WORDS[trial.ink]?.toLowerCase() ?? '' })
+            : t('a11y.clashColour', { word: words[trial.word] ?? '', ink: COLOR_NAMES[trial.ink]?.toLowerCase() ?? '' })
         }
       >
         {shapeMode ? (
@@ -59,7 +59,7 @@ export function ClashView({ trial, onInputOpen, onAnswer, locked, shapeMode, dem
         )}
       </View>
       <View style={[styles.card, styles.probe, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-        <Text variant="title" align="center" accessibilityLabel={`Bottom word: ${words[trial.probe]}`}>
+        <Text variant="title" align="center" accessibilityLabel={t('a11y.bottomWord', { word: words[trial.probe] ?? '' })}>
           {words[trial.probe]}
         </Text>
       </View>

@@ -40,7 +40,7 @@ export function MatchView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
       <Text variant="label" tone="muted" align="center">
         {t('play.sameAsk')}
       </Text>
-      <View style={styles.pair} accessible accessibilityLabel="Two dot patterns">
+      <View style={styles.pair} accessible accessibilityLabel={t('a11y.twoPatterns')}>
         <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
           <DotGlyph size={136} cells={trial.left} dim={trial.size} color={color} frame={colors.border} />
         </View>

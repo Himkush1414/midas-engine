@@ -25,7 +25,7 @@ export function PatternView({ trial, onInputOpen, onAnswer, locked, demo }: Game
       <View
         style={styles.sequence}
         accessible
-        accessibilityLabel={`Sequence: ${trial.sequence.join(', ')}, then what?`}
+        accessibilityLabel={t('a11y.sequence', { terms: trial.sequence.join(', ') })}
       >
         {trial.sequence.map((n, i) => (
           <View key={i} style={[styles.term, { backgroundColor: colors.surface, borderColor: colors.border }]}>

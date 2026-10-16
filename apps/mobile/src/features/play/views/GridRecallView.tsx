@@ -64,7 +64,7 @@ export function GridRecallView({ trial, onInputOpen, onAnswer, locked, demo }: G
                   pressedScale={0.92}
                   disabled={phase !== 'recall' || locked}
                   onPress={() => tap(i)}
-                  accessibilityLabel={`Row ${r + 1}, column ${c + 1}${tapped ? ', selected' : ''}`}
+                  accessibilityLabel={t(tapped ? 'a11y.cellSelected' : 'a11y.cell', { row: r + 1, col: c + 1 })}
                   style={[styles.cell, { width: cell, height: cell, backgroundColor: bg, borderColor: border }]}
                 />
               );

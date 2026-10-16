@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
+import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 import { OptionGrid } from './controls';
 import { SHAPE_NAMES, Shape } from './shapes';
@@ -42,11 +43,12 @@ const describe = (terms: BalanceTerm[]) =>
 
 function Scale({ eq }: { eq: BalanceEquation }) {
   const { colors } = useTheme();
+  const t = useT();
   return (
     <View
       style={[styles.scale, { backgroundColor: colors.surface, borderColor: colors.border }]}
       accessible
-      accessibilityLabel={`${describe(eq.left)} balances ${describe(eq.right)}`}
+      accessibilityLabel={t('a11y.balances', { left: describe(eq.left), right: describe(eq.right) })}
     >
       <View style={styles.pan}>
         <Terms terms={eq.left} />

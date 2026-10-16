@@ -79,13 +79,13 @@ export function RouteView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
                   testID={`route-option-${option}`}
                   disabled={locked}
                   onPress={() => onAnswer(option)}
-                  accessibilityLabel={`Option ${LABELS[option]}`}
+                  accessibilityLabel={t('a11y.option', { label: LABELS[option] ?? '' })}
                   style={style}
                 >
                   {content}
                 </PressableScale>
               ) : (
-                <View key={i} style={style} accessibilityLabel={isStart ? 'Start tile' : undefined}>
+                <View key={i} style={style} accessibilityLabel={isStart ? t('a11y.startTile') : undefined}>
                   {content}
                 </View>
               );

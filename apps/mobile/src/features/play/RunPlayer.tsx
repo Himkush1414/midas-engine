@@ -54,8 +54,8 @@ export function RunPlayer({ gameId, mode, seed, rating, trialCount, reduceMotion
       haptic.wrong();
       play('wrong');
     }
-    const t = setTimeout(advance, feedbackMs(feedback, FAST_GAMES.has(gameId)));
-    return () => clearTimeout(t);
+    const timer = setTimeout(advance, feedbackMs(feedback, FAST_GAMES.has(gameId)));
+    return () => clearTimeout(timer);
   }, [feedback, advance, gameId]);
 
   useEffect(() => {

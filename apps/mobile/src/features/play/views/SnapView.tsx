@@ -21,11 +21,11 @@ export function SnapView({ trial, onInputOpen, onAnswer, locked, reduceMotion, d
 
   useEffect(() => {
     if (demo) return;
-    const t = setTimeout(() => {
+    const timer = setTimeout(() => {
       setShown(true);
       onInputOpen();
     }, trial.delayMs);
-    return () => clearTimeout(t);
+    return () => clearTimeout(timer);
   }, [trial, onInputOpen, demo]);
 
   const tap = () => {
@@ -44,7 +44,7 @@ export function SnapView({ trial, onInputOpen, onAnswer, locked, reduceMotion, d
       onPressIn={tap}
       style={[styles.area, { backgroundColor: colors.surface, borderColor: colors.border }]}
       accessibilityRole="button"
-      accessibilityLabel={shown ? (trial.go ? 'Target shown, tap now' : 'Lure shown, do not tap') : 'Wait for the shape'}
+      accessibilityLabel={shown ? (trial.go ? t('a11y.snapTarget') : t('a11y.snapLure')) : t('a11y.snapWait')}
     >
       <Text variant="label" tone="muted" align="center" style={styles.hint}>
         {falseStart && !shown ? t('play.snapEarly') : t('play.snapHint')}

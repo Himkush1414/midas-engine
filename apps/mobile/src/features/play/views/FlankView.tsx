@@ -36,7 +36,7 @@ export function FlankView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
       <View
         style={styles.row}
         accessible
-        accessibilityLabel={`Middle arrow points ${trial.center}${trial.reverse ? ', highlighted amber' : ''}`}
+        accessibilityLabel={t(trial.reverse ? 'a11y.flankRowReverse' : 'a11y.flankRow', { dir: t(trial.center === 'left' ? 'a11y.dirLeft' : 'a11y.dirRight') })}
       >
         {row.map((dir, i) => {
           const isCenter = i === centerIndex;

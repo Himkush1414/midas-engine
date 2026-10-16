@@ -31,7 +31,7 @@ export default function Reveal() {
   const tierShare = useTierShare(finished?.result.ratings ?? INITIAL);
 
   useEffect(() => {
-    const t = setTimeout(
+    const timer = setTimeout(
       () => {
         setRevealed(true);
         track('placement_completed');
@@ -40,7 +40,7 @@ export default function Reveal() {
       },
       reduce ? 400 : SUSPENSE_MS,
     );
-    return () => clearTimeout(t);
+    return () => clearTimeout(timer);
   }, [reduce]);
 
   if (!finished) return <Redirect href="/" />;

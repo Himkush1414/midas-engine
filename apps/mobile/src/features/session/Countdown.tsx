@@ -14,8 +14,8 @@ export function Countdown({ from = 3, reduceMotion, onDone }: { from?: number; r
     }
     haptic.tap();
     play('tick');
-    const t = setTimeout(() => setN((v) => v - 1), 650);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setN((v) => v - 1), 650);
+    return () => clearTimeout(timer);
   }, [n, onDone]);
 
   return (

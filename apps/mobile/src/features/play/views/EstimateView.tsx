@@ -7,16 +7,16 @@ import { radii, spacing, useTheme } from '@/theme';
 import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 
-function describeQuantity(q: Quantity): string {
+function describeQuantity(t: ReturnType<typeof useT>, q: Quantity): string {
   switch (q.kind) {
     case 'dots':
-      return 'a cloud of dots';
+      return t('a11y.dots');
     case 'fraction':
-      return `${q.num} over ${q.den}`;
+      return t('a11y.fraction', { num: q.num, den: q.den });
     case 'product':
-      return `${q.a} times ${q.b}`;
+      return t('a11y.product', { a: q.a, b: q.b });
     case 'percent':
-      return `${q.p} percent of ${q.of}`;
+      return t('a11y.percent', { p: q.p, of: q.of });
     case 'number':
       return String(q.value);
   }
@@ -74,7 +74,7 @@ export function EstimateView({ trial, onInputOpen, onAnswer, locked, demo }: Gam
             testID={`estimate-${i}`}
             disabled={locked}
             onPress={() => onAnswer(i as 0 | 1)}
-            accessibilityLabel={`${i === 0 ? 'Left' : 'Right'}: ${describeQuantity(q)}`}
+            accessibilityLabel={t('a11y.estimateSide', { side: t(i === 0 ? 'play.left' : 'play.right'), value: describeQuantity(t, q) })}
             style={[
               styles.card,
               {

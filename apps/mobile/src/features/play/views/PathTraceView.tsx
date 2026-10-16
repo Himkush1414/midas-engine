@@ -77,7 +77,7 @@ export function PathTraceView({ trial, onInputOpen, onAnswer, locked, demo }: Ga
                   pressedScale={0.9}
                   disabled={phase !== 'repeat' || locked}
                   onPress={() => tap(i)}
-                  accessibilityLabel={`Tile ${i + 1}`}
+                  accessibilityLabel={t('a11y.tile', { n: i + 1 })}
                   style={[
                     styles.tile,
                     {

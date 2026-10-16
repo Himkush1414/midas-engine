@@ -59,7 +59,7 @@ export function SpotView({ trial, onInputOpen, onAnswer, locked, demo }: GameVie
                   pressedScale={0.9}
                   disabled={locked}
                   onPress={() => onAnswer(i)}
-                  accessibilityLabel={`Ring ${i + 1}`}
+                  accessibilityLabel={t('a11y.ring', { n: i + 1 })}
                   style={[
                     styles.cell,
                     {
