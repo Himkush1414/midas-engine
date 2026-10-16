@@ -40,7 +40,7 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-16.
 - ☑ Landing page
 - ☑ Privacy policy, terms, refund policy, account-deletion page, support page
 - ☑ Duel invite landing page with deep links
-- ◐ Open Graph preview images for links
+- ☑ Open Graph preview images for the site and duel links
 - ☑ `assetlinks.json` / AASA for app links
 
 ## M5 — Store readiness
