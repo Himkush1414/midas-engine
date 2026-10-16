@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 # Commit and push following the project's PUSH_METHOD, step by step.
-# Usage: scripts/ship.sh "type(scope): message"
+# Usage: scripts/ship.sh "type(scope): message" [pathspec...]
+# With no pathspec every change is staged (git add .); with one, only those paths are.
 # The GitHub token is read from .env.local at runtime and passed through a
 # one-off credential helper; it is never written to git config or the remote URL.
 set -euo pipefail
 
 msg="${1:?commit message required}"
+shift
 root="$(git rev-parse --show-toplevel)"
 cd "$root"
 
@@ -23,7 +25,11 @@ git config user.name >/dev/null || true
 git config user.email >/dev/null || true
 git config user.name "Himkush1414"
 git config user.email "light.dark14143@gmail.com"
-git add .
+if [ "$#" -gt 0 ]; then
+  git add -- "$@"
+else
+  git add .
+fi
 
 if git diff --cached --quiet; then
   echo "ship: nothing staged, refusing to create an empty commit" >&2
