@@ -4,6 +4,10 @@ const nextConfig: NextConfig = {
   // The shared engine ships TypeScript source.
   transpilePackages: ['@mindtier/core'],
   poweredByHeader: false,
+  // The runtime OG image route reads its font from disk.
+  outputFileTracingIncludes: {
+    '/duel/[id]/opengraph-image': ['./src/assets/**'],
+  },
   async headers() {
     return [
       {
