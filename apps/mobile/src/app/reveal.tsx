@@ -7,6 +7,7 @@ import { Celebration } from '@/components/Celebration';
 import { SkillRadar } from '@/components/SkillRadar';
 import { DomainBadge, TierBadge } from '@/components/tier';
 import { Button, Card, ProgressBar, Screen, Text } from '@/components/ui';
+import { track } from '@/lib/analytics';
 import { haptic } from '@/lib/feedback';
 import { play } from '@/lib/sound';
 import { useReduceMotion } from '@/lib/motion';
@@ -28,6 +29,7 @@ export default function Reveal() {
     const t = setTimeout(
       () => {
         setRevealed(true);
+        track('placement_completed');
         haptic.success();
         play('rankup');
       },

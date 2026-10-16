@@ -8,6 +8,7 @@ import { Button, PressableScale, Screen, Text } from '@/components/ui';
 import { RunPlayer } from '@/features/play/RunPlayer';
 import { Countdown } from '@/features/session/Countdown';
 import { GameIntro } from '@/features/session/GameIntro';
+import { track } from '@/lib/analytics';
 import { useReduceMotion } from '@/lib/motion';
 import { useSession } from '@/state/session';
 import { spacing, useTheme } from '@/theme';
@@ -32,6 +33,7 @@ export default function SessionScreen() {
 
   const onRunDone = useCallback(
     (summary: RunSummary) => {
+      track('game_completed', { game: summary.gameId, mode: summary.mode, accuracy: Math.round(summary.accuracy * 10) / 10 });
       recordRun(summary);
       setLast(summary);
       setPhase('between');

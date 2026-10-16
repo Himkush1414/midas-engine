@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { TierBadge } from '@/components/tier';
 import { Button, Screen, Text } from '@/components/ui';
+import { track } from '@/lib/analytics';
 import { links } from '@/lib/links';
 import { useReduceMotion } from '@/lib/motion';
 import { useProgress } from '@/state/progress';
@@ -25,6 +26,7 @@ export default function Welcome() {
   const start = useSession((s) => s.start);
 
   const begin = () => {
+    track('onboarding_started');
     start(placementPlan(userSeed));
     router.push('/session');
   };
