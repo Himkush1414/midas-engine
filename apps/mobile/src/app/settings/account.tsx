@@ -18,6 +18,7 @@ import {
 } from '@/features/account/account';
 import { backendConfigured } from '@/lib/config';
 import { links } from '@/lib/links';
+import { useT } from '@/i18n';
 import { currentUserId } from '@/lib/supabase';
 import { useAccount } from '@/state/account';
 import { useEntitlements } from '@/state/entitlements';
@@ -27,6 +28,7 @@ type Flow = 'link' | 'signin';
 
 function EmailCodeForm({ flow, onDone }: { flow: Flow; onDone(): void }) {
   const { colors } = useTheme();
+  const t = useT();
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [sent, setSent] = useState(false);
@@ -55,11 +57,9 @@ function EmailCodeForm({ flow, onDone }: { flow: Flow; onDone(): void }) {
 
   return (
     <Card style={styles.gap}>
-      <Text weight="semibold">{flow === 'link' ? 'Save progress to your email' : 'Sign in with email'}</Text>
+      <Text weight="semibold">{flow === 'link' ? t('account.linkTitle') : t('account.signIn')}</Text>
       <Text variant="caption" tone="muted">
-        {flow === 'link'
-          ? 'We’ll email you a 6-digit code. Your ranks stay exactly as they are.'
-          : 'Use the email you saved your progress to. This replaces the progress on this device.'}
+        {flow === 'link' ? t('account.linkBody') : t('account.signInBody')}
       </Text>
       <TextInput
         value={email}
@@ -71,19 +71,19 @@ function EmailCodeForm({ flow, onDone }: { flow: Flow; onDone(): void }) {
         autoCapitalize="none"
         autoComplete="email"
         textContentType="emailAddress"
-        accessibilityLabel="Email address"
+        accessibilityLabel={t('account.emailA11y')}
         style={inputStyle}
       />
       {sent ? (
         <TextInput
           value={code}
           onChangeText={(t) => setCode(t.replace(/\D/g, '').slice(0, 6))}
-          placeholder="6-digit code"
+          placeholder={t('account.codePlaceholder')}
           placeholderTextColor={colors.textFaint}
           keyboardType="number-pad"
           autoComplete="one-time-code"
           textContentType="oneTimeCode"
-          accessibilityLabel="Verification code"
+          accessibilityLabel={t('account.codeA11y')}
           style={[inputStyle, styles.code]}
         />
       ) : null}
@@ -93,15 +93,16 @@ function EmailCodeForm({ flow, onDone }: { flow: Flow; onDone(): void }) {
         </Text>
       ) : null}
       {sent ? (
-        <Button label="Confirm code" loading={busy} disabled={!isValidCode(code)} onPress={verify} fullWidth />
+        <Button label={t('account.confirmCode')} loading={busy} disabled={!isValidCode(code)} onPress={verify} fullWidth />
       ) : (
-        <Button label="Email me a code" loading={busy} disabled={!isValidEmail(email)} onPress={send} fullWidth />
+        <Button label={t('account.emailCode')} loading={busy} disabled={!isValidEmail(email)} onPress={send} fullWidth />
       )}
     </Card>
   );
 }
 
 export default function AccountSettings() {
+  const t = useT();
   const email = useAccount((s) => s.email);
   const isPro = useEntitlements((s) => s.isPro);
   const [flow, setFlow] = useState<Flow | null>(null);
@@ -113,17 +114,17 @@ export default function AccountSettings() {
 
   const confirmDelete = () => {
     Alert.alert(
-      'Delete your account?',
-      `This permanently deletes your ranks, history, duels and leaderboard entries.${isPro ? ' It does not cancel your subscription — cancel it in the store first.' : ''}`,
+      t('account.deleteTitle'),
+      `${t('account.deleteBody')}${isPro ? t('account.deleteSubscription') : ''}`,
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Delete forever',
+          text: t('account.deleteForever'),
           style: 'destructive',
           onPress: async () => {
             const r = await deleteAccount();
             if (r.ok) router.replace('/');
-            else Alert.alert('Couldn’t delete', r.message);
+            else Alert.alert(t('account.deleteFailed'), r.message);
           },
         },
       ],
@@ -131,10 +132,10 @@ export default function AccountSettings() {
   };
 
   const confirmSignOut = () => {
-    Alert.alert('Sign out?', 'Your progress stays saved to your email. This device will start fresh.', [
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert(t('account.signOutTitle'), t('account.signOutBody'), [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Sign out',
+        text: t('account.signOut'),
         style: 'destructive',
         onPress: async () => {
           await signOut();
@@ -146,48 +147,48 @@ export default function AccountSettings() {
 
   return (
     <Screen scroll>
-      <BackHeader title="Account" />
+      <BackHeader title={t('account.title')} />
       <View style={styles.stack}>
         {!backendConfigured ? (
           <Card>
-            <Text tone="muted">Accounts are available in the full release. Your progress is saved on this device.</Text>
+            <Text tone="muted">{t('account.unavailable')}</Text>
           </Card>
         ) : email ? (
           <Card style={styles.gap}>
-            <Text weight="semibold">Progress saved</Text>
+            <Text weight="semibold">{t('account.saved')}</Text>
             <Text tone="muted">{email}</Text>
             <Text variant="caption" tone="faint">
-              On a new phone, choose “Sign in with email” and enter the code we send.
+              {t('account.newPhone')}
             </Text>
           </Card>
         ) : flow ? (
           <EmailCodeForm flow={flow} onDone={() => setFlow(null)} />
         ) : (
-          <SettingsSection title="Your progress">
-            <SettingsRow first icon="mail" label="Save progress to email" detail="Recommended — keeps your rank safe" onPress={() => setFlow('link')} />
-            <SettingsRow icon="logout" label="Sign in with email" detail="Already saved on another phone?" onPress={() => setFlow('signin')} />
+          <SettingsSection title={t('account.yourProgress')}>
+            <SettingsRow first icon="mail" label={t('account.saveToEmail')} detail={t('account.saveRecommended')} onPress={() => setFlow('link')} />
+            <SettingsRow icon="logout" label={t('account.signIn')} detail={t('account.signInDetail')} onPress={() => setFlow('signin')} />
           </SettingsSection>
         )}
 
         {userId ? (
-          <SettingsSection title="Account ID" footer="Include this when contacting support.">
+          <SettingsSection title={t('account.accountId')} footer={t('account.accountIdFooter')}>
             <SettingsRow
               first
               icon="copy"
               label={`${userId.slice(0, 8)}…${userId.slice(-4)}`}
-              detail="Tap to copy"
+              detail={t('account.tapToCopy')}
               onPress={() => {
                 void Clipboard.setStringAsync(userId);
-                Alert.alert('Copied', 'Account ID copied to the clipboard.');
+                Alert.alert(t('common.copied'), t('account.copiedBody'));
               }}
             />
           </SettingsSection>
         ) : null}
 
-        <SettingsSection title="Danger zone" footer="Deleting is permanent. You can also request deletion on our website.">
-          {email ? <SettingsRow first icon="logout" label="Sign out" onPress={confirmSignOut} /> : null}
-          <SettingsRow first={!email} icon="trash" label="Delete account" destructive onPress={confirmDelete} testID="delete-account" />
-          <SettingsRow icon="external" label="Deletion help" onPress={() => void WebBrowser.openBrowserAsync(links.deleteAccount)} />
+        <SettingsSection title={t('account.danger')} footer={t('account.dangerFooter')}>
+          {email ? <SettingsRow first icon="logout" label={t('account.signOut')} onPress={confirmSignOut} /> : null}
+          <SettingsRow first={!email} icon="trash" label={t('account.delete')} destructive onPress={confirmDelete} testID="delete-account" />
+          <SettingsRow icon="external" label={t('account.deletionHelp')} onPress={() => void WebBrowser.openBrowserAsync(links.deleteAccount)} />
         </SettingsSection>
       </View>
     </Screen>

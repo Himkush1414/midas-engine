@@ -1,16 +1,18 @@
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
+import { useT } from '@/i18n';
 import { spacing, useTheme } from '@/theme';
 import { Icon } from './icons/Icon';
 import { PressableScale, Text } from './ui';
 
 export function BackHeader({ title }: { title: string }) {
   const { colors } = useTheme();
+  const t = useT();
   return (
     <View style={styles.row}>
       <PressableScale
         onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
-        accessibilityLabel="Back"
+        accessibilityLabel={t('common.back')}
         style={styles.back}
       >
         <Icon name="back" size={24} color={colors.text} />

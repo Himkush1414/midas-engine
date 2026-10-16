@@ -6,26 +6,27 @@ import { Icon, type IconName } from '@/components/icons/Icon';
 import { TierBadge } from '@/components/tier';
 import { Button, PressableScale, Screen, Text } from '@/components/ui';
 import { ctaCopy, planDetail, planTitle } from '@/features/paywall/copy';
+import { useLanguage, useT, type TKey } from '@/i18n';
 import { track } from '@/lib/analytics';
 import { links } from '@/lib/links';
 import { scheduleTrialReminder } from '@/lib/notifications';
 import { applyEntitlement, purchases, type PlanOffer } from '@/lib/purchases';
 import { radii, spacing, useTheme } from '@/theme';
 
-const BENEFITS: { icon: IconName; text: string }[] = [
-  { icon: 'badge', text: 'Unlimited ranked sessions — climb as fast as you like' },
-  { icon: 'focus', text: 'Focus training: pick any domain and drill it' },
-  { icon: 'zen', text: 'All 13 games in untimed Zen mode' },
-  { icon: 'chart', text: 'Full rating history, percentiles and trends' },
-  { icon: 'duel', text: 'Unlimited duel challenges' },
+const BENEFITS: { icon: IconName; text: TKey }[] = [
+  { icon: 'badge', text: 'paywall.benefitRanked' },
+  { icon: 'focus', text: 'paywall.benefitFocus' },
+  { icon: 'zen', text: 'paywall.benefitZen' },
+  { icon: 'chart', text: 'paywall.benefitHistory' },
+  { icon: 'duel', text: 'paywall.benefitDuels' },
 ];
-
-const ALWAYS_FREE = 'Always free: a daily ranked session, the Daily Challenge, duels with friends — and no ads, ever.';
 
 const PREVIEW_BADGE = { tier: 'diamond' as const, division: 2 as const, label: 'Diamond II', provisional: false };
 
 export default function Paywall() {
   const { colors } = useTheme();
+  const t = useT();
+  const language = useLanguage();
   const { from } = useLocalSearchParams<{ from?: string }>();
   const [plans, setPlans] = useState<PlanOffer[] | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
@@ -49,8 +50,8 @@ export default function Paywall() {
   };
 
   const plan = plans?.find((p) => p.id === selected) ?? null;
-  const store = Platform.OS === 'ios' ? 'the App Store' : 'Google Play';
-  const copy = plan ? ctaCopy(plan, new Date(), store) : null;
+  const store = Platform.OS === 'ios' ? t('paywall.appStore') : t('paywall.googlePlay');
+  const copy = plan ? ctaCopy(t, plan, new Date(), store, language) : null;
 
   const buy = async () => {
     if (!plan) return;
@@ -66,9 +67,9 @@ export default function Paywall() {
       }
       close();
     } else if (outcome.status === 'pending') {
-      Alert.alert('Almost there', outcome.message);
+      Alert.alert(t('paywall.almostThere'), outcome.message);
     } else if (outcome.status === 'failed') {
-      Alert.alert('Purchase didn’t go through', outcome.message);
+      Alert.alert(t('paywall.failedTitle'), outcome.message);
     }
   };
 
@@ -77,10 +78,10 @@ export default function Paywall() {
     try {
       const e = await purchases.restore();
       applyEntitlement(e);
-      Alert.alert(e.isPro ? 'Pro restored' : 'Nothing to restore', e.isPro ? 'Welcome back.' : `No active Pro purchase was found for this ${store} account.`);
+      Alert.alert(e.isPro ? t('paywall.restoredTitle') : t('paywall.nothingTitle'), e.isPro ? t('paywall.restoredBody') : t('paywall.nothingBody', { store }));
       if (e.isPro) close();
     } catch {
-      Alert.alert('Couldn’t restore', 'Check your connection and try again.');
+      Alert.alert(t('paywall.restoreFailedTitle'), t('paywall.restoreFailedBody'));
     } finally {
       setBusy(null);
     }
@@ -92,7 +93,7 @@ export default function Paywall() {
       edges={['top', 'left', 'right', 'bottom']}
       footer={
         <View style={styles.footer}>
-          <Button label={copy?.button ?? 'Continue'} size="lg" fullWidth loading={busy === 'buy'} disabled={!plan || busy !== null} onPress={buy} testID="paywall-buy" />
+          <Button label={copy?.button ?? t('paywall.continue')} size="lg" fullWidth loading={busy === 'buy'} disabled={!plan || busy !== null} onPress={buy} testID="paywall-buy" />
           {copy ? (
             <Text variant="caption" tone="faint" align="center">
               {copy.terms}
@@ -100,22 +101,22 @@ export default function Paywall() {
           ) : null}
           <View style={styles.links}>
             <Text variant="caption" tone="primary" onPress={restore} accessibilityRole="button">
-              {busy === 'restore' ? 'Restoring…' : 'Restore purchases'}
+              {busy === 'restore' ? t('paywall.restoring') : t('paywall.restore')}
             </Text>
             <Text variant="caption" tone="faint">·</Text>
             <Text variant="caption" tone="primary" onPress={() => WebBrowser.openBrowserAsync(links.terms)} accessibilityRole="link">
-              Terms
+              {t('paywall.terms')}
             </Text>
             <Text variant="caption" tone="faint">·</Text>
             <Text variant="caption" tone="primary" onPress={() => WebBrowser.openBrowserAsync(links.privacy)} accessibilityRole="link">
-              Privacy
+              {t('paywall.privacy')}
             </Text>
           </View>
         </View>
       }
     >
       <View style={styles.top}>
-        <PressableScale onPress={close} accessibilityLabel="Close" style={[styles.close, { backgroundColor: colors.surfaceRaised }]} testID="paywall-close">
+        <PressableScale onPress={close} accessibilityLabel={t('common.close')} style={[styles.close, { backgroundColor: colors.surfaceRaised }]} testID="paywall-close">
           <Icon name="close" size={22} color={colors.text} />
         </PressableScale>
       </View>
@@ -123,10 +124,10 @@ export default function Paywall() {
       <View style={styles.hero}>
         <TierBadge info={PREVIEW_BADGE} size={96} />
         <Text variant="title" align="center">
-          Mindtier Pro
+          {t('paywall.title')}
         </Text>
         <Text tone="muted" align="center">
-          {from === 'placement' ? 'You’ve got your tier. Keep climbing without limits.' : 'Climb without limits.'}
+          {from === 'placement' ? t('paywall.afterPlacement') : t('paywall.tagline')}
         </Text>
       </View>
 
@@ -136,7 +137,7 @@ export default function Paywall() {
             <View style={[styles.benefitIcon, { backgroundColor: colors.surfaceRaised }]}>
               <Icon name={b.icon} size={20} color={colors.primaryText} />
             </View>
-            <Text style={styles.flex}>{b.text}</Text>
+            <Text style={styles.flex}>{t(b.text)}</Text>
           </View>
         ))}
       </View>
@@ -146,7 +147,7 @@ export default function Paywall() {
           <ActivityIndicator color={colors.primaryText} />
         ) : plans.length === 0 ? (
           <Text tone="muted" align="center">
-            Plans couldn’t load. Check your connection and try again.
+            {t('paywall.loadFailed')}
           </Text>
         ) : (
           plans.map((p) => {
@@ -157,7 +158,7 @@ export default function Paywall() {
                 onPress={() => setSelected(p.id)}
                 accessibilityRole="radio"
                 accessibilityState={{ selected: active }}
-                accessibilityLabel={`${planTitle(p.kind)}, ${planDetail(p)}${p.trialDays ? `, ${p.trialDays}-day free trial` : ''}`}
+                accessibilityLabel={`${t('paywall.planA11y', { plan: planTitle(t, p.kind), detail: planDetail(t, p) })}${p.trialDays ? t('paywall.trialA11y', { days: p.trialDays }) : ''}`}
                 style={[styles.plan, { borderColor: active ? colors.primaryText : colors.border, backgroundColor: active ? colors.surfaceRaised : colors.surface }]}
                 testID={`plan-${p.kind}`}
               >
@@ -165,15 +166,15 @@ export default function Paywall() {
                   {active ? <View style={[styles.radioDot, { backgroundColor: colors.primaryText }]} /> : null}
                 </View>
                 <View style={styles.flex}>
-                  <Text weight="semibold">{planTitle(p.kind)}</Text>
+                  <Text weight="semibold">{planTitle(t, p.kind)}</Text>
                   <Text variant="caption" tone="muted" tabular>
-                    {planDetail(p)}
+                    {planDetail(t, p)}
                   </Text>
                 </View>
                 {p.trialDays ? (
                   <View style={[styles.pill, { backgroundColor: colors.primary }]}>
                     <Text variant="caption" weight="bold" style={{ color: colors.onPrimary }}>
-                      {p.trialDays} days free
+                      {t('paywall.daysFree', { days: p.trialDays })}
                     </Text>
                   </View>
                 ) : null}
@@ -184,11 +185,11 @@ export default function Paywall() {
       </View>
 
       <Text variant="caption" tone="muted" align="center" style={styles.free}>
-        {ALWAYS_FREE}
+        {t('paywall.alwaysFree')}
       </Text>
       {!purchases.live ? (
         <Text variant="caption" tone="warning" align="center">
-          {__DEV__ ? 'Test build: purchases are simulated and no money is charged.' : 'Purchases aren’t available in this build yet.'}
+          {__DEV__ ? t('paywall.testBuild') : t('paywall.unavailableBuild')}
         </Text>
       ) : null}
     </Screen>

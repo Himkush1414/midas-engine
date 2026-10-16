@@ -1,4 +1,5 @@
 import { syncNow } from '@/features/sync/sync';
+import { getT } from '@/i18n';
 import { track } from '@/lib/analytics';
 import { api } from '@/lib/api';
 import { cancelAllLocalNotifications } from '@/lib/notifications';
@@ -18,15 +19,16 @@ export const isValidCode = (c: string) => /^\d{6}$/.test(c.trim());
 
 function client() {
   const sb = supabase();
-  if (!sb) throw new Error('Accounts aren’t available in this build.');
+  if (!sb) throw new Error(getT()('account.errUnavailable'));
   return sb;
 }
 
 const friendly = (message: string | undefined): string => {
-  if (!message) return 'Something went wrong. Please try again.';
-  if (/rate|too many|seconds/i.test(message)) return 'Too many attempts. Wait a minute and try again.';
-  if (/expired|invalid|token/i.test(message)) return 'That code is invalid or has expired. Request a new one.';
-  if (/already|registered|exists/i.test(message)) return 'That email already has a Mindtier account. Use “Sign in” instead.';
+  const t = getT();
+  if (!message) return t('account.errGeneric');
+  if (/rate|too many|seconds/i.test(message)) return t('account.errRate');
+  if (/expired|invalid|token/i.test(message)) return t('account.errCode');
+  if (/already|registered|exists/i.test(message)) return t('account.errExists');
   return message;
 };
 
@@ -92,7 +94,7 @@ export async function deleteAccount(): Promise<AccountResult> {
   try {
     await api.deleteAccount();
   } catch (e) {
-    return { ok: false, message: 'We couldn’t reach the server. Check your connection and try again.' + (__DEV__ ? ` (${(e as Error).message})` : '') };
+    return { ok: false, message: getT()('account.errNetwork') + (__DEV__ ? ` (${(e as Error).message})` : '') };
   }
   track('account_deleted');
   await supabase()?.auth.signOut({ scope: 'local' }).catch(() => undefined);
