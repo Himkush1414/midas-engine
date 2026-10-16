@@ -26,6 +26,7 @@ const echoNumber: GameDefinition<{ value: number }, number> = {
     const correct = response === trial.value;
     return { correct, score: correct ? 1 : 0 };
   },
+  solve: (trial) => trial.value,
   timeLimitMs: () => 5000,
   minHumanRtMs: 200,
   isResponse: (v): v is number => typeof v === 'number',

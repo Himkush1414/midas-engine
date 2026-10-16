@@ -51,6 +51,8 @@ export interface GameDefinition<TTrial = unknown, TResponse = unknown> {
    * trial's time limit are already converted to `null` by the runner.
    */
   evaluate(trial: TTrial, response: TResponse | null, rtMs: number): TrialOutcome;
+  /** The ideal response. Powers tutorials ("show me") and property tests. */
+  solve(trial: TTrial): TResponse | null;
   /** Per-trial answer window in ms (null = untimed). Zen mode ignores it. */
   timeLimitMs(level: number): number | null;
   /** Fastest plausible human response in ms, used by server validation. */
