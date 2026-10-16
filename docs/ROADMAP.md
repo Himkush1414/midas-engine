@@ -4,7 +4,7 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-16.
 
 ## M0 — Foundations
 - ☑ npm-workspaces monorepo: `apps/mobile` (Expo SDK 57), `apps/web` (Next.js on Vercel), `packages/core` (pure TS engine), `supabase/` (migrations)
-- ☑ TypeScript strict, ESLint, Prettier, Vitest, GitHub Actions CI
+- ☑ TypeScript strict, ESLint (zero warnings), Vitest + Jest, GitHub Actions CI
 - ☑ `.env.example`, environment validation, HANDOFF doc skeleton
 
 ## M1 — Core engine (`packages/core`)
@@ -17,7 +17,7 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-16.
 - ☑ Result validation (shared by client and server)
 
 ## M2 — Backend (Supabase + Vercel API)
-- ☑ Schema + RLS: profiles, ratings, rating_history, sessions, game_results, daily challenges/entries, duels, friendships, push tokens, entitlements, events, deletion requests
+- ☑ Schema + RLS: profiles, ratings, rating_history, sessions, game_results, daily challenges/entries, duels, push tokens, entitlements, events, deletion requests
 - ☑ Anonymous auth + identity linking (email codes; Google sign-in is post-launch)
 - ☑ API: submit session (server-side rating), daily leaderboard, duel create/join/result, account deletion, RevenueCat webhook
 - ☑ Plausibility checks (replay verification, timing floors, quotas); per-IP rate limiting via Vercel firewall is post-launch
@@ -28,8 +28,8 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-16.
 - ☑ Onboarding → placement → tier reveal ceremony → paywall
 - ☑ Home: today's ranked session, Daily Challenge, duels, streak
 - ☑ All 13 games with tutorials, Zen mode, haptics, sound
-- ☑ Results screen with rating deltas, rank-up animation, share card
-- ☑ Profile / stats: radar, rating history, percentiles
+- ☑ Results screen with rating deltas, rank-up animation and sharing (text; image share cards post-launch)
+- ☑ Profile / stats: radar, rating history (small multiples + table); Daily Challenge percentile
 - ☑ Duels: create, invite link, accept, result
 - ☑ Settings: theme, sounds, haptics, reminders, accessibility, manage subscription, restore, delete account, legal links
 - ☑ Offline outbox + background sync
@@ -39,14 +39,15 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-16.
 ## M4 — Web (Vercel)
 - ☑ Landing page
 - ☑ Privacy policy, terms, refund policy, account-deletion page, support page
-- ☑ Duel invite and share-card landing pages (deep links, OG images)
+- ☑ Duel invite landing page with deep links
+- ◐ Open Graph preview images for links
 - ☑ `assetlinks.json` / AASA for app links
 
 ## M5 — Store readiness
 - ☑ Icon (SVG master, adaptive icon, all PNG sizes), feature graphic, screenshots
 - ☑ Store listing copy, Data Safety answers, content-rating answers
 - ☑ EAS build profiles (AAB, production), target API level current, 64-bit
-- ☑ iOS: privacy manifest, Sign in with Apple, no ATT needed (no tracking)
+- ☑ iOS: privacy manifest, universal links; Sign in with Apple not required (no social login); no ATT (no tracking)
 - ☑ HANDOFF.md with exact manual steps
 
 ## Post-launch
