@@ -1,6 +1,7 @@
 import { flushAnalytics } from '@/lib/analytics';
 import { ApiError, api } from '@/lib/api';
 import { backendConfigured } from '@/lib/config';
+import { useAccount } from '@/state/account';
 import { useEntitlements } from '@/state/entitlements';
 import { useProgress } from '@/state/progress';
 
@@ -16,6 +17,7 @@ let running: Promise<SyncResult> | null = null;
 async function run(): Promise<SyncResult> {
   const progress = useProgress.getState();
   const boot = await api.bootstrap(progress.userSeed);
+  useAccount.getState().setDisplayName(boot.profile.displayName);
   useProgress.getState().adoptServerProfile({
     seed: boot.profile.seed,
     nextSessionIndex: boot.nextSessionIndex,
