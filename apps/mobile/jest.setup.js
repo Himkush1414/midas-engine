@@ -54,3 +54,6 @@ jest.mock('expo-audio', () => ({
   setAudioModeAsync: jest.fn(async () => undefined),
   createAudioPlayer: jest.fn(() => ({ volume: 1, seekTo: jest.fn(async () => undefined), play: jest.fn(), remove: jest.fn() })),
 }));
+
+jest.mock('react-native-view-shot', () => ({ captureRef: jest.fn(async () => 'file:///tmp/card.png') }));
+jest.mock('expo-sharing', () => ({ isAvailableAsync: jest.fn(async () => true), shareAsync: jest.fn(async () => undefined) }));

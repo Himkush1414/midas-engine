@@ -9,7 +9,7 @@ import { DomainBadge, TierBadge } from '@/components/tier';
 import { Button, Card, PressableScale, Screen, Text } from '@/components/ui';
 import { domainSeries, windowDelta } from '@/features/profile/history';
 import { ApiError, api } from '@/lib/api';
-import { shareText, tierShareText } from '@/lib/share';
+import { useTierShare } from '@/features/share/useTierShare';
 import { useAccount } from '@/state/account';
 import { useEntitlements } from '@/state/entitlements';
 import { useProgress } from '@/state/progress';
@@ -70,6 +70,7 @@ export default function Profile() {
   const streakState = useProgress((s) => s.streak);
   const isPro = useEntitlements((s) => s.isPro);
   const [table, setTable] = useState(false);
+  const tierShare = useTierShare(ratings);
 
   const streak = currentStreak(streakState, utcDayKey(new Date()));
   const overall = overallRating(ratings);
@@ -86,6 +87,7 @@ export default function Profile() {
 
   return (
     <Screen scroll>
+      {tierShare.card}
       <View style={styles.header}>
         <Text variant="caption" tone="faint" weight="semibold">
           YOU
@@ -106,7 +108,7 @@ export default function Profile() {
               </Text>
             </View>
           </View>
-          <Button label="Share my tier" icon="share" variant="secondary" fullWidth onPress={() => void shareText(tierShareText(ratings))} />
+          <Button label="Share my tier" icon="share" variant="secondary" fullWidth onPress={() => void tierShare.share()} />
         </Card>
 
         <View style={styles.stats}>

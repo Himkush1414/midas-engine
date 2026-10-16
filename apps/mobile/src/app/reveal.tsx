@@ -1,4 +1,4 @@
-import { DOMAINS, DOMAIN_LABELS, overallRating, tierInfo, type Domain } from '@mindtier/core';
+import { DOMAINS, DOMAIN_LABELS, initialRatings, overallRating, tierInfo, type Domain } from '@mindtier/core';
 import { Redirect, router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -11,12 +11,13 @@ import { track } from '@/lib/analytics';
 import { haptic } from '@/lib/feedback';
 import { play } from '@/lib/sound';
 import { useReduceMotion } from '@/lib/motion';
-import { shareText, tierShareText } from '@/lib/share';
+import { useTierShare } from '@/features/share/useTierShare';
 import { useEntitlements } from '@/state/entitlements';
 import { useSession } from '@/state/session';
 import { spacing, tierColors, useTheme } from '@/theme';
 
 const SUSPENSE_MS = 2200;
+const INITIAL = initialRatings();
 
 export default function Reveal() {
   const reduce = useReduceMotion();
@@ -24,6 +25,7 @@ export default function Reveal() {
   const finished = useSession((s) => s.finished);
   const isPro = useEntitlements((s) => s.isPro);
   const [revealed, setRevealed] = useState(false);
+  const tierShare = useTierShare(finished?.result.ratings ?? INITIAL);
 
   useEffect(() => {
     const t = setTimeout(
@@ -82,10 +84,11 @@ export default function Reveal() {
       footer={
         <View style={styles.footer}>
           <Button label="Start climbing" size="lg" iconRight="arrowRight" fullWidth onPress={next} testID="reveal-continue" />
-          <Button label="Share my tier" variant="ghost" icon="share" onPress={() => void shareText(tierShareText(ratings))} />
+          <Button label="Share my tier" variant="ghost" icon="share" onPress={() => void tierShare.share()} />
         </View>
       }
     >
+      {tierShare.card}
       <View style={styles.hero}>
         <Celebration colors={[c.highlight, c.base, '#FFFFFF']} reduceMotion={reduce} top={60} />
         <Text variant="label" tone="muted" align="center">
