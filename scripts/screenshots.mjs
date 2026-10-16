@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // Captures real screenshots of the app rendered with react-native-web.
 // Build once:  cd apps/mobile && EXPO_PUBLIC_QA_HOOKS=1 npx expo export --platform web --output-dir ../../.qa-web
-// Then:        node scripts/screenshots.mjs [--dist .qa-web] [--scheme dark|light] [--only name]
+// Then:        node scripts/screenshots.mjs [--dist .qa-web] [--scheme dark|light] [--lang en|es|pt|de|fr] [--only name]
 // (or point --base at a running `expo start --web` dev server)
-// Writes raw captures to store/screenshots/raw/<scheme>/ (1080×1920, 9:16 for Google Play).
+// Writes raw captures to store/screenshots/raw/<scheme>[-<lang>]/ (1080×1920, 9:16 for Google Play).
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import { createServer } from 'node:http';
@@ -37,7 +37,8 @@ function serve(dir) {
 }
 const SCHEME = arg('scheme', 'dark');
 const ONLY = arg('only', null);
-const OUT = join(root, 'store/screenshots/raw', SCHEME);
+const LANG = arg('lang', 'en');
+const OUT = join(root, 'store/screenshots/raw', LANG === 'en' ? SCHEME : `${SCHEME}-${LANG}`);
 
 // 412×732 CSS px at 2.625× ≈ 1080×1920.
 const VIEWPORT = { width: 412, height: 732 };
@@ -79,7 +80,7 @@ function demoState() {
     },
     'mindtier.account.v1': { state: { displayName: 'Alex', email: null, userId: null }, version: 1 },
     'mindtier.settings.v1': {
-      state: { theme: SCHEME, sound: true, haptics: true, motion: 'reduced', shapeMode: false, reminderEnabled: true, reminderHour: 19, reminderMinute: 0, hiddenGames: [] },
+      state: { theme: SCHEME, language: LANG, sound: true, haptics: true, motion: 'reduced', shapeMode: false, reminderEnabled: true, reminderHour: 19, reminderMinute: 0, hiddenGames: [] },
       version: 1,
     },
     'mindtier.duels.v1': {
@@ -275,7 +276,7 @@ const browser = await chromium.launch();
 await mkdir(OUT, { recursive: true });
 for (const scene of SCENES) {
   if (ONLY && !scene.name.includes(ONLY)) continue;
-  const context = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: DPR, colorScheme: SCHEME, reducedMotion: 'reduce' });
+  const context = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: DPR, colorScheme: SCHEME, reducedMotion: 'reduce', locale: LANG });
   const state = scene.fresh ? { 'mindtier.settings.v1': demoState()['mindtier.settings.v1'] } : demoState();
   await context.addInitScript((entries) => {
     if (sessionStorage.getItem('seeded')) return;
