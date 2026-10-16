@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { Text } from '@/components/ui';
 import { haptic } from '@/lib/feedback';
-import { domainColors, spacing, useTheme } from '@/theme';
+import { spacing, useTheme } from '@/theme';
 import { AnswerButton } from './controls';
 import type { GameViewProps } from '../types';
 import { Shape } from './shapes';
@@ -12,7 +12,7 @@ import { Shape } from './shapes';
 const SHOW_FRACTION = 0.75;
 
 export function EchoView({ trial, onInputOpen, onAnswer, locked, reduceMotion, demo }: GameViewProps<EchoTrial, boolean[]>) {
-  const { colors } = useTheme();
+  const { colors, domain: dc } = useTheme();
   const [index, setIndex] = useState(-1);
   const [visible, setVisible] = useState(false);
   const pressed = useRef<boolean[]>(trial.symbols.map(() => false));
@@ -45,7 +45,7 @@ export function EchoView({ trial, onInputOpen, onAnswer, locked, reduceMotion, d
   };
 
   const symbol = index >= 0 ? trial.symbols[index] : undefined;
-  const color = domainColors.memory;
+  const color = dc.memory;
 
   return (
     <View style={styles.root}>

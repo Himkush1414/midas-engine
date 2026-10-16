@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { DomainBadge } from '@/components/tier';
 import { Button, Card, Text } from '@/components/ui';
-import { domainColors, spacing } from '@/theme';
+import { spacing, useTheme } from '@/theme';
 
 const MODE_NOTE: Record<GameMode, string> = {
   placement: 'Placement match — sets your starting rank',
@@ -25,7 +25,7 @@ export interface GameIntroProps {
 
 export function GameIntro({ gameId, mode, position, total, reduceMotion, onStart, onPractice }: GameIntroProps) {
   const def = getGame(gameId);
-  const color = domainColors[def.domain];
+  const color = useTheme().domain[def.domain];
   return (
     <View style={styles.root}>
       <Animated.View entering={reduceMotion ? undefined : FadeInDown.duration(320)} style={styles.content}>

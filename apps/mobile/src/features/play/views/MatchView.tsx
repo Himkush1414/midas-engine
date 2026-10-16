@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Circle, Rect } from 'react-native-svg';
 import { Text } from '@/components/ui';
-import { domainColors, radii, spacing, useTheme } from '@/theme';
+import { radii, spacing, useTheme } from '@/theme';
 import type { GameViewProps } from '../types';
 import { BinaryChoice } from './controls';
 
@@ -27,11 +27,11 @@ function DotGlyph({ size, cells, dim, color, frame }: { size: number; cells: num
 }
 
 export function MatchView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<MatchTrial, boolean>) {
-  const { colors } = useTheme();
+  const { colors, domain: dc } = useTheme();
   useEffect(() => {
     onInputOpen();
   }, [onInputOpen]);
-  const color = domainColors.speed;
+  const color = dc.speed;
 
   return (
     <View style={styles.root}>

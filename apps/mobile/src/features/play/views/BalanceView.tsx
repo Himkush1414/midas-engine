@@ -3,15 +3,21 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Text } from '@/components/ui';
-import { domainColors, radii, spacing, useTheme } from '@/theme';
+import { radii, spacing, useTheme } from '@/theme';
 import type { GameViewProps } from '../types';
 import { OptionGrid } from './controls';
 import { SHAPE_NAMES, Shape } from './shapes';
 
-/** Balance shape ids 0..3 map to circle, square, triangle, star in the shared shape set. */
-const SHAPE_COLORS = ['#F472B6', '#60A5FA', '#FBBF24', '#34D399'] as const;
+/** Balance shape ids 0..3 map to circle, square, triangle, star. Light-theme steps keep ≥3:1 on white. */
+const SHAPE_COLORS_DARK = ['#F472B6', '#60A5FA', '#FBBF24', '#34D399'] as const;
+const SHAPE_COLORS_LIGHT = ['#BE185D', '#2563EB', '#B45309', '#047857'] as const;
+
+function useShapeColors() {
+  return useTheme().scheme === 'dark' ? SHAPE_COLORS_DARK : SHAPE_COLORS_LIGHT;
+}
 
 function Terms({ terms }: { terms: BalanceTerm[] }) {
+  const shapeColors = useShapeColors();
   return (
     <View style={styles.terms}>
       {terms.map((t, i) => (
@@ -19,7 +25,7 @@ function Terms({ terms }: { terms: BalanceTerm[] }) {
           <Text variant="subheading" tabular weight="semibold">
             {t.count}
           </Text>
-          <Shape id={t.shape} size={26} color={SHAPE_COLORS[t.shape] ?? '#FFFFFF'} />
+          <Shape id={t.shape} size={26} color={shapeColors[t.shape] ?? '#FFFFFF'} />
           {i < terms.length - 1 ? (
             <Text variant="subheading" tone="muted">
               +
@@ -56,7 +62,8 @@ function Scale({ eq }: { eq: BalanceEquation }) {
 }
 
 export function BalanceView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<BalanceTrial, number>) {
-  const { colors } = useTheme();
+  const { colors, domain: dc } = useTheme();
+  const shapeColors = useShapeColors();
   useEffect(() => {
     onInputOpen();
   }, [onInputOpen]);
@@ -68,13 +75,13 @@ export function BalanceView({ trial, onInputOpen, onAnswer, locked, demo }: Game
           <Scale key={i} eq={eq} />
         ))}
       </View>
-      <View style={[styles.question, { borderColor: domainColors.logic }]}>
+      <View style={[styles.question, { borderColor: dc.logic }]}>
         <Terms terms={[trial.ask]} />
         <Text variant="subheading">=</Text>
         <Text variant="heading" tone="primary">
           ?
         </Text>
-        <Shape id={trial.unit} size={26} color={SHAPE_COLORS[trial.unit] ?? colors.text} />
+        <Shape id={trial.unit} size={26} color={shapeColors[trial.unit] ?? colors.text} />
       </View>
       <View style={styles.actions}>
         <OptionGrid

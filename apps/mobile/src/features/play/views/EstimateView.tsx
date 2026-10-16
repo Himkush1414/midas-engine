@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { PressableScale, Text } from '@/components/ui';
-import { domainColors, radii, spacing, useTheme } from '@/theme';
+import { radii, spacing, useTheme } from '@/theme';
 import type { GameViewProps } from '../types';
 
 function describeQuantity(q: Quantity): string {
@@ -54,7 +54,7 @@ function QuantityFace({ q, color }: { q: Quantity; color: string }) {
 }
 
 export function EstimateView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<EstimateTrial, 0 | 1>) {
-  const { colors } = useTheme();
+  const { colors, domain: dc } = useTheme();
   useEffect(() => {
     onInputOpen();
   }, [onInputOpen]);
@@ -81,7 +81,7 @@ export function EstimateView({ trial, onInputOpen, onAnswer, locked, demo }: Gam
               },
             ]}
           >
-            <QuantityFace q={q} color={domainColors.math} />
+            <QuantityFace q={q} color={dc.math} />
           </PressableScale>
         ))}
       </View>

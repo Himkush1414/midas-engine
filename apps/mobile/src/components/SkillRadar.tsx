@@ -1,6 +1,6 @@
 import { DOMAINS, DOMAIN_LABELS, ITEM_RATING_MAX, ITEM_RATING_MIN, type DomainRatings } from '@mindtier/core';
 import Svg, { Circle, Line, Polygon, Text as SvgText } from 'react-native-svg';
-import { domainColors, fonts, useTheme } from '@/theme';
+import { fonts, useTheme } from '@/theme';
 
 export function radarPoint(index: number, value: number, radius: number, center: number): [number, number] {
   const angle = -Math.PI / 2 + (index * 2 * Math.PI) / DOMAINS.length;
@@ -13,7 +13,7 @@ export function normalise(rating: number): number {
 
 /** Five-axis skill shape. Labels sit outside the pentagon. */
 export function SkillRadar({ ratings, size = 260 }: { ratings: DomainRatings; size?: number }) {
-  const { colors } = useTheme();
+  const { colors, domain } = useTheme();
   const c = size / 2;
   const r = size * 0.34;
   const ring = (k: number) =>
@@ -33,7 +33,7 @@ export function SkillRadar({ ratings, size = 260 }: { ratings: DomainRatings; si
       <Polygon points={shape} fill={colors.primary} fillOpacity={0.28} stroke={colors.primaryText} strokeWidth={2.5} strokeLinejoin="round" />
       {DOMAINS.map((d, i) => {
         const [x, y] = radarPoint(i, normalise(ratings[d].rating), r, c);
-        return <Circle key={d} cx={x} cy={y} r={4.5} fill={domainColors[d]} />;
+        return <Circle key={d} cx={x} cy={y} r={4.5} fill={domain[d]} />;
       })}
       {DOMAINS.map((d, i) => {
         const [x, y] = radarPoint(i, 1.32, r, c);

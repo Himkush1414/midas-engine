@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { PressableScale, Text } from '@/components/ui';
-import { domainColors, radii, spacing, useTheme } from '@/theme';
+import { radii, spacing, useTheme } from '@/theme';
 import type { GameViewProps } from '../types';
 
 const LABELS = ['A', 'B', 'C', 'D'] as const;
@@ -18,7 +18,7 @@ function ArrowGlyph({ dir, size, color }: { dir: number; size: number; color: st
 }
 
 export function RouteView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<RouteTrial, number>) {
-  const { colors } = useTheme();
+  const { colors, domain: dc } = useTheme();
   const { width } = useWindowDimensions();
   useEffect(() => {
     onInputOpen();
@@ -43,7 +43,7 @@ export function RouteView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
               const option = optionAt.get(i);
               const isAnswer = option === trial.answerIndex;
               const border = isStart
-                ? domainColors.logic
+                ? dc.logic
                 : option !== undefined
                   ? (demo || locked) && isAnswer
                     ? colors.success
@@ -51,7 +51,7 @@ export function RouteView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
                   : colors.border;
               const content = (
                 <>
-                  <ArrowGlyph dir={trial.arrows[i] ?? 0} size={cell * 0.5} color={isStart ? domainColors.logic : colors.textMuted} />
+                  <ArrowGlyph dir={trial.arrows[i] ?? 0} size={cell * 0.5} color={isStart ? dc.logic : colors.textMuted} />
                   {option !== undefined ? (
                     <View style={[styles.tag, { backgroundColor: colors.primary }]}>
                       <Text variant="caption" weight="bold" style={{ color: colors.onPrimary }}>
@@ -67,7 +67,7 @@ export function RouteView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
                   width: cell,
                   height: cell,
                   borderColor: border,
-                  backgroundColor: isStart ? `${domainColors.logic}26` : colors.surface,
+                  backgroundColor: isStart ? `${dc.logic}26` : colors.surface,
                   borderWidth: isStart || option !== undefined ? 2 : 1,
                 },
               ];

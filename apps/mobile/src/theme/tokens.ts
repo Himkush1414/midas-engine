@@ -79,6 +79,16 @@ export const lightPalette: Palette = {
 /** Tier colours are the same in both themes (shared with the website). */
 export const tierColors = TIER_COLORS;
 
+/** Light-theme steps of the domain hues, validated for ≥3:1 on white and the chroma floor. */
+export const domainColorsLight: Record<Domain, string> = {
+  memory: '#6D4CF5',
+  focus: '#0891B2',
+  speed: '#B45309',
+  logic: '#047857',
+  math: '#BE185D',
+};
+
+/** Dark-theme domain hues (≥3:1 on the dark surfaces). */
 export const domainColors: Record<Domain, string> = {
   memory: '#8B6CFF',
   focus: '#22D3EE',

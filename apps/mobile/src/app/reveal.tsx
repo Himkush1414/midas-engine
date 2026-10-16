@@ -12,12 +12,13 @@ import { useReduceMotion } from '@/lib/motion';
 import { shareText, tierShareText } from '@/lib/share';
 import { useEntitlements } from '@/state/entitlements';
 import { useSession } from '@/state/session';
-import { domainColors, spacing, tierColors } from '@/theme';
+import { spacing, tierColors, useTheme } from '@/theme';
 
 const SUSPENSE_MS = 2200;
 
 export default function Reveal() {
   const reduce = useReduceMotion();
+  const { domain: domainColor } = useTheme();
   const finished = useSession((s) => s.finished);
   const isPro = useEntitlements((s) => s.isPro);
   const [revealed, setRevealed] = useState(false);
@@ -60,7 +61,7 @@ export default function Reveal() {
               <Animated.View key={d} entering={reduce ? undefined : FadeIn.delay(i * 280)} style={styles.barRow}>
                 <DomainBadge domain={d} size={32} />
                 <View style={styles.flex}>
-                  <ProgressBar value={(ratings[d].rating - 700) / 1700} color={domainColors[d]} />
+                  <ProgressBar value={(ratings[d].rating - 700) / 1700} color={domainColor[d]} />
                 </View>
               </Animated.View>
             ))}

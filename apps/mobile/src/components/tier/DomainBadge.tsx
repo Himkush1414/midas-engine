@@ -1,10 +1,10 @@
 import { DOMAIN_LABELS, type Domain } from '@mindtier/core';
 import { View } from 'react-native';
-import { domainColors, radii } from '@/theme';
+import { radii, useTheme } from '@/theme';
 import { Icon } from '../icons/Icon';
 
 export function DomainBadge({ domain, size = 40 }: { domain: Domain; size?: number }) {
-  const color = domainColors[domain];
+  const color = useTheme().domain[domain];
   return (
     <View
       accessible
