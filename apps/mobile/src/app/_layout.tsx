@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ErrorScreen } from '@/components/ErrorScreen';
+import { useAppLifecycle } from '@/features/sync/useAppLifecycle';
 import { useProgress } from '@/state/progress';
 import { useSettings } from '@/state/settings';
 import { ThemeProvider, useTheme } from '@/theme';
@@ -28,6 +29,7 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
 function AppStack() {
   const { colors, scheme } = useTheme();
   const placementDone = useProgress((s) => s.placementDone);
+  useAppLifecycle();
 
   useEffect(() => {
     void SystemUI.setBackgroundColorAsync(colors.background);
@@ -44,6 +46,7 @@ function AppStack() {
           <Stack.Screen name="welcome" />
         </Stack.Protected>
         <Stack.Screen name="session" options={{ gestureEnabled: false, animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="paywall" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
       </Stack>
     </>
   );
