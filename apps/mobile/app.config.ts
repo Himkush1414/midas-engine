@@ -3,6 +3,7 @@ import type { ConfigContext, ExpoConfig } from 'expo/config';
 const IS_DEV = process.env.APP_VARIANT === 'development';
 const IS_PREVIEW = process.env.APP_VARIANT === 'preview';
 
+const EAS_PROJECT_ID = 'd5f3f04d-c19f-4980-a108-d9db5774a0de';
 const BRAND_INK = '#0A0D1A';
 const WEB_HOST = new URL(process.env.EXPO_PUBLIC_WEB_URL ?? 'https://midas-engine.vercel.app').host;
 
@@ -73,5 +74,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   experiments: {
     typedRoutes: true,
     reactCompiler: true,
+  },
+  runtimeVersion: { policy: 'appVersion' },
+  updates: { url: `https://u.expo.dev/${EAS_PROJECT_ID}` },
+  extra: {
+    eas: { projectId: EAS_PROJECT_ID },
   },
 });
