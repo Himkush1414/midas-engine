@@ -28,7 +28,7 @@ const PROMISES = [
 const FAQ = [
   {
     q: 'How are ranks calculated?',
-    a: 'Mindtier uses Glicko-2, the rating system behind many online chess sites. Every puzzle has a difficulty rating; when you solve harder puzzles your rating rises. Ratings map to eight tiers — Iron to Grandmaster — with four divisions each up to Diamond.',
+    a: 'Mindtier uses Glicko-2, the rating system behind many online chess sites. Every puzzle has a difficulty rating; when you solve harder puzzles your rating rises. Ratings map to eight tiers — Iron to Grandmaster — with four divisions each up to Diamond. Placement can start you as high as Diamond; Master and Grandmaster are earned in ranked play.',
   },
   {
     q: 'Is this an IQ test?',

@@ -65,8 +65,8 @@ export default function Welcome() {
             What tier is your mind?
           </Text>
           <Text variant="subheading" tone="muted" align="center" weight="regular">
-            Play 5 quick placement games — Memory, Focus, Speed, Logic and Math — and get your rank from Iron to
-            Grandmaster. Then climb.
+            Play 5 quick placement games — Memory, Focus, Speed, Logic and Math — to get your starting rank. Then
+            climb all the way to Grandmaster.
           </Text>
         </Animated.View>
         <View style={styles.facts}>
