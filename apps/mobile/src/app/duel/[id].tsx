@@ -1,4 +1,6 @@
-import { DOMAIN_LABELS, duelPlan, getGame } from '@mindtier/core';
+import { duelPlan, getGame } from '@mindtier/core';
+import { useT } from '@/i18n';
+import { domainLabel } from '@/i18n/labels';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
@@ -13,6 +15,7 @@ import { spacing, useTheme } from '@/theme';
 
 export default function DuelScreen() {
   const { colors } = useTheme();
+  const t = useT();
   const params = useLocalSearchParams<{ id: string }>();
   const id = normaliseDuelCode(params.id ?? '');
   const local = useDuels((s) => s.duels.find((d) => d.id === id));
@@ -52,11 +55,11 @@ export default function DuelScreen() {
     return (
       <Screen>
         <View style={styles.center}>
-          <Text variant="heading">Duel not found</Text>
+          <Text variant="heading">{t('duels.notFound')}</Text>
           <Text tone="muted" align="center">
-            Check the code and try again.
+            {t('duels.checkCode')}
           </Text>
-          <Button label="Back" variant="secondary" onPress={close} />
+          <Button label={t('common.back')} variant="secondary" onPress={close} />
         </View>
       </Screen>
     );
@@ -71,18 +74,18 @@ export default function DuelScreen() {
   return (
     <Screen scroll edges={['top', 'left', 'right', 'bottom']}>
       <View style={styles.top}>
-        <PressableScale onPress={close} accessibilityLabel="Back" style={styles.back}>
+        <PressableScale onPress={close} accessibilityLabel={t('common.back')} style={styles.back}>
           <Icon name="back" size={24} color={colors.text} />
         </PressableScale>
         <Text variant="label" tone="faint" tabular>
-          DUEL {id.toUpperCase()}
+          {t('duels.duelLabel', { code: id.toUpperCase() })}
         </Text>
         <View style={styles.back} />
       </View>
 
       <View style={styles.stack}>
         <Text variant="title" align="center">
-          {info ? (local?.role === 'creator' || info.entries.find((e) => e.isMe && e.isCreator) ? 'Your challenge' : `${info.creatorName} challenged you`) : 'Duel'}
+          {info ? (local?.role === 'creator' || info.entries.find((e) => e.isMe && e.isCreator) ? t('duels.yourChallenge') : t('duels.challengedYou', { name: info.creatorName })) : t('duels.title')}
         </Text>
 
         <Card style={styles.gap}>
@@ -94,7 +97,7 @@ export default function DuelScreen() {
                 <View style={styles.flex}>
                   <Text weight="semibold">{def.name}</Text>
                   <Text variant="caption" tone="muted">
-                    {DOMAIN_LABELS[def.domain]}
+                    {domainLabel(t, def.domain)}
                   </Text>
                 </View>
               </View>
@@ -105,7 +108,7 @@ export default function DuelScreen() {
         {state === 'loading' ? <ActivityIndicator color={colors.primaryText} /> : null}
         {state === 'offline' ? (
           <Text tone="muted" align="center">
-            You’re offline — scores will appear when you reconnect.
+            {t('duels.offlineScores')}
           </Text>
         ) : null}
 
@@ -113,16 +116,16 @@ export default function DuelScreen() {
           <Card style={styles.scores}>
             <View style={styles.score}>
               <Text variant="caption" tone="faint">
-                YOU
+                {t('duels.you')}
               </Text>
               <Text variant="title" tabular>
                 {me ? me.points.toLocaleString() : '—'}
               </Text>
             </View>
-            <Text tone="faint">vs</Text>
+            <Text tone="faint">{t('duels.vs')}</Text>
             <View style={styles.score}>
               <Text variant="caption" tone="faint" numberOfLines={1}>
-                {(other?.name ?? 'FRIEND').toUpperCase()}
+                {(other?.name ?? t('duels.friend')).toUpperCase()}
               </Text>
               <Text variant="title" tabular>
                 {other ? other.points.toLocaleString() : '—'}
@@ -133,17 +136,17 @@ export default function DuelScreen() {
 
         {!placementDone ? (
           <Text tone="muted" align="center">
-            Finish your placement first, then come back to this duel.
+            {t('duels.placeFirst')}
           </Text>
         ) : expired ? (
           <Text tone="muted" align="center">
-            This duel has expired.
+            {t('duels.expired')}
           </Text>
         ) : !played ? (
-          <Button label="Play duel" icon="play" size="lg" fullWidth onPress={() => playDuel(id)} testID="duel-play" />
+          <Button label={t('duels.play')} icon="play" size="lg" fullWidth onPress={() => playDuel(id)} testID="duel-play" />
         ) : null}
 
-        <Button label="Share duel link" icon="share" variant="secondary" fullWidth onPress={() => shareDuel(id)} />
+        <Button label={t('duels.shareLink')} icon="share" variant="secondary" fullWidth onPress={() => shareDuel(id)} />
       </View>
     </Screen>
   );

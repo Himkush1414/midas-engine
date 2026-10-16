@@ -1,4 +1,6 @@
-import { DOMAIN_LABELS, dailyPlan, getGame, utcDayKey } from '@mindtier/core';
+import { dailyPlan, getGame, utcDayKey } from '@mindtier/core';
+import { useT } from '@/i18n';
+import { domainLabel } from '@/i18n/labels';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
@@ -18,6 +20,7 @@ import { spacing, useTheme } from '@/theme';
 
 export default function Daily() {
   const { colors } = useTheme();
+  const t = useT();
   const today = utcDayKey(new Date());
   const plan = dailyPlan(today);
   const record = useProgress((s) => s.daily[today]);
@@ -62,14 +65,14 @@ export default function Daily() {
   return (
     <Screen scroll>
       <View style={styles.header}>
-        <Text variant="title">Daily Challenge</Text>
-        <Text tone="muted">Same three puzzles for everyone · resets at 00:00 UTC</Text>
+        <Text variant="title">{t('daily.title')}</Text>
+        <Text tone="muted">{t('daily.subtitle')}</Text>
       </View>
 
       <View style={styles.stack}>
         <Card raised style={styles.gap}>
           <Text variant="caption" tone="faint" weight="semibold">
-            TODAY · {today}
+            {t('daily.today', { day: today })}
           </Text>
           {plan.games.map((g, i) => {
             const def = getGame(g);
@@ -79,7 +82,7 @@ export default function Daily() {
                 <View style={styles.flex}>
                   <Text weight="semibold">{def.name}</Text>
                   <Text variant="caption" tone="muted">
-                    {DOMAIN_LABELS[def.domain]}
+                    {domainLabel(t, def.domain)}
                   </Text>
                 </View>
                 {record ? (
@@ -93,15 +96,15 @@ export default function Daily() {
           {record ? (
             <>
               <Text variant="title" tabular align="center">
-                {record.points.toLocaleString()} pts
+                {t('common.points', { points: record.points })}
               </Text>
-              <Button label="Share result" icon="share" variant="secondary" fullWidth onPress={share} />
+              <Button label={t('daily.shareResult')} icon="share" variant="secondary" fullWidth onPress={share} />
               <Text variant="caption" tone="faint" align="center">
-                Next challenge in {next.hours}h {next.minutes}m
+                {t('daily.next', { hours: next.hours, minutes: next.minutes })}
               </Text>
             </>
           ) : (
-            <Button label="Play today’s challenge" icon="play" size="lg" fullWidth onPress={() => startDaily()} testID="daily-play" />
+            <Button label={t('daily.play')} icon="play" size="lg" fullWidth onPress={() => startDaily()} testID="daily-play" />
           )}
         </Card>
 
@@ -109,40 +112,40 @@ export default function Daily() {
           <Card style={styles.gap}>
             <View style={styles.boardHeader}>
               <Text variant="subheading" weight="semibold">
-                Leaderboard
+                {t('daily.leaderboard')}
               </Text>
               {board?.me?.percentile ? (
                 <Text tone="accent" weight="semibold">
-                  Top {Math.max(1, 100 - board.me.percentile + 1)}%
+                  {t('daily.topPercent', { percent: Math.max(1, 100 - board.me.percentile + 1) })}
                 </Text>
               ) : null}
             </View>
             {!backendConfigured ? (
-              <Text tone="muted">Leaderboards are available in the full release.</Text>
+              <Text tone="muted">{t('daily.unavailable')}</Text>
             ) : loading && !board ? (
               <ActivityIndicator color={colors.primaryText} />
             ) : offline && !board ? (
               <View style={styles.offline}>
                 <Icon name="wifiOff" size={20} color={colors.textMuted} />
                 <Text tone="muted" style={styles.flex}>
-                  You’re offline. Your score is saved and will be ranked when you reconnect.
+                  {t('daily.offline')}
                 </Text>
               </View>
             ) : board ? (
               <>
                 {!displayName ? (
-                  <Card onPress={() => router.push('/profile')} accessibilityLabel="Set a display name for the leaderboard">
+                  <Card onPress={() => router.push('/profile')} accessibilityLabel={t('daily.nameNudgeBody')}>
                     <Text variant="caption" weight="semibold">
-                      You appear as “Player”
+                      {t('daily.nameNudgeTitle')}
                     </Text>
                     <Text variant="caption" tone="muted">
-                      Tap to choose a name for leaderboards and duels.
+                      {t('daily.nameNudgeBody')}
                     </Text>
                   </Card>
                 ) : null}
                 <Text variant="caption" tone="muted">
-                  {board.total.toLocaleString()} {board.total === 1 ? 'player' : 'players'} today
-                  {board.me ? ` · you’re #${board.me.place}` : ''}
+                  {t('daily.players', { count: board.total })}
+                  {board.me ? t('daily.youAre', { place: board.me.place }) : ''}
                 </Text>
                 {board.top.slice(0, 20).map((e) => (
                   <View key={`${e.place}-${e.name}`} style={[styles.boardRow, e.me && { backgroundColor: colors.surfaceRaised }]}>
@@ -150,10 +153,10 @@ export default function Daily() {
                       {e.place}
                     </Text>
                     <Text style={styles.flex} weight={e.me ? 'semibold' : 'regular'} numberOfLines={1}>
-                      {e.me ? `${e.name} (you)` : e.name}
+                      {e.me ? t('daily.you', { name: e.name }) : e.name}
                     </Text>
                     <Text tabular weight="semibold">
-                      {e.points.toLocaleString()}
+                      {e.points.toLocaleString(undefined)}
                     </Text>
                   </View>
                 ))}

@@ -1,4 +1,6 @@
-import { DOMAINS, DOMAIN_LABELS, FREE_ZEN_GAMES, GAMES, GAMES_BY_DOMAIN } from '@mindtier/core';
+import { DOMAINS, FREE_ZEN_GAMES, GAMES, GAMES_BY_DOMAIN } from '@mindtier/core';
+import { useT } from '@/i18n';
+import { domainLabel, gameRules } from '@/i18n/labels';
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import { BackHeader } from '@/components/BackHeader';
@@ -11,12 +13,13 @@ import { spacing, useTheme } from '@/theme';
 
 export default function Zen() {
   const { colors } = useTheme();
+  const t = useT();
   const isPro = useEntitlements((s) => s.isPro);
   return (
     <Screen scroll>
-      <BackHeader title="Zen practice" />
+      <BackHeader title={t('zen.title')} />
       <Text tone="muted" style={styles.intro}>
-        No timer, no rating — just play. Great for learning a game before it counts.
+        {t('zen.intro')}
       </Text>
       <View style={styles.stack}>
         {DOMAINS.map((d) => (
@@ -24,7 +27,7 @@ export default function Zen() {
             <View style={styles.groupHeader}>
               <DomainBadge domain={d} size={28} />
               <Text variant="subheading" weight="semibold">
-                {DOMAIN_LABELS[d]}
+                {domainLabel(t, d)}
               </Text>
             </View>
             {GAMES_BY_DOMAIN[d].map((g) => {
@@ -34,14 +37,14 @@ export default function Zen() {
                 <Card
                   key={g}
                   onPress={() => (locked ? router.push({ pathname: '/paywall', params: { from: 'zen' } }) : startZen(g))}
-                  accessibilityLabel={`${GAMES[g].name}${locked ? ', Pro' : ''}`}
-                  accessibilityHint={locked ? 'Opens Mindtier Pro' : 'Starts an untimed practice game'}
+                  accessibilityLabel={`${GAMES[g].name}${locked ? t('zen.pro') : ''}`}
+                  accessibilityHint={locked ? t('zen.proHint') : t('zen.playHint')}
                 >
                   <View style={styles.row}>
                     <View style={styles.flex}>
                       <Text weight="semibold">{GAMES[g].name}</Text>
                       <Text variant="caption" tone="muted">
-                        {GAMES[g].rules}
+                        {gameRules(t, g)}
                       </Text>
                     </View>
                     <Icon name={locked ? 'lock' : 'play'} size={20} color={locked ? colors.textFaint : colors.primaryText} />

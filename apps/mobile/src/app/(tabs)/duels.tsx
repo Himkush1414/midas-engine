@@ -4,18 +4,22 @@ import { StyleSheet, TextInput, View } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
 import { Button, Card, Screen, Text } from '@/components/ui';
 import { createAndPlayDuel } from '@/features/duels/actions';
+import { useT, type TFunction } from '@/i18n';
 import { normaliseDuelCode, useDuels, type LocalDuel } from '@/state/duels';
 import { fonts, radii, spacing, useTheme } from '@/theme';
 
-function status(d: LocalDuel): { label: string; tone: 'success' | 'danger' | 'muted' | 'accent' } {
-  if (d.myPoints === null) return { label: 'Your turn', tone: 'accent' };
-  if (!d.opponent) return { label: 'Waiting for your friend', tone: 'muted' };
-  if (d.myPoints === d.opponent.points) return { label: 'Draw', tone: 'muted' };
-  return d.myPoints > d.opponent.points ? { label: `You won vs ${d.opponent.name}`, tone: 'success' } : { label: `${d.opponent.name} won`, tone: 'danger' };
+function status(t: TFunction, d: LocalDuel): { label: string; tone: 'success' | 'danger' | 'muted' | 'accent' } {
+  if (d.myPoints === null) return { label: t('duels.yourTurn'), tone: 'accent' };
+  if (!d.opponent) return { label: t('duels.waiting'), tone: 'muted' };
+  if (d.myPoints === d.opponent.points) return { label: t('duels.draw'), tone: 'muted' };
+  return d.myPoints > d.opponent.points
+    ? { label: t('duels.youWon', { name: d.opponent.name }), tone: 'success' }
+    : { label: t('duels.theyWon', { name: d.opponent.name }), tone: 'danger' };
 }
 
 export default function Duels() {
   const { colors } = useTheme();
+  const t = useT();
   const duels = useDuels((s) => s.duels);
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
@@ -30,8 +34,8 @@ export default function Duels() {
   return (
     <Screen scroll>
       <View style={styles.header}>
-        <Text variant="title">Duels</Text>
-        <Text tone="muted">Same three puzzles for both of you. Highest score wins.</Text>
+        <Text variant="title">{t('duels.title')}</Text>
+        <Text tone="muted">{t('duels.subtitle')}</Text>
       </View>
 
       <View style={styles.stack}>
@@ -42,41 +46,41 @@ export default function Duels() {
             </View>
             <View style={styles.flex}>
               <Text variant="subheading" weight="semibold">
-                Challenge a friend
+                {t('duels.challengeTitle')}
               </Text>
               <Text variant="caption" tone="muted">
-                Play your run, then send the link. Duels stay open for 7 days.
+                {t('duels.challengeBody')}
               </Text>
             </View>
           </View>
-          <Button label="New duel" icon="userPlus" size="lg" fullWidth loading={busy} onPress={create} testID="duel-new" />
+          <Button label={t('duels.newDuel')} icon="userPlus" size="lg" fullWidth loading={busy} onPress={create} testID="duel-new" />
         </Card>
 
         <Card style={styles.gap}>
-          <Text weight="semibold">Got a code?</Text>
+          <Text weight="semibold">{t('duels.gotCode')}</Text>
           <View style={styles.row}>
             <TextInput
               value={code}
               onChangeText={setCode}
-              placeholder="e.g. K7PX2MQA"
+              placeholder={t('duels.codePlaceholder')}
               placeholderTextColor={colors.textFaint}
               autoCapitalize="characters"
               autoCorrect={false}
               maxLength={80}
-              accessibilityLabel="Duel code or link"
+              accessibilityLabel={t('duels.codeA11y')}
               style={[styles.input, { color: colors.text, borderColor: colors.borderStrong, backgroundColor: colors.surfaceSunken, fontFamily: fonts.bodySemibold }]}
             />
-            <Button label="Open" disabled={!parsed} onPress={() => parsed && router.push(`/duel/${parsed}`)} />
+            <Button label={t('common.open')} disabled={!parsed} onPress={() => parsed && router.push(`/duel/${parsed}`)} />
           </View>
         </Card>
 
         {duels.length > 0 ? (
           <View style={styles.gap}>
             <Text variant="subheading" weight="semibold">
-              Your duels
+              {t('duels.yours')}
             </Text>
             {duels.map((d) => {
-              const s = status(d);
+              const s = status(t, d);
               return (
                 <Card key={d.id} onPress={() => router.push(`/duel/${d.id}`)} accessibilityLabel={`Duel ${d.id}, ${s.label}`}>
                   <View style={styles.row}>
@@ -101,7 +105,7 @@ export default function Duels() {
           </View>
         ) : (
           <Text tone="faint" align="center">
-            No duels yet. Start one — it’s more fun with a rival.
+            {t('duels.empty')}
           </Text>
         )}
       </View>
