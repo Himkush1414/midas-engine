@@ -35,7 +35,7 @@ export default function DeleteAccount() {
         <li>Your profile and display name, and any email linked to your sign-in</li>
         <li>Your ratings, rating history, game results and session records</li>
         <li>Your Daily Challenge leaderboard entries and duel entries</li>
-        <li>Your Pro entitlement record and analytics events linked to your account</li>
+        <li>Your Pro entitlement record, notification tokens and analytics events linked to your account</li>
       </ul>
       <h2>What is kept</h2>
       <ul>
