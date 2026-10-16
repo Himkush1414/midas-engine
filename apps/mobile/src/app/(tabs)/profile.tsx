@@ -41,7 +41,7 @@ function NameEditor() {
         <Text variant="title" numberOfLines={1} style={styles.flex}>
           {displayName ?? 'Player'}
         </Text>
-        <Icon name="settings" size={18} color={colors.textFaint} />
+        <Icon name="edit" size={18} color={colors.textFaint} />
       </PressableScale>
     );
   }
