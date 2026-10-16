@@ -1,4 +1,4 @@
-import type { Domain, TierId } from '@mindtier/core';
+import { TIER_COLORS, type Domain } from '@mindtier/core';
 
 /** Semantic colour roles. Every component reads colours from here, never hard-codes them. */
 export interface Palette {
@@ -76,17 +76,8 @@ export const lightPalette: Palette = {
   brandGradient: ['#6A47F5', '#0891B2'],
 };
 
-/** Tier colours are the same in both themes: [highlight, base, deep]. */
-export const tierColors: Record<TierId, { highlight: string; base: string; deep: string }> = {
-  iron: { highlight: '#B4B9C4', base: '#7E8492', deep: '#4B505C' },
-  bronze: { highlight: '#F0B27A', base: '#C9773B', deep: '#7A4219' },
-  silver: { highlight: '#F1F4F9', base: '#B8C2D2', deep: '#6F7B90' },
-  gold: { highlight: '#FFE7A0', base: '#F4BE3A', deep: '#A7700A' },
-  platinum: { highlight: '#A7F3E4', base: '#2DD4BF', deep: '#0F766E' },
-  diamond: { highlight: '#BAE6FD', base: '#60A5FA', deep: '#4338CA' },
-  master: { highlight: '#E9D5FF', base: '#A855F7', deep: '#6B21A8' },
-  grandmaster: { highlight: '#FFE4E6', base: '#F43F5E', deep: '#9F1239' },
-};
+/** Tier colours are the same in both themes (shared with the website). */
+export const tierColors = TIER_COLORS;
 
 export const domainColors: Record<Domain, string> = {
   memory: '#8B6CFF',

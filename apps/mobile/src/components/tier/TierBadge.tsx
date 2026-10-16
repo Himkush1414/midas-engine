@@ -1,8 +1,7 @@
-import { TIER_LABELS, type TierInfo } from '@mindtier/core';
+import { BADGE_INNER, BADGE_OUTER, EMBLEMS, LIGHT_TIERS, PIP_XS, PIP_Y, TIER_LABELS, type TierInfo } from '@mindtier/core';
 import { memo, useId } from 'react';
 import Svg, { Circle, Defs, LinearGradient, Path, Polygon, Stop, Text as SvgText } from 'react-native-svg';
 import { tierColors, useTheme } from '@/theme';
-import { BADGE_INNER, BADGE_OUTER, EMBLEMS, LIGHT_TIERS, PIP_XS, PIP_Y } from './badgeArt';
 
 export interface TierBadgeProps {
   info: Pick<TierInfo, 'tier' | 'division' | 'label' | 'provisional'>;

@@ -1,4 +1,4 @@
-import type { TierId } from '@mindtier/core';
+import type { TierId } from '../tiers';
 
 /**
  * Tier badge artwork on a 100×100 canvas, shared by the in-app badge and the
@@ -35,3 +35,15 @@ export const PIP_XS = [41, 47, 53, 59] as const;
 
 /** Light tiers get dark emblems for contrast. */
 export const LIGHT_TIERS: ReadonlySet<TierId> = new Set(['silver', 'gold', 'platinum']);
+
+/** Tier palette shared by the app and the website: highlight → base → deep. */
+export const TIER_COLORS: Record<TierId, { highlight: string; base: string; deep: string }> = {
+  iron: { highlight: '#B4B9C4', base: '#7E8492', deep: '#4B505C' },
+  bronze: { highlight: '#F0B27A', base: '#C9773B', deep: '#7A4219' },
+  silver: { highlight: '#F1F4F9', base: '#B8C2D2', deep: '#6F7B90' },
+  gold: { highlight: '#FFE7A0', base: '#F4BE3A', deep: '#A7700A' },
+  platinum: { highlight: '#A7F3E4', base: '#2DD4BF', deep: '#0F766E' },
+  diamond: { highlight: '#BAE6FD', base: '#60A5FA', deep: '#4338CA' },
+  master: { highlight: '#E9D5FF', base: '#A855F7', deep: '#6B21A8' },
+  grandmaster: { highlight: '#FFE4E6', base: '#F43F5E', deep: '#9F1239' },
+};

@@ -24,3 +24,4 @@ export * from './games/estimate';
 export * from './verify';
 export * from './streak';
 export * from './limits';
+export * from './art/badges';
