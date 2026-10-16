@@ -90,7 +90,7 @@ export default function Results() {
         ) : (
           <>
             <Text variant="title" align="center" tabular>
-              {points.toLocaleString()} pts
+              {plan.mode === 'zen' ? `${Math.round((runs[0]?.accuracy ?? 0) * 100)}% accuracy` : `${points.toLocaleString()} pts`}
             </Text>
             <Text tone="muted" align="center">
               {plan.mode === 'daily' ? 'Daily Challenge complete' : plan.mode === 'duel' ? 'Your duel run is in' : 'Practice complete — unrated'}
@@ -111,7 +111,7 @@ export default function Results() {
             <Card key={`${r.gameId}-${i}`}>
               <Text weight="semibold">{Math.round(r.accuracy * 100)}% accuracy</Text>
               <Text variant="caption" tone="muted" tabular>
-                {r.points.toLocaleString()} pts · peak level {r.peakLevel}
+                {plan.mode === 'zen' ? `Reached level ${Math.max(1, r.peakLevel)}` : `${r.points.toLocaleString()} pts · peak level ${r.peakLevel}`}
               </Text>
             </Card>
           ))}
