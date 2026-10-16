@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, { Easing, cancelAnimation, interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, ReduceMotion, cancelAnimation, interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { radii, useTheme } from '@/theme';
 
 export interface TimerBarProps {
@@ -32,7 +32,8 @@ export function TimerBar({ durationMs, startedAt, frozen, onExpire }: TimerBarPr
     const elapsed = Math.max(0, now() - startedAt);
     const left = Math.max(0, durationMs - elapsed);
     remaining.set(left / durationMs);
-    remaining.set(withTiming(0, { duration: left, easing: Easing.linear }));
+    // The countdown is information, not decoration: it must animate even with reduced motion.
+    remaining.set(withTiming(0, { duration: left, easing: Easing.linear, reduceMotion: ReduceMotion.Never }));
     const timeout = setTimeout(onExpire, left + 16);
     return () => clearTimeout(timeout);
   }, [durationMs, startedAt, frozen, onExpire, remaining]);
