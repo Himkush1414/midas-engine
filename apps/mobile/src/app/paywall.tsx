@@ -188,7 +188,7 @@ export default function Paywall() {
       </Text>
       {!purchases.live ? (
         <Text variant="caption" tone="warning" align="center">
-          Test build: purchases are simulated and no money is charged.
+          {__DEV__ ? 'Test build: purchases are simulated and no money is charged.' : 'Purchases aren’t available in this build yet.'}
         </Text>
       ) : null}
     </Screen>
