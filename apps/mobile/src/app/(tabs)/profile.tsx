@@ -1,4 +1,6 @@
-import { DOMAINS, DOMAIN_LABELS, currentStreak, overallRating, tierInfo, utcDayKey } from '@mindtier/core';
+import { DOMAINS, currentStreak, overallRating, tierInfo, utcDayKey } from '@mindtier/core';
+import { useT } from '@/i18n';
+import { domainLabel, tierLabel } from '@/i18n/labels';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, StyleSheet, TextInput, View } from 'react-native';
@@ -17,6 +19,7 @@ import { fonts, radii, spacing, useTheme } from '@/theme';
 
 function NameEditor() {
   const { colors } = useTheme();
+  const t = useT();
   const displayName = useAccount((s) => s.displayName);
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(displayName ?? '');
@@ -29,7 +32,7 @@ function NameEditor() {
       useAccount.getState().setDisplayName(res.displayName);
       setEditing(false);
     } catch (e) {
-      Alert.alert('Couldn’t save name', e instanceof ApiError && e.status === 422 ? e.message : 'Check your connection and try again.');
+      Alert.alert(t('profile.nameFailed'), e instanceof ApiError && e.status === 422 ? e.message : t('profile.nameOffline'));
     } finally {
       setBusy(false);
     }
@@ -37,9 +40,9 @@ function NameEditor() {
 
   if (!editing) {
     return (
-      <PressableScale onPress={() => setEditing(true)} accessibilityLabel="Edit display name" style={styles.nameRow}>
+      <PressableScale onPress={() => setEditing(true)} accessibilityLabel={t('profile.editName')} style={styles.nameRow}>
         <Text variant="title" numberOfLines={1} style={styles.flex}>
-          {displayName ?? 'Player'}
+          {displayName ?? t('profile.player')}
         </Text>
         <Icon name="edit" size={18} color={colors.textFaint} />
       </PressableScale>
@@ -52,18 +55,19 @@ function NameEditor() {
         onChangeText={setValue}
         autoFocus
         maxLength={24}
-        placeholder="Display name"
+        placeholder={t('profile.namePlaceholder')}
         placeholderTextColor={colors.textFaint}
-        accessibilityLabel="Display name"
+        accessibilityLabel={t('profile.namePlaceholder')}
         style={[styles.input, { color: colors.text, borderColor: colors.borderStrong, backgroundColor: colors.surfaceSunken, fontFamily: fonts.bodySemibold }]}
       />
-      <Button label="Save" loading={busy} disabled={value.trim().length < 2} onPress={save} />
+      <Button label={t('common.save')} loading={busy} disabled={value.trim().length < 2} onPress={save} />
     </View>
   );
 }
 
 export default function Profile() {
   const { colors, domain: dc } = useTheme();
+  const t = useT();
   const ratings = useProgress((s) => s.ratings);
   const history = useProgress((s) => s.history);
   const gamesPlayed = useProgress((s) => s.gamesPlayed);
@@ -79,10 +83,10 @@ export default function Profile() {
   const truncated = series.some((s) => s.truncated);
 
   const stats = [
-    { label: 'Games played', value: gamesPlayed },
-    { label: 'Streak', value: streak.current },
-    { label: 'Best streak', value: streak.best },
-    { label: 'Shields', value: streak.shields },
+    { label: t('profile.gamesPlayed'), value: gamesPlayed },
+    { label: t('profile.streak'), value: streak.current },
+    { label: t('profile.bestStreak'), value: streak.best },
+    { label: t('profile.shields'), value: streak.shields },
   ];
 
   return (
@@ -90,9 +94,9 @@ export default function Profile() {
       {tierShare.card}
       <View style={styles.header}>
         <Text variant="caption" tone="faint" weight="semibold">
-          YOU
+          {t('profile.you')}
         </Text>
-        <PressableScale onPress={() => router.push('/settings')} accessibilityLabel="Settings" style={styles.iconButton}>
+        <PressableScale onPress={() => router.push('/settings')} accessibilityLabel={t('home.settings')} style={styles.iconButton}>
           <Icon name="settings" size={24} color={colors.textMuted} />
         </PressableScale>
       </View>
@@ -104,11 +108,11 @@ export default function Profile() {
             <View style={styles.flex}>
               <NameEditor />
               <Text tone="muted" tabular>
-                {info.label} · {Math.round(overall.rating)}
+                {tierLabel(t, info)} · {Math.round(overall.rating)}
               </Text>
             </View>
           </View>
-          <Button label="Share my tier" icon="share" variant="secondary" fullWidth onPress={() => void tierShare.share()} />
+          <Button label={t('profile.shareTier')} icon="share" variant="secondary" fullWidth onPress={() => void tierShare.share()} />
         </Card>
 
         <View style={styles.stats}>
@@ -130,11 +134,11 @@ export default function Profile() {
 
         <View style={styles.sectionHeader}>
           <Text variant="subheading" weight="semibold">
-            Rating history
+            {t('profile.history')}
           </Text>
-          <PressableScale onPress={() => setTable((t) => !t)} accessibilityLabel={table ? 'Show charts' : 'Show as table'} hapticOnPress>
+          <PressableScale onPress={() => setTable((t) => !t)} accessibilityLabel={table ? t('profile.showCharts') : t('profile.showTable')} hapticOnPress>
             <Text variant="caption" tone="primary" weight="semibold">
-              {table ? 'Charts' : 'Table'}
+              {table ? t('profile.charts') : t('profile.table')}
             </Text>
           </PressableScale>
         </View>
@@ -146,7 +150,7 @@ export default function Profile() {
               const delta = windowDelta(s.points);
               return (
                 <View key={s.domain} style={[styles.tableRow, i > 0 && { borderTopWidth: 1, borderTopColor: colors.border }]}>
-                  <Text style={styles.flex}>{DOMAIN_LABELS[s.domain]}</Text>
+                  <Text style={styles.flex}>{domainLabel(t, s.domain)}</Text>
                   <Text tabular weight="semibold">
                     {last ? Math.round(last.value) : '—'}
                   </Text>
@@ -155,7 +159,7 @@ export default function Profile() {
                     {Math.abs(delta)}
                   </Text>
                   <Text variant="caption" tone="faint" style={styles.count}>
-                    {s.points.length} pts
+                    {t('profile.historyPoints', { count: s.points.length })}
                   </Text>
                 </View>
               );
@@ -169,7 +173,7 @@ export default function Profile() {
                 <View style={styles.chartHeader}>
                   <DomainBadge domain={s.domain} size={28} />
                   <Text weight="semibold" style={styles.flex}>
-                    {DOMAIN_LABELS[s.domain]}
+                    {domainLabel(t, s.domain)}
                   </Text>
                   <Text tabular weight="semibold">
                     {Math.round(ratings[s.domain].rating)}
@@ -179,17 +183,17 @@ export default function Profile() {
                     {Math.abs(delta)}
                   </Text>
                 </View>
-                <RatingSparkline data={s.points} color={dc[s.domain]} label={`${DOMAIN_LABELS[s.domain]} rating`} />
+                <RatingSparkline data={s.points} color={dc[s.domain]} label={domainLabel(t, s.domain)} />
               </Card>
             );
           })
         )}
 
         {truncated && !isPro ? (
-          <Card onPress={() => router.push({ pathname: '/paywall', params: { from: 'history' } })} accessibilityLabel="See full history with Pro">
-            <Text weight="semibold">Showing the last 30 days</Text>
+          <Card onPress={() => router.push({ pathname: '/paywall', params: { from: 'history' } })} accessibilityLabel={t('profile.fullHistory')}>
+            <Text weight="semibold">{t('profile.last30')}</Text>
             <Text variant="caption" tone="muted">
-              Your full history is kept. Pro shows all of it.
+              {t('profile.fullHistory')}
             </Text>
           </Card>
         ) : null}

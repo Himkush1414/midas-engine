@@ -9,6 +9,7 @@ import { track } from '@/lib/analytics';
 import { links } from '@/lib/links';
 import { cancelDailyReminder, scheduleDailyReminder } from '@/lib/notifications';
 import { applyEntitlement, purchases } from '@/lib/purchases';
+import { LANGUAGES, LANGUAGE_NAMES, useT, type LanguagePreference, type TFunction } from '@/i18n';
 import { useAccount } from '@/state/account';
 import { useEntitlements } from '@/state/entitlements';
 import { usePrivacy } from '@/state/privacy';
@@ -18,9 +19,9 @@ import { spacing } from '@/theme';
 
 const fmtDate = (iso: string) => new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
 
-function planLabel(plan: string | null, inTrial: boolean) {
-  const name = plan === 'yearly' ? 'Yearly' : plan === 'monthly' ? 'Monthly' : plan === 'lifetime' ? 'Lifetime' : 'Pro';
-  return inTrial ? `${name} · free trial` : name;
+function planLabel(t: TFunction, plan: string | null, inTrial: boolean) {
+  const name = plan === 'yearly' ? t('paywall.yearly') : plan === 'monthly' ? t('paywall.monthly') : plan === 'lifetime' ? t('paywall.lifetime') : 'Pro';
+  return inTrial ? t('settings.planTrial', { plan: name }) : name;
 }
 
 function pad(n: number) {
@@ -29,6 +30,7 @@ function pad(n: number) {
 
 export default function Settings() {
   const s = useSettings();
+  const t = useT();
   const privacy = usePrivacy();
   const ent = useEntitlements();
   const email = useAccount((a) => a.email);
@@ -42,9 +44,9 @@ export default function Settings() {
     try {
       const e = await purchases.restore();
       applyEntitlement(e);
-      Alert.alert(e.isPro ? 'Pro restored' : 'Nothing to restore', e.isPro ? 'Welcome back.' : 'No active purchase was found for this store account.');
+      Alert.alert(e.isPro ? t('paywall.restoredTitle') : t('paywall.nothingTitle'), e.isPro ? t('paywall.restoredBody') : t('paywall.nothingBody', { store: Platform.OS === 'ios' ? t('paywall.appStore') : t('paywall.googlePlay') }));
     } catch {
-      Alert.alert('Couldn’t restore', 'Check your connection and try again.');
+      Alert.alert(t('paywall.restoreFailedTitle'), t('paywall.restoreFailedBody'));
     }
   };
 
@@ -56,9 +58,9 @@ export default function Settings() {
     }
     const ok = await scheduleDailyReminder(s.reminderHour, s.reminderMinute);
     if (!ok) {
-      Alert.alert('Notifications are off', 'Allow notifications for Mindtier in your device settings to get reminders.', [
-        { text: 'Not now', style: 'cancel' },
-        { text: 'Open settings', onPress: () => void Linking.openSettings() },
+      Alert.alert(t('settings.notifOffTitle'), t('settings.notifOffBody'), [
+        { text: t('settings.notNow'), style: 'cancel' },
+        { text: t('settings.openSettings'), onPress: () => void Linking.openSettings() },
       ]);
       return;
     }
@@ -74,106 +76,126 @@ export default function Settings() {
 
   const subscriptionDetail = ent.isPro
     ? ent.plan === 'lifetime'
-      ? 'Lifetime access'
+      ? t('settings.lifetimeAccess')
       : ent.expiresAt
-        ? `${ent.inTrial ? 'Trial ends' : 'Renews or ends'} ${fmtDate(ent.expiresAt)}`
-        : 'Active'
-    : 'Free plan';
+        ? t(ent.inTrial ? 'settings.trialEnds' : 'settings.renews', { date: fmtDate(ent.expiresAt) })
+        : t('settings.active')
+    : t('settings.freePlan');
 
   return (
     <Screen scroll>
-      <BackHeader title="Settings" />
+      <BackHeader title={t('settings.title')} />
       <View style={styles.stack}>
-        <SettingsSection title="Account">
+        <SettingsSection title={t('settings.account')}>
           <SettingsRow
             first
             icon="profile"
-            label={email ? 'Saved to email' : 'Save your progress'}
-            detail={email ?? 'Keep your rank if you change phones'}
+            label={email ? t('settings.savedTo') : t('settings.saveProgress')}
+            detail={email ?? t('settings.saveDetail')}
             onPress={() => router.push('/settings/account')}
             testID="settings-account"
           />
         </SettingsSection>
 
-        <SettingsSection title="Mindtier Pro">
-          <SettingsRow first icon="sparkle" label={ent.isPro ? planLabel(ent.plan, ent.inTrial) : 'Free'} detail={subscriptionDetail} onPress={ent.isPro ? undefined : () => router.push({ pathname: '/paywall', params: { from: 'settings' } })} />
+        <SettingsSection title={t('settings.pro')}>
+          <SettingsRow first icon="sparkle" label={ent.isPro ? planLabel(t, ent.plan, ent.inTrial) : t('settings.free')} detail={subscriptionDetail} onPress={ent.isPro ? undefined : () => router.push({ pathname: '/paywall', params: { from: 'settings' } })} />
           {ent.billingIssue ? (
-            <SettingsRow icon="info" label="Payment issue" detail="Update your payment method to keep Pro" onPress={manageSubscription} destructive />
+            <SettingsRow icon="info" label={t('settings.paymentIssue')} detail={t('settings.paymentIssueDetail')} onPress={manageSubscription} destructive />
           ) : null}
-          {ent.isPro && ent.plan !== 'lifetime' ? <SettingsRow icon="card" label="Manage subscription" detail="Change or cancel in the store" onPress={manageSubscription} /> : null}
-          <SettingsRow icon="refresh" label="Restore purchases" onPress={restore} />
+          {ent.isPro && ent.plan !== 'lifetime' ? <SettingsRow icon="card" label={t('settings.manage')} detail={t('settings.manageDetail')} onPress={manageSubscription} /> : null}
+          <SettingsRow icon="refresh" label={t('settings.restore')} onPress={restore} />
         </SettingsSection>
 
-        <SettingsSection title="Appearance">
+        <SettingsSection title={t('settings.appearance')}>
           <View style={styles.padded}>
             <Segmented<ThemePreference>
-              label="Theme"
+              label={t('settings.theme')}
               value={s.theme}
               onChange={s.setTheme}
               options={[
-                { value: 'system', label: 'System' },
-                { value: 'dark', label: 'Dark' },
-                { value: 'light', label: 'Light' },
+                { value: 'system', label: t('settings.themeSystem') },
+                { value: 'dark', label: t('settings.themeDark') },
+                { value: 'light', label: t('settings.themeLight') },
               ]}
             />
           </View>
-        </SettingsSection>
-
-        <SettingsSection title="Gameplay & accessibility" footer="Colour-free mode swaps colours for shapes in Clash. Reduced motion removes celebratory animations.">
-          <SettingsRow first icon="sound" label="Sound effects" detail="Follows your phone’s silent mode" switchValue={s.sound} onSwitch={s.setSound} />
-          <SettingsRow icon="vibrate" label="Haptics" switchValue={s.haptics} onSwitch={s.setHaptics} />
-          <SettingsRow icon="accessibility" label="Colour-free mode" detail="Shapes instead of colours" switchValue={s.shapeMode} onSwitch={s.setShapeMode} />
           <View style={[styles.padded, styles.labelled]}>
             <Text variant="caption" tone="muted">
-              Motion
+              {t('settings.language')}
+            </Text>
+            <View style={styles.languages}>
+              {(['system', ...LANGUAGES] as LanguagePreference[]).map((l) => (
+                <Text
+                  key={l}
+                  variant="label"
+                  tone={s.language === l ? 'primary' : 'muted'}
+                  onPress={() => s.setLanguage(l)}
+                  accessibilityRole="radio"
+                  accessibilityState={{ selected: s.language === l }}
+                  style={styles.language}
+                >
+                  {l === 'system' ? t('settings.languageSystem') : LANGUAGE_NAMES[l]}
+                </Text>
+              ))}
+            </View>
+          </View>
+        </SettingsSection>
+
+        <SettingsSection title={t('settings.gameplay')} footer={t('settings.gameplayFooter')}>
+          <SettingsRow first icon="sound" label={t('settings.sound')} detail={t('settings.soundDetail')} switchValue={s.sound} onSwitch={s.setSound} />
+          <SettingsRow icon="vibrate" label={t('settings.haptics')} switchValue={s.haptics} onSwitch={s.setHaptics} />
+          <SettingsRow icon="accessibility" label={t('settings.colourFree')} detail={t('settings.colourFreeDetail')} switchValue={s.shapeMode} onSwitch={s.setShapeMode} />
+          <View style={[styles.padded, styles.labelled]}>
+            <Text variant="caption" tone="muted">
+              {t('settings.motion')}
             </Text>
             <Segmented<MotionPreference>
-              label="Motion"
+              label={t('settings.motion')}
               value={s.motion}
               onChange={s.setMotion}
               options={[
-                { value: 'system', label: 'System' },
-                { value: 'reduced', label: 'Reduced' },
-                { value: 'full', label: 'Full' },
+                { value: 'system', label: t('settings.themeSystem') },
+                { value: 'reduced', label: t('settings.motionReduced') },
+                { value: 'full', label: t('settings.motionFull') },
               ]}
             />
           </View>
-          <SettingsRow icon="memory" label="Games in ranked rotation" detail="Hide games you don’t enjoy" onPress={() => router.push('/settings/games')} />
+          <SettingsRow icon="memory" label={t('settings.rotation')} detail={t('settings.rotationDetail')} onPress={() => router.push('/settings/games')} />
         </SettingsSection>
 
-        <SettingsSection title="Reminders" footer="One gentle reminder a day, at the time you choose. No streak guilt.">
-          <SettingsRow first icon="bell" label="Daily reminder" switchValue={s.reminderEnabled} onSwitch={(v) => void toggleReminder(v)} />
+        <SettingsSection title={t('settings.reminders')} footer={t('settings.remindersFooter')}>
+          <SettingsRow first icon="bell" label={t('settings.dailyReminder')} switchValue={s.reminderEnabled} onSwitch={(v) => void toggleReminder(v)} />
           <View style={[styles.padded, styles.timeRow]}>
-            <Text tone="muted">Time</Text>
+            <Text tone="muted">{t('settings.time')}</Text>
             <View style={styles.timeControls}>
-              <Text variant="label" tone="primary" onPress={() => void shiftReminder(-1)} accessibilityRole="button" accessibilityLabel="One hour earlier" style={styles.step}>
+              <Text variant="label" tone="primary" onPress={() => void shiftReminder(-1)} accessibilityRole="button" accessibilityLabel={t('settings.earlier')} style={styles.step}>
                 −
               </Text>
-              <Text variant="subheading" tabular accessibilityLabel={`Reminder at ${s.reminderHour}:${pad(s.reminderMinute)}`}>
+              <Text variant="subheading" tabular accessibilityLabel={t('settings.reminderAt', { time: `${s.reminderHour}:${pad(s.reminderMinute)}` })}>
                 {pad(s.reminderHour)}:{pad(s.reminderMinute)}
               </Text>
-              <Text variant="label" tone="primary" onPress={() => void shiftReminder(1)} accessibilityRole="button" accessibilityLabel="One hour later" style={styles.step}>
+              <Text variant="label" tone="primary" onPress={() => void shiftReminder(1)} accessibilityRole="button" accessibilityLabel={t('settings.later')} style={styles.step}>
                 +
               </Text>
             </View>
           </View>
         </SettingsSection>
 
-        <SettingsSection title="Privacy" footer="Usage data is anonymous: no names, emails or advertising IDs. Mindtier has no ads and never sells data.">
-          <SettingsRow first icon="chart" label="Share anonymous usage data" switchValue={!privacy.analyticsOptOut} onSwitch={(v) => privacy.setAnalyticsOptOut(!v)} />
-          <SettingsRow icon="shield" label="Send crash reports" switchValue={!privacy.crashReportsOptOut} onSwitch={(v) => privacy.setCrashReportsOptOut(!v)} />
-          <SettingsRow icon="document" label="Privacy Policy" onPress={() => void WebBrowser.openBrowserAsync(links.privacy)} />
-          <SettingsRow icon="document" label="Terms of Service" onPress={() => void WebBrowser.openBrowserAsync(links.terms)} />
-          <SettingsRow icon="document" label="Refunds & cancellation" onPress={() => void WebBrowser.openBrowserAsync(links.refunds)} />
+        <SettingsSection title={t('settings.privacy')} footer={t('settings.privacyFooter')}>
+          <SettingsRow first icon="chart" label={t('settings.usageData')} switchValue={!privacy.analyticsOptOut} onSwitch={(v) => privacy.setAnalyticsOptOut(!v)} />
+          <SettingsRow icon="shield" label={t('settings.crashReports')} switchValue={!privacy.crashReportsOptOut} onSwitch={(v) => privacy.setCrashReportsOptOut(!v)} />
+          <SettingsRow icon="document" label={t('settings.privacyPolicy')} onPress={() => void WebBrowser.openBrowserAsync(links.privacy)} />
+          <SettingsRow icon="document" label={t('settings.termsOfService')} onPress={() => void WebBrowser.openBrowserAsync(links.terms)} />
+          <SettingsRow icon="document" label={t('settings.refunds')} onPress={() => void WebBrowser.openBrowserAsync(links.refunds)} />
         </SettingsSection>
 
-        <SettingsSection title="Help">
-          <SettingsRow first icon="help" label="Support" onPress={() => void WebBrowser.openBrowserAsync(links.support)} />
-          <SettingsRow icon="info" label="Version" value={`${Application.nativeApplicationVersion ?? '1.0.0'} (${Application.nativeBuildVersion ?? 'dev'})`} />
+        <SettingsSection title={t('settings.help')}>
+          <SettingsRow first icon="help" label={t('settings.support')} onPress={() => void WebBrowser.openBrowserAsync(links.support)} />
+          <SettingsRow icon="info" label={t('settings.version')} value={`${Application.nativeApplicationVersion ?? '1.0.0'} (${Application.nativeBuildVersion ?? 'dev'})`} />
         </SettingsSection>
 
         <Text variant="caption" tone="faint" align="center">
-          Mindtier is a game. Ranks reflect skill at its puzzles, not intelligence or health.
+          {t('settings.disclaimer')}
         </Text>
       </View>
     </Screen>
@@ -187,4 +209,6 @@ const styles = StyleSheet.create({
   timeRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg },
   timeControls: { flexDirection: 'row', alignItems: 'center', gap: spacing.lg },
   step: { fontSize: 24, paddingHorizontal: spacing.md, paddingVertical: spacing.xs },
+  languages: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
+  language: { paddingHorizontal: spacing.md, paddingVertical: spacing.sm, minHeight: 40 },
 });

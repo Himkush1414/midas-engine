@@ -1,4 +1,6 @@
-import { DOMAINS, DOMAIN_LABELS, ITEM_RATING_MAX, ITEM_RATING_MIN, type DomainRatings } from '@mindtier/core';
+import { DOMAINS, ITEM_RATING_MAX, ITEM_RATING_MIN, type DomainRatings } from '@mindtier/core';
+import { useT } from '@/i18n';
+import { domainLabel } from '@/i18n/labels';
 import Svg, { Circle, Line, Polygon, Text as SvgText } from 'react-native-svg';
 import { fonts, useTheme } from '@/theme';
 import { svgA11y } from './svgA11y';
@@ -15,15 +17,16 @@ export function normalise(rating: number): number {
 /** Five-axis skill shape. Labels sit outside the pentagon. */
 export function SkillRadar({ ratings, size = 260 }: { ratings: DomainRatings; size?: number }) {
   const { colors, domain } = useTheme();
+  const t = useT();
   const c = size / 2;
   const r = size * 0.34;
   const ring = (k: number) =>
     DOMAINS.map((_, i) => radarPoint(i, k, r, c).join(',')).join(' ');
   const shape = DOMAINS.map((d, i) => radarPoint(i, normalise(ratings[d].rating), r, c).join(',')).join(' ');
-  const label = DOMAINS.map((d) => `${DOMAIN_LABELS[d]} ${Math.round(ratings[d].rating)}`).join(', ');
+  const label = DOMAINS.map((d) => `${domainLabel(t, d)} ${Math.round(ratings[d].rating)}`).join(', ');
 
   return (
-    <Svg width={size} height={size} {...svgA11y(`Skill shape: ${label}`)}>
+    <Svg width={size} height={size} {...svgA11y(t('reveal.skillShape', { summary: label }))}>
       {[0.25, 0.5, 0.75, 1].map((k) => (
         <Polygon key={k} points={ring(k)} fill="none" stroke={colors.border} strokeWidth={1} />
       ))}
@@ -40,7 +43,7 @@ export function SkillRadar({ ratings, size = 260 }: { ratings: DomainRatings; si
         const [x, y] = radarPoint(i, 1.32, r, c);
         return (
           <SvgText key={d} x={x} y={y + 4} fontSize={12} fontFamily={fonts.bodySemibold} fill={colors.textMuted} textAnchor="middle">
-            {DOMAIN_LABELS[d]}
+            {domainLabel(t, d)}
           </SvgText>
         );
       })}

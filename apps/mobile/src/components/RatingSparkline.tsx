@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, View, type GestureResponderEvent, type LayoutChangeEvent } from 'react-native';
 import Svg, { Circle, Line, Path } from 'react-native-svg';
+import { useT } from '@/i18n';
 import { useTheme } from '@/theme';
 import { Text } from './ui';
 
@@ -58,6 +59,7 @@ const fmtDate = (at: number) => new Date(at).toLocaleDateString(undefined, { mon
  */
 export function RatingSparkline({ data, color, height = 72, label }: { data: SparkPoint[]; color: string; height?: number; label: string }) {
   const { colors } = useTheme();
+  const t = useT();
   const [width, setWidth] = useState(0);
   const [active, setActive] = useState<number | null>(null);
   const geo = sparklineGeometry(data, width, height);
@@ -69,7 +71,9 @@ export function RatingSparkline({ data, color, height = 72, label }: { data: Spa
   const first = data[0];
   const end = data[data.length - 1];
   const summary =
-    first && end ? `${label}: from ${Math.round(first.value)} to ${Math.round(end.value)} across ${data.length} updates` : `${label}: no history yet`;
+    first && end
+      ? t('profile.chartA11y', { label, from: Math.round(first.value), to: Math.round(end.value), count: data.length })
+      : t('profile.chartEmpty', { label });
 
   return (
     <View
