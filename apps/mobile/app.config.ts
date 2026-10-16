@@ -37,6 +37,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   plugins: [
     'expo-router',
     [
+      'expo-notifications',
+      {
+        icon: './assets/images/notification-icon.png',
+        color: '#6D4CF5',
+      },
+    ],
+    [
       'expo-splash-screen',
       {
         backgroundColor: BRAND_INK,

@@ -35,3 +35,15 @@ jest.mock('react-native-reanimated', () => {
   const mock = require('react-native-reanimated/mock');
   return { ...mock, useReducedMotion: () => false };
 });
+
+jest.mock('expo-notifications', () => ({
+  setNotificationHandler: jest.fn(),
+  setNotificationChannelAsync: jest.fn(async () => null),
+  getPermissionsAsync: jest.fn(async () => ({ granted: true, canAskAgain: true })),
+  requestPermissionsAsync: jest.fn(async () => ({ granted: true, canAskAgain: true })),
+  scheduleNotificationAsync: jest.fn(async () => 'notif-id'),
+  cancelScheduledNotificationAsync: jest.fn(async () => undefined),
+  cancelAllScheduledNotificationsAsync: jest.fn(async () => undefined),
+  AndroidImportance: { DEFAULT: 3, HIGH: 4 },
+  SchedulableTriggerInputTypes: { DAILY: 'daily', DATE: 'date' },
+}));
