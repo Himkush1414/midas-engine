@@ -49,7 +49,7 @@ Adjacent "ranked" apps: **Liftoff** 1M+ (4.78, 97k), **GymLevels** 100k+ (4.49, 
 | 5 | Anonymous account syncs to the server from day 1; linking email/Google/Apple keeps the same user id. Purchases bound to the account via RevenueCat app user id; "Restore purchases" on the paywall and in settings. |
 | 7 | **Adaptive difficulty from the rating system:** every game is generated at your rating, so it is never too easy. Procedural generation means effectively infinite unique levels. |
 | 8 | **Zen mode** (untimed, unrated) for every game. Streak repair is earned by play, never bought; offline play counts toward the streak (synced later). Leagues are opt-in. |
-| 9 | Pick any domain to train; hide games you dislike from ranked rotation (at least 2 per domain must remain). |
+| 9 | Pick any domain to train; hide games you dislike from ranked rotation (at least one game per domain always stays on). |
 | 10 | No game requires audio. Colorblind-safe palette plus a shape-coded alternative for colour games. Dynamic type up to 200%. Minimum 48dp hit targets. Reduce-motion respected. Every game has an animated, illustrated tutorial with a practice round. |
 | 11 | **No cognitive-health claims.** Copy says "games", "challenge", "your rank among players"; never "improve memory", "prevent decline" or "clinically proven". Ratings are framed as *game skill*, not IQ. |
 | 12 | Fair pricing: ~$4.99/mo-equivalent on yearly; regional pricing; a lifetime option for subscription-fatigued users. |
