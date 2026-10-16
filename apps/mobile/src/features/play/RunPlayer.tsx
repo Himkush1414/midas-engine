@@ -2,6 +2,7 @@ import { getGame, type GameId, type GameMode, type RunSummary } from '@mindtier/
 import { useCallback, useEffect, useRef } from 'react';
 import { AppState, StyleSheet, View } from 'react-native';
 import { Text } from '@/components/ui';
+import { registerQaAnswer } from '@/lib/devHooks';
 import { haptic } from '@/lib/feedback';
 import { play } from '@/lib/sound';
 import { useSettings } from '@/state/settings';
@@ -69,6 +70,21 @@ export function RunPlayer({ gameId, mode, seed, rating, trialCount, reduceMotion
     });
     return () => sub.remove();
   }, [restartTrial]);
+
+  // QA builds only: let end-to-end scripts answer the current trial correctly.
+  const { trial, inputOpenedAt } = run;
+  useEffect(() => {
+    registerQaAnswer(
+      trial !== null && inputOpenedAt !== null && !feedback
+        ? () => {
+            // Answer like a fast human: never quicker than the game's plausibility floor.
+            const now = globalThis.performance?.now?.() ?? Date.now();
+            if (now - inputOpenedAt >= def.minHumanRtMs + 80) answer(def.solve(trial));
+          }
+        : null,
+    );
+    return () => registerQaAnswer(null);
+  }, [trial, inputOpenedAt, feedback, answer, def]);
 
   const onExpire = useCallback(() => {
     answer(null);

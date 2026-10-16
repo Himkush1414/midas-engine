@@ -14,8 +14,17 @@ import { useSettings } from '@/state/settings';
  */
 const QA_BUILD = process.env.EXPO_PUBLIC_QA_HOOKS === '1';
 
+export const qaEnabled = (__DEV__ || QA_BUILD) && Platform.OS === 'web';
+
+/** Lets QA scripts answer the current trial (registered by RunPlayer). */
+export function registerQaAnswer(answer: (() => void) | null): void {
+  if (!qaEnabled) return;
+  const hooks = (globalThis as { __mindtier?: Record<string, unknown> }).__mindtier;
+  if (hooks) hooks.answerCurrent = answer;
+}
+
 export function installDevHooks(): void {
-  if (!(__DEV__ || QA_BUILD) || Platform.OS !== 'web') return;
+  if (!qaEnabled) return;
   // react-native-web forwards some native-only accessibility props to the DOM; harmless on web QA
   // builds, so keep the dev overlay from covering the UI in screenshots.
   LogBox.ignoreAllLogs(true);
