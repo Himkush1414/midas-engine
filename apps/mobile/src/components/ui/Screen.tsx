@@ -14,23 +14,27 @@ export interface ScreenProps {
   testID?: string;
 }
 
+/** Content column width on tablets and large phones in landscape. */
+export const MAX_CONTENT_WIDTH = 640;
+
 export function Screen({ children, scroll, edges = ['top', 'left', 'right'], padded = true, contentStyle, footer, testID }: ScreenProps) {
   const { colors } = useTheme();
   const pad = padded ? { paddingHorizontal: spacing.lg } : null;
+  const column = { width: '100%' as const, maxWidth: MAX_CONTENT_WIDTH, alignSelf: 'center' as const };
   return (
     <SafeAreaView testID={testID} edges={edges} style={[styles.root, { backgroundColor: colors.background }]}>
       {scroll ? (
         <ScrollView
-          contentContainerStyle={[pad, styles.scrollContent, contentStyle]}
+          contentContainerStyle={[pad, column, styles.scrollContent, contentStyle]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
           {children}
         </ScrollView>
       ) : (
-        <View style={[styles.root, pad, contentStyle]}>{children}</View>
+        <View style={[styles.root, pad, column, contentStyle]}>{children}</View>
       )}
-      {footer ? <View style={[styles.footer, pad]}>{footer}</View> : null}
+      {footer ? <View style={[styles.footer, pad, column]}>{footer}</View> : null}
     </SafeAreaView>
   );
 }
