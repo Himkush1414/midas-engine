@@ -9,6 +9,12 @@ const WEB_HOST = new URL(process.env.EXPO_PUBLIC_WEB_URL ?? 'https://midas-engin
 const appId = IS_DEV ? 'app.mindtier.dev' : IS_PREVIEW ? 'app.mindtier.preview' : 'app.mindtier';
 const appName = IS_DEV ? 'Mindtier (Dev)' : IS_PREVIEW ? 'Mindtier (Preview)' : 'Mindtier';
 
+// Sentry's native plugin (source maps, native crash config) is enabled once an org and project are configured.
+const SENTRY_PLUGIN: [string, Record<string, string>][] =
+  process.env.SENTRY_ORG && process.env.SENTRY_PROJECT
+    ? [['@sentry/react-native/expo', { organization: process.env.SENTRY_ORG, project: process.env.SENTRY_PROJECT }]]
+    : [];
+
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: appName,
@@ -62,6 +68,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         imageWidth: 160,
       },
     ],
+    ...SENTRY_PLUGIN,
   ],
   experiments: {
     typedRoutes: true,

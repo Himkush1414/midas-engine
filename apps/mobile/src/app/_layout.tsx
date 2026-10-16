@@ -10,13 +10,18 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ErrorScreen } from '@/components/ErrorScreen';
 import { useAppLifecycle } from '@/features/sync/useAppLifecycle';
+import { initCrashReporting, reportError } from '@/lib/crash';
 import { useProgress } from '@/state/progress';
 import { useSettings } from '@/state/settings';
 import { ThemeProvider, useTheme } from '@/theme';
 
+initCrashReporting();
 void SplashScreen.preventAutoHideAsync();
 
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
+  useEffect(() => {
+    reportError(error, { boundary: 'root' });
+  }, [error]);
   return (
     <SafeAreaProvider>
       <ThemeProvider preference={useSettings.getState().theme}>
