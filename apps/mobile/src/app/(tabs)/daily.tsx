@@ -1,5 +1,5 @@
 import { DOMAIN_LABELS, dailyPlan, getGame, utcDayKey } from '@mindtier/core';
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
@@ -12,6 +12,7 @@ import { track } from '@/lib/analytics';
 import { api, type DailyBoard } from '@/lib/api';
 import { backendConfigured } from '@/lib/config';
 import { shareText } from '@/lib/share';
+import { useAccount } from '@/state/account';
 import { useProgress } from '@/state/progress';
 import { spacing, useTheme } from '@/theme';
 
@@ -20,6 +21,7 @@ export default function Daily() {
   const today = utcDayKey(new Date());
   const plan = dailyPlan(today);
   const record = useProgress((s) => s.daily[today]);
+  const displayName = useAccount((s) => s.displayName);
   const [board, setBoard] = useState<DailyBoard | null>(null);
   const [loading, setLoading] = useState(false);
   const [offline, setOffline] = useState(false);
@@ -128,6 +130,16 @@ export default function Daily() {
               </View>
             ) : board ? (
               <>
+                {!displayName ? (
+                  <Card onPress={() => router.push('/profile')} accessibilityLabel="Set a display name for the leaderboard">
+                    <Text variant="caption" weight="semibold">
+                      You appear as “Player”
+                    </Text>
+                    <Text variant="caption" tone="muted">
+                      Tap to choose a name for leaderboards and duels.
+                    </Text>
+                  </Card>
+                ) : null}
                 <Text variant="caption" tone="muted">
                   {board.total.toLocaleString()} {board.total === 1 ? 'player' : 'players'} today
                   {board.me ? ` · you’re #${board.me.place}` : ''}
