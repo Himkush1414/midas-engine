@@ -1,0 +1,19 @@
+{
+  "name": "mindtier",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Mindtier — ranked brain games. Monorepo for the mobile app, web/API and shared engine.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present"
+  }
+}
