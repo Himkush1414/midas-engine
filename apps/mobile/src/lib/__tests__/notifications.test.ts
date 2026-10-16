@@ -28,3 +28,13 @@ describe('notifications', () => {
     expect(call.trigger.type).toBe('date');
   });
 });
+
+describe('notification deep links', () => {
+  it('maps duel links to the duel screen and ignores anything else', () => {
+    const { notificationPath } = jest.requireActual('../notifications');
+    expect(notificationPath({ url: 'mindtier://duel/abcd2345' })).toBe('/duel/abcd2345');
+    expect(notificationPath({ url: 'https://evil.example/duel/abcd2345' })).toBeNull();
+    expect(notificationPath({ url: 'mindtier://duel/../../settings' })).toBeNull();
+    expect(notificationPath(null)).toBeNull();
+  });
+});

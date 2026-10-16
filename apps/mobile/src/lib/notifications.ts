@@ -1,5 +1,7 @@
 import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
 import { Platform } from 'react-native';
+import { api } from './api';
 import { syncStorage } from './storage';
 
 const CHANNEL_REMINDERS = 'reminders';
@@ -32,6 +34,11 @@ export function initNotifications(): void {
     void Notifications.setNotificationChannelAsync(CHANNEL_REMINDERS, {
       name: 'Daily reminders',
       description: 'An optional nudge at the time you choose.',
+      importance: Notifications.AndroidImportance.DEFAULT,
+    });
+    void Notifications.setNotificationChannelAsync('duels', {
+      name: 'Duels',
+      description: 'When a friend plays a duel you are in.',
       importance: Notifications.AndroidImportance.DEFAULT,
     });
     void Notifications.setNotificationChannelAsync(CHANNEL_ACCOUNT, {
@@ -106,4 +113,35 @@ export async function cancelAllLocalNotifications(): Promise<void> {
   await Notifications.cancelAllScheduledNotificationsAsync();
   syncStorage.removeItem(KEY_DAILY);
   syncStorage.removeItem(KEY_TRIAL);
+}
+
+const KEY_PUSH = 'mindtier.notif.pushToken';
+
+/**
+ * Ask (in context, after a duel) to be told when the other player finishes,
+ * and register this device's Expo push token. Safe to call repeatedly.
+ */
+export async function registerForDuelPush(): Promise<boolean> {
+  if (Platform.OS === 'web') return false;
+  try {
+    if (!(await ensurePermission())) return false;
+    const projectId = (Constants.expoConfig?.extra?.eas as { projectId?: string } | undefined)?.projectId;
+    const { data: token } = await Notifications.getExpoPushTokenAsync(projectId ? { projectId } : undefined);
+    if (syncStorage.getItem(KEY_PUSH) === token) return true;
+    await api.registerPushToken(token, Platform.OS === 'ios' ? 'ios' : 'android');
+    syncStorage.setItem(KEY_PUSH, token);
+    return true;
+  } catch (e) {
+    // Push needs FCM/APNs credentials on EAS; without them registration fails quietly.
+    if (__DEV__) console.warn('push registration failed', e);
+    return false;
+  }
+}
+
+/** Route a tapped notification to its deep link (e.g. mindtier://duel/abcd2345). */
+export function notificationPath(data: unknown): string | null {
+  const url = (data as { url?: unknown } | null)?.url;
+  if (typeof url !== 'string') return null;
+  const m = /^mindtier:\/\/duel\/([a-z0-9]{8})$/.exec(url);
+  return m ? `/duel/${m[1]}` : null;
 }

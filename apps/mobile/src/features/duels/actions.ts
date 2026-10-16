@@ -5,6 +5,7 @@ import { startPlan } from '@/features/session/start';
 import { track } from '@/lib/analytics';
 import { ApiError, api } from '@/lib/api';
 import { links } from '@/lib/links';
+import { registerForDuelPush } from '@/lib/notifications';
 import { shareText } from '@/lib/share';
 import { useDuels } from '@/state/duels';
 import { useEntitlements } from '@/state/entitlements';
@@ -26,6 +27,8 @@ export async function createAndPlayDuel(): Promise<void> {
     useProgress.getState().noteDuelCreated();
     useDuels.getState().upsert({ id: duel.id, role: 'creator', expiresAt: duel.expiresAt });
     track('duel_created');
+    // Contextual ask: you'll want to know when your friend plays.
+    void registerForDuelPush();
     startPlan(duelPlan(duel.id));
   } catch (e) {
     if (e instanceof ApiError && e.status === 402) {
@@ -39,6 +42,7 @@ export async function createAndPlayDuel(): Promise<void> {
 export function playDuel(id: string): void {
   useDuels.getState().upsert({ id });
   track('duel_accepted');
+  void registerForDuelPush();
   startPlan(duelPlan(id));
 }
 

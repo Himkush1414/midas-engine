@@ -1,7 +1,9 @@
+import * as Notifications from 'expo-notifications';
+import { router } from 'expo-router';
 import { useEffect } from 'react';
-import { AppState } from 'react-native';
+import { AppState, Platform } from 'react-native';
 import { setAnalyticsOptOut, track } from '@/lib/analytics';
-import { initNotifications } from '@/lib/notifications';
+import { initNotifications, notificationPath } from '@/lib/notifications';
 import { initSounds } from '@/lib/sound';
 import { startPurchases } from '@/lib/purchases';
 import { currentUserId } from '@/lib/supabase';
@@ -37,6 +39,20 @@ export function useAppLifecycle(): void {
     const sub = AppState.addEventListener('change', (state) => {
       if (state === 'active' && Date.now() - lastSync > FOREGROUND_SYNC_MS) void sync();
     });
-    return () => sub.remove();
+
+    // Tapped notifications open their deep link (cold start and while running).
+    const open = (data: unknown) => {
+      const path = notificationPath(data);
+      if (path) router.push(path as never);
+    };
+    let tapSub: { remove(): void } | null = null;
+    if (Platform.OS !== 'web') {
+      void Notifications.getLastNotificationResponseAsync().then((r) => r && open(r.notification.request.content.data));
+      tapSub = Notifications.addNotificationResponseReceivedListener((r) => open(r.notification.request.content.data));
+    }
+    return () => {
+      sub.remove();
+      tapSub?.remove();
+    };
   }, []);
 }

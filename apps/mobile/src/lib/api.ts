@@ -106,5 +106,8 @@ export const api = {
 
   deleteAccount: () => request<{ deleted: boolean }>('/api/v1/account', { method: 'DELETE' }),
 
+  registerPushToken: (token: string, platform: 'android' | 'ios') =>
+    request<{ registered: boolean }>('/api/v1/push-tokens', { method: 'POST', body: JSON.stringify({ token, platform }) }),
+
   sendEvents: (events: unknown[]) => request<{ accepted: number }>('/api/v1/events', { method: 'POST', body: JSON.stringify({ events }) }),
 };
