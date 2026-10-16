@@ -30,7 +30,8 @@ export function ClashView({ trial, onInputOpen, onAnswer, locked, shapeMode, dem
         </Text>
       </View>
       <View
-        style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}
+        // Ink colours need a dark stage to stay legible and recognisable in both themes.
+        style={[styles.card, { backgroundColor: shapeMode ? colors.surface : '#121734', borderColor: colors.border }]}
         accessible
         accessibilityLabel={
           shapeMode
