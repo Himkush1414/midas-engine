@@ -109,7 +109,7 @@ const BOARD = {
   me: { place: 5, points: 2905, total: 4812, percentile: 100 },
 };
 
-async function stubNetwork(page) {
+async function stubNetwork(page, { fresh = false } = {}) {
   await page.route(/supabase\.co|\/api\/v1\//, async (route) => {
     const url = route.request().url();
     if (url.includes('/auth/v1/signup')) {
@@ -121,7 +121,7 @@ async function stubNetwork(page) {
         },
       });
     }
-    if (url.includes('/api/v1/bootstrap')) {
+    if (url.includes('/api/v1/bootstrap') && !fresh) {
       const st = demoState()['mindtier.progress.v1'].state;
       return route.fulfill({
         json: { profile: { id: 'demo', seed: st.userSeed, displayName: 'Alex' }, ratings: st.ratings, isPro: false, usage: { rankedSessions: 0, duelsCreated: 0 }, nextSessionIndex: 41, placementDone: true },
@@ -284,7 +284,7 @@ for (const scene of SCENES) {
   }, state);
   const page = await context.newPage();
   page.on('pageerror', (e) => console.error(`  [${scene.name}] page error: ${e.message}`));
-  await stubNetwork(page);
+  await stubNetwork(page, { fresh: Boolean(scene.fresh) });
   await page.goto(`${BASE}${scene.path}`, { waitUntil: 'networkidle' });
   await page.waitForFunction(() => Boolean(globalThis.__mindtier), null, { timeout: 60_000 });
   await settle(page, 1200);
