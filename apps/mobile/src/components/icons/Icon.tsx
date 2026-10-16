@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import type { ColorValue } from 'react-native';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import { useTheme } from '@/theme';
 import { GLYPHS, type IconName, type Primitive } from './glyphs';
@@ -6,13 +7,13 @@ import { GLYPHS, type IconName, type Primitive } from './glyphs';
 export interface IconProps {
   name: IconName;
   size?: number;
-  color?: string;
+  color?: ColorValue;
   strokeWidth?: number;
   /** Accessible label; omit for decorative icons. */
   label?: string;
 }
 
-function renderPrimitive(p: Primitive, i: number, color: string, strokeWidth: number) {
+function renderPrimitive(p: Primitive, i: number, color: ColorValue, strokeWidth: number) {
   const paint = p.fill
     ? { fill: color, stroke: 'none' as const }
     : { fill: 'none' as const, stroke: color, strokeWidth, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };

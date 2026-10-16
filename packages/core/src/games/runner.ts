@@ -1,6 +1,6 @@
 import { Rng, seedFor } from '../random';
 import { fixedRamp, nextLevel, playableLevel } from '../staircase';
-import { ADAPTIVE_MODES, type AnyGameDefinition, type GameMode, type TrialRecord } from './types';
+import { ADAPTIVE_MODES, type AnyGameDefinition, type GameId, type GameMode, type TrialRecord } from './types';
 
 /** Lowest and highest item ratings; levels map linearly between them. */
 export const ITEM_RATING_MIN = 700;
@@ -46,7 +46,7 @@ export interface BlockResult {
 }
 
 export interface RunSummary {
-  gameId: string;
+  gameId: GameId;
   mode: GameMode;
   seed: string;
   startLevel: number;
