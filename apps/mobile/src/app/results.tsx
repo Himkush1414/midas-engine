@@ -10,6 +10,7 @@ import { shareDuel } from '@/features/duels/actions';
 import { DeltaRow } from '@/features/results/DeltaRow';
 import { haptic } from '@/lib/feedback';
 import { useReduceMotion } from '@/lib/motion';
+import { maybeAskForReview } from '@/lib/review';
 import { play } from '@/lib/sound';
 import { useEntitlements } from '@/state/entitlements';
 import { useSession } from '@/state/session';
@@ -38,6 +39,9 @@ export default function Results() {
     if (promoted) {
       haptic.success();
       play('rankup');
+      // Give the celebration a moment before the system review sheet may appear.
+      const t = setTimeout(() => void maybeAskForReview(), 2500);
+      return () => clearTimeout(t);
     }
   }, [promoted]);
   if (!finished) return <Redirect href="/" />;
