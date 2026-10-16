@@ -23,3 +23,5 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
+      - name: Build web
+        run: npm run build -w @mindtier/web
