@@ -3,6 +3,7 @@ import * as Sharing from 'expo-sharing';
 import { useCallback, useRef, type ReactNode } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { captureRef } from 'react-native-view-shot';
+import { getT } from '@/i18n';
 import { track } from '@/lib/analytics';
 import { shareText, tierShareText } from '@/lib/share';
 import { TierShareCard } from './TierShareCard';
@@ -19,7 +20,7 @@ export function useTierShare(ratings: DomainRatings): { share(): Promise<void>; 
     try {
       if (Platform.OS !== 'web' && ref.current && (await Sharing.isAvailableAsync())) {
         const uri = await captureRef(ref, { format: 'png', quality: 1, result: 'tmpfile', width: 1080, height: 1350 });
-        await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: 'Share your Mindtier', UTI: 'public.png' });
+        await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: getT()('share.dialogTitle'), UTI: 'public.png' });
         return;
       }
     } catch {

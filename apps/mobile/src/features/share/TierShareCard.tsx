@@ -1,9 +1,11 @@
-import { DOMAINS, DOMAIN_LABELS, overallRating, tierInfo, type DomainRatings } from '@mindtier/core';
+import { DOMAINS, overallRating, tierInfo, type DomainRatings } from '@mindtier/core';
 import { forwardRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { DomainBadge, TierBadge } from '@/components/tier';
 import { Text } from '@/components/ui';
+import { useT } from '@/i18n';
+import { domainLabel, tierLabel } from '@/i18n/labels';
 import { WEB_URL } from '@/lib/links';
 import { ThemeProvider } from '@/theme';
 
@@ -15,6 +17,7 @@ export const CARD_HEIGHT = 450; // 4:5, the format social feeds crop to least
  * the same for everyone, whatever their app theme.
  */
 export const TierShareCard = forwardRef<View, { ratings: DomainRatings }>(function TierShareCard({ ratings }, ref) {
+  const t = useT();
   const overall = tierInfo(overallRating(ratings));
   const host = WEB_URL.replace(/^https?:\/\//, '');
   return (
@@ -31,14 +34,14 @@ export const TierShareCard = forwardRef<View, { ratings: DomainRatings }>(functi
           <Rect width={CARD_WIDTH} height={CARD_HEIGHT} fill="url(#bg)" />
         </Svg>
         <Text variant="caption" weight="semibold" style={styles.eyebrow}>
-          MY MIND TIER
+          {t('share.cardTitle')}
         </Text>
         {/* Wrapped so it stacks above the absolutely positioned background on every platform. */}
         <View>
           <TierBadge info={overall} size={120} showProvisional={false} />
         </View>
         <Text variant="title" align="center">
-          {overall.label}
+          {tierLabel(t, overall)}
         </Text>
         <View style={styles.rows}>
           {DOMAINS.map((d) => {
@@ -47,17 +50,17 @@ export const TierShareCard = forwardRef<View, { ratings: DomainRatings }>(functi
               <View key={d} style={styles.row}>
                 <DomainBadge domain={d} size={26} />
                 <Text variant="label" style={styles.flex}>
-                  {DOMAIN_LABELS[d]}
+                  {domainLabel(t, d)}
                 </Text>
                 <Text variant="label" tone="muted">
-                  {info.label}
+                  {tierLabel(t, info)}
                 </Text>
               </View>
             );
           })}
         </View>
         <Text variant="caption" tone="muted" align="center">
-          What tier is yours? · {host}
+          {t('share.cardFooter', { host })}
         </Text>
       </View>
     </ThemeProvider>

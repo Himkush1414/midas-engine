@@ -1,4 +1,6 @@
-import { DOMAIN_LABELS, getGame, type GameId } from '@mindtier/core';
+import { getGame, type GameId } from '@mindtier/core';
+import { getT } from '@/i18n';
+import { domainLabel } from '@/i18n/labels';
 import { links } from '@/lib/links';
 
 const FILLED = '■';
@@ -13,8 +15,9 @@ export function accuracyBar(accuracy: number): string {
 
 /** Spoiler-free share text: shows how well you did, never what the puzzles were. */
 export function dailyShareText(day: string, points: number, games: readonly GameId[], accuracy: readonly number[], percentile?: number | null): string {
-  const lines = games.map((g, i) => `${accuracyBar(accuracy[i] ?? 0)} ${DOMAIN_LABELS[getGame(g).domain]}`);
-  const header = `Mindtier Daily ${day} · ${points.toLocaleString('en-US')} pts${percentile ? ` · top ${Math.max(1, 100 - percentile + 1)}%` : ''}`;
+  const t = getT();
+  const lines = games.map((g, i) => `${accuracyBar(accuracy[i] ?? 0)} ${domainLabel(t, getGame(g).domain)}`);
+  const header = t('daily.shareHeader', { day, points }) + (percentile ? t('daily.shareTop', { percent: Math.max(1, 100 - percentile + 1) }) : '');
   return [header, ...lines, '', links.home].join('\n');
 }
 

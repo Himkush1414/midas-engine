@@ -1,6 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
+import { getT, type TKey } from '@/i18n';
 import { api } from './api';
 import { syncStorage } from './storage';
 
@@ -10,12 +11,7 @@ const KEY_DAILY = 'mindtier.notif.daily';
 const KEY_TRIAL = 'mindtier.notif.trial';
 
 /** Gentle copy: invitations, never guilt. */
-const REMINDER_LINES = [
-  'Your daily ranked session is ready.',
-  'Today’s Daily Challenge is live — same puzzles for everyone.',
-  'Three quick games. See if your tier moves.',
-  'A few minutes of climbing?',
-] as const;
+const REMINDER_LINES: TKey[] = ['notify.reminder1', 'notify.reminder2', 'notify.reminder3', 'notify.reminder4'];
 
 let initialised = false;
 
@@ -31,19 +27,20 @@ export function initNotifications(): void {
     }),
   });
   if (Platform.OS === 'android') {
+    const t = getT();
     void Notifications.setNotificationChannelAsync(CHANNEL_REMINDERS, {
-      name: 'Daily reminders',
-      description: 'An optional nudge at the time you choose.',
+      name: t('notify.channelReminders'),
+      description: t('notify.channelRemindersDesc'),
       importance: Notifications.AndroidImportance.DEFAULT,
     });
     void Notifications.setNotificationChannelAsync('duels', {
-      name: 'Duels',
-      description: 'When a friend plays a duel you are in.',
+      name: t('notify.channelDuels'),
+      description: t('notify.channelDuelsDesc'),
       importance: Notifications.AndroidImportance.DEFAULT,
     });
     void Notifications.setNotificationChannelAsync(CHANNEL_ACCOUNT, {
-      name: 'Account and billing',
-      description: 'Trial ending and subscription notices.',
+      name: t('notify.channelAccount'),
+      description: t('notify.channelAccountDesc'),
       importance: Notifications.AndroidImportance.HIGH,
     });
   }
@@ -69,7 +66,8 @@ async function cancelStored(key: string): Promise<void> {
 export async function scheduleDailyReminder(hour: number, minute: number): Promise<boolean> {
   if (!(await ensurePermission())) return false;
   await cancelStored(KEY_DAILY);
-  const body = REMINDER_LINES[(new Date().getDate() + hour) % REMINDER_LINES.length] ?? REMINDER_LINES[0];
+  const t = getT();
+  const body = t(REMINDER_LINES[(new Date().getDate() + hour) % REMINDER_LINES.length] ?? 'notify.reminder1');
   const id = await Notifications.scheduleNotificationAsync({
     content: { title: 'Mindtier', body },
     trigger: { type: Notifications.SchedulableTriggerInputTypes.DAILY, hour, minute, channelId: CHANNEL_REMINDERS },
@@ -98,11 +96,12 @@ export async function scheduleTrialReminder(trialEndsAt: Date, priceString: stri
   const at = trialReminderDate(trialEndsAt);
   if (!at || !(await ensurePermission())) return;
   await cancelStored(KEY_TRIAL);
+  const t = getT();
   const day = trialEndsAt.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
   const id = await Notifications.scheduleNotificationAsync({
     content: {
-      title: 'Your Mindtier Pro trial ends soon',
-      body: `It converts to ${priceString} on ${day}. Cancel anytime in Settings → Manage subscription.`,
+      title: t('notify.trialTitle'),
+      body: t('notify.trialBody', { price: priceString, day }),
     },
     trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: at, channelId: CHANNEL_ACCOUNT },
   });
