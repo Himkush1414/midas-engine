@@ -1,6 +1,7 @@
 import type { DomainRatings, RunSummary, SessionPlan, SessionUpdate } from '@mindtier/core';
 import { create } from 'zustand';
 import { track } from '@/lib/analytics';
+import { useDuels } from './duels';
 import { useProgress } from './progress';
 
 export interface ActiveSession {
@@ -48,6 +49,10 @@ export const useSession = create<SessionStore>((set, get) => ({
     const result = useProgress.getState().completeSession(active.plan, active.runs);
     const finished: FinishedSession = { plan: active.plan, runs: active.runs, result, ratingsBefore: active.ratingsAtStart };
     set({ active: null, finished });
+    if (active.plan.mode === 'duel') {
+      const duelId = active.plan.seed.split('|')[1];
+      if (duelId) useDuels.getState().recordMyRun(duelId, active.runs.reduce((s, r) => s + r.points, 0));
+    }
     track('session_completed', { mode: active.plan.mode, games: active.runs.length });
     // Upload right away when online; the outbox keeps it if not. Lazy import avoids a require cycle.
     void import('@/features/sync/sync').then((m) => m.syncNow());

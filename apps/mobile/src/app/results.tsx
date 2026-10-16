@@ -5,6 +5,7 @@ import Animated, { ZoomIn } from 'react-native-reanimated';
 import { Celebration } from '@/components/Celebration';
 import { TierBadge } from '@/components/tier';
 import { Button, Card, Screen, Text } from '@/components/ui';
+import { shareDuel } from '@/features/duels/actions';
 import { DeltaRow } from '@/features/results/DeltaRow';
 import { useReduceMotion } from '@/lib/motion';
 import { useEntitlements } from '@/state/entitlements';
@@ -50,7 +51,19 @@ export default function Results() {
           {plan.mode === 'daily' ? (
             <Button label="See today’s board" size="lg" fullWidth icon="trophy" onPress={() => router.replace('/daily')} />
           ) : null}
-          <Button label="Done" size="lg" variant={plan.mode === 'daily' ? 'secondary' : 'primary'} fullWidth onPress={done} testID="results-done" />
+          {plan.mode === 'duel' ? (
+            <Button
+              label="Send to a friend"
+              size="lg"
+              fullWidth
+              icon="share"
+              onPress={() => {
+                const id = plan.seed.split('|')[1];
+                if (id) shareDuel(id);
+              }}
+            />
+          ) : null}
+          <Button label="Done" size="lg" variant={plan.mode === 'daily' || plan.mode === 'duel' ? 'secondary' : 'primary'} fullWidth onPress={done} testID="results-done" />
         </View>
       }
     >
