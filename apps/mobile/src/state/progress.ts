@@ -65,6 +65,8 @@ export interface ProgressState {
   noteDuelCreated(now?: Date): void;
   /** Replace local ratings with the authoritative server copy. */
   adoptServerRatings(ratings: DomainRatings): void;
+  /** Align local identity with the server profile (e.g. after signing in on a second device). */
+  adoptServerProfile(input: { seed: string; nextSessionIndex: number; placementDone: boolean }): void;
   dropOutboxItem(id: string): void;
   bumpOutboxAttempt(id: string): void;
   displayStreak(now?: Date): StreakState;
@@ -155,6 +157,14 @@ export const useProgress = create<ProgressState>()(
 
       adoptServerRatings(ratings) {
         set({ ratings });
+      },
+
+      adoptServerProfile({ seed, nextSessionIndex, placementDone }) {
+        set((s) => ({
+          userSeed: seed,
+          rankedSessionIndex: Math.max(s.rankedSessionIndex, nextSessionIndex),
+          placementDone: s.placementDone || placementDone,
+        }));
       },
 
       dropOutboxItem(id) {
