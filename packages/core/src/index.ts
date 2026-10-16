@@ -4,3 +4,5 @@ export * from './domains';
 export * from './tiers';
 export * from './staircase';
 export * from './games/types';
+export * from './games/runner';
+export * from './rating';
