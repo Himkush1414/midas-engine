@@ -165,7 +165,7 @@ export const es: Translations = {
   },
   welcome: {
     title: '¿En qué rango está tu mente?',
-    body: 'Juega 5 partidas rápidas de clasificación —Memoria, Atención, Velocidad, Lógica y Cálculo— para obtener tu rango inicial. Después, escala hasta Gran Maestro.',
+    body: 'Juega 5 partidas rápidas de clasificación (Memoria, Atención, Velocidad, Lógica y Cálculo) para obtener tu rango inicial. Después, escala hasta Gran Maestro.',
     factTime: 'Unos 4 minutos',
     factSignup: 'Sin registro',
     factAds: 'Sin anuncios, nunca',
