@@ -20,10 +20,11 @@ Answers for every Play Console declaration, derived from what the code actually 
 | Financial info → **Purchase history** (Pro plan + expiry, via RevenueCat) | Yes | Required for Pro buyers only | App functionality | No |
 | App activity → **App interactions** (anonymous usage events) | Yes | Optional (Settings → Privacy) | Analytics | No |
 | App activity → **Other actions** (game results, ratings, sessions) | Yes | Required | App functionality, Fraud prevention | No |
+| Device or other IDs → **Push notification token** | Yes, if the player allows duel notifications | Optional | App functionality | No |
 | App info and performance → **Crash logs** | Yes, when crash reporting is configured | Optional (Settings → Privacy) | App functionality | No |
 | App info and performance → **Diagnostics** | Yes, when crash reporting is configured | Optional | App functionality | No |
 
-Not collected: location, contacts, photos/videos, audio, files, calendar, health/fitness, messages, web history, device or advertising IDs, financial account or payment details (handled by Google Play).
+Not collected: location, contacts, photos/videos, audio, files, calendar, health/fitness, messages, web history, advertising ID, financial account or payment details (handled by Google Play).
 
 > Cross-check RevenueCat's and Sentry's current Data safety guidance before submitting, in case their SDK versions add data types.
 
@@ -65,7 +66,7 @@ Verified by dumping the AAB manifest (bundletool) after blocking unused library 
 | `POST_NOTIFICATIONS` | Optional daily reminder and trial-ending notice (runtime prompt only when enabled) |
 | `RECEIVE_BOOT_COMPLETED`, `WAKE_LOCK` | Keep scheduled local reminders after a reboot |
 | `VIBRATE` | Haptic feedback (can be turned off) |
-| `com.google.android.c2dm.permission.RECEIVE` | Added by expo-notifications; no remote push is sent today |
+| `com.google.android.c2dm.permission.RECEIVE` | Duel notifications via Firebase Cloud Messaging (only if the player allows notifications) |
 
 Blocked: storage read/write, `SYSTEM_ALERT_WINDOW`, install referrer, launcher badge permissions.
 

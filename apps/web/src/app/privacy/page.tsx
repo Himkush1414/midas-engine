@@ -65,6 +65,11 @@ export default function Privacy() {
             <td>No</td>
           </tr>
           <tr>
+            <td>Push notification token</td>
+            <td>Only if you allow duel notifications; used to tell you when a friend plays your duel</td>
+            <td>No</td>
+          </tr>
+          <tr>
             <td>Crash diagnostics (error details, app version, device model and OS version)</td>
             <td>To find and fix crashes</td>
             <td>No — only when crash reporting is enabled in the app</td>
@@ -79,8 +84,10 @@ export default function Privacy() {
 
       <h2>Reminders and notifications</h2>
       <p>
-        Daily reminders and trial-ending reminders are scheduled locally on your device. You choose whether to allow
-        them, and you can turn them off at any time in the app or in your device settings.
+        Daily reminders and trial-ending reminders are scheduled locally on your device. If you allow notifications when
+        you create or play a duel, we store a push notification token for your device so we can tell you when the other
+        player finishes. You can turn notifications off at any time in your device settings; deleting your account
+        removes the token.
       </p>
 
       <h2>Service providers</h2>
@@ -104,6 +111,10 @@ export default function Privacy() {
         </li>
         <li>
           <strong>Sentry</strong> — crash reporting, when enabled.
+        </li>
+        <li>
+          <strong>Expo push service</strong> (with Google Firebase Cloud Messaging and Apple Push Notification service) —
+          delivers duel notifications if you allow them.
         </li>
       </ul>
       <p>We do not sell personal data and do not share it for advertising.</p>

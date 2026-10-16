@@ -99,14 +99,24 @@ The app ships with a full RevenueCat integration that switches on as soon as a k
 2. Vercel env `ANDROID_CERT_SHA256` = `[upload_sha256],[signing_sha256]` (colon-separated hex), then redeploy.
 3. Check: `https://midas-engine.vercel.app/.well-known/assetlinks.json` lists both.
 
-## 7. Crash reporting (optional, recommended)
+## 7. Push notifications for duels
+
+The app asks for notification permission only when a player creates or plays a duel, registers an Expo push token and the API notifies the other player. Delivery on Android needs Firebase credentials on EAS:
+
+1. Firebase console → create a project → add an Android app `app.mindtier` (you don't need to download google-services.json for Expo push).
+2. Project settings → Service accounts → generate a private key (FCM V1).
+3. `cd apps/mobile && npx eas-cli@latest credentials -p android` → Push Notifications: FCM V1 → upload that JSON. Never commit it.
+4. iOS: EAS creates the APNs key during the first iOS build.
+5. Test: create a duel on one phone, play it on another; the creator gets "Sam beat your score…".
+
+## 8. Crash reporting (optional, recommended)
 
 1. Create a Sentry project (React Native).
 2. EAS env (all environments): `EXPO_PUBLIC_SENTRY_DSN=[dsn]`.
 3. For readable stack traces, add EAS secrets `SENTRY_ORG`, `SENTRY_PROJECT` and `SENTRY_AUTH_TOKEN` (visibility: secret), and remove `SENTRY_DISABLE_AUTO_UPLOAD` from `apps/mobile/eas.json`. `app.config.ts` enables the Sentry plugin automatically when org and project are set.
 4. Players can opt out in Settings → Privacy. The privacy policy already covers crash data.
 
-## 8. Apple App Store (secondary)
+## 9. Apple App Store (secondary)
 
 The code is iOS-ready: privacy manifest, no tracking (no ATT prompt needed), universal links, App Store subscription management link, and no third-party social login (so Sign in with Apple isn't required).
 
@@ -116,7 +126,7 @@ The code is iOS-ready: privacy manifest, no tracking (no ATT prompt needed), uni
 4. `cd apps/mobile && npx eas-cli@latest build -p ios --profile production` (EAS handles certificates interactively the first time), then `eas submit -p ios`.
 5. App Privacy questionnaire: mirror `NSPrivacyCollectedDataTypes` in `app.config.ts` (user ID, email, gameplay, purchases, product interaction, crash data; none used for tracking).
 
-## 9. After launch
+## 10. After launch
 
 - Watch the funnel in Supabase (`events` table): `onboarding_started → placement_completed → paywall_viewed → purchase_completed`.
 - Ship JS-only fixes over the air: `cd apps/mobile && npx eas-cli@latest update --channel production --message "…"`.
