@@ -54,3 +54,6 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 *.swp
+
+# Web QA export used for screenshots
+.qa-web/

@@ -11,11 +11,13 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ErrorScreen } from '@/components/ErrorScreen';
 import { useAppLifecycle } from '@/features/sync/useAppLifecycle';
 import { initCrashReporting, reportError } from '@/lib/crash';
+import { installDevHooks } from '@/lib/devHooks';
 import { useProgress } from '@/state/progress';
 import { useSettings } from '@/state/settings';
 import { ThemeProvider, useTheme } from '@/theme';
 
 initCrashReporting();
+installDevHooks();
 void SplashScreen.preventAutoHideAsync();
 
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {

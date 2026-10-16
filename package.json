@@ -17,6 +17,7 @@
     "build": "npm run build --workspaces --if-present"
   },
   "devDependencies": {
+    "playwright": "^1.64.1",
     "sharp": "^0.34.5"
   },
   "overrides": {
