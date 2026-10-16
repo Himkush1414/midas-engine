@@ -1,4 +1,4 @@
-import type { Dictionary } from '../core';
+import { LANGUAGES, type Dictionary } from '../core';
 import { de } from '../de';
 import { en } from '../en';
 import { es } from '../es';
@@ -37,5 +37,13 @@ describe.each([
       expect({ path, empty: text.trim() === '' && source.trim() !== '' }).toEqual({ path, empty: false });
       expect({ path, params: placeholders(text) }).toEqual({ path, params: placeholders(source) });
     }
+  });
+});
+
+describe('native locale declaration', () => {
+  it('app.config declares exactly the in-app languages', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- app.config is plain config, loaded the way Expo loads it
+    const { SUPPORTED_LOCALES } = require('../../../app.config') as { SUPPORTED_LOCALES: string[] };
+    expect([...SUPPORTED_LOCALES].sort()).toEqual([...LANGUAGES].sort());
   });
 });
