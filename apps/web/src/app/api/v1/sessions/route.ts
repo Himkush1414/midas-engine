@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { HttpError, handler, json, parseBody, requireUser } from '@/server/http';
 import { getRatings, isPro, requireProfile, usageToday } from '@/server/players';
 import { supabaseAdmin } from '@/server/supabase';
+import { duelResultMessage, sendPush } from '@/server/push';
 import { UPLOAD_MODES, validateSession } from '@/server/validate-session';
 
 const Run = z.object({
@@ -93,6 +94,10 @@ export const POST = handler(async (req: Request) => {
     throw error;
   }
 
+  if (status === 'ok' && body.mode === 'duel' && result.duelId) {
+    await notifyDuelOpponents(result.duelId, user.id, profile.display_name ?? 'Your friend', result.points);
+  }
+
   return json({
     status,
     ratings: result.update?.ratings ?? ratings,
@@ -108,3 +113,24 @@ export const POST = handler(async (req: Request) => {
     points: result.points,
   });
 });
+
+/** Tell everyone else in the duel how this run compares with theirs. Best-effort. */
+async function notifyDuelOpponents(duelId: string, playerId: string, playerName: string, points: number) {
+  try {
+    const db = supabaseAdmin();
+    const { data: duel } = await db.from('duels').select('creator_id').eq('id', duelId).maybeSingle();
+    const { data: entries } = await db.from('duel_entries').select('user_id, points').eq('duel_id', duelId);
+    const others = new Set<string>([...(entries ?? []).map((e) => e.user_id), ...(duel ? [duel.creator_id] : [])]);
+    others.delete(playerId);
+    if (others.size === 0) return;
+    const { data: tokens } = await db.from('push_tokens').select('user_id, token').in('user_id', [...others]);
+    const pointsOf = new Map((entries ?? []).map((e) => [e.user_id, e.points] as const));
+    await sendPush(
+      (tokens ?? []).map((t) =>
+        duelResultMessage({ token: t.token, duelId, playerName, playerPoints: points, recipientPoints: pointsOf.get(t.user_id) ?? null }),
+      ),
+    );
+  } catch (e) {
+    console.warn('duel notify failed', e);
+  }
+}
