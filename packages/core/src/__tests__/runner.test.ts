@@ -133,3 +133,21 @@ describe('applyRun', () => {
     expect(applyRun(current, run.summary())).toMatchObject({ delta: 0, after: current, change: 'none' });
   });
 });
+
+describe('applySession', () => {
+  it('updates each game domain and leaves the others alone', async () => {
+    const { applySession, initialRatings } = await import('../rating');
+    const { GAMES } = await import('../games/registry');
+    const ratings = initialRatings();
+    const runs = (['flank', 'quick-sum'] as const).map((id) => {
+      const run = new GameRun(GAMES[id], { mode: 'ranked', seed: `s-${id}`, rating: 1300 });
+      while (!run.done) run.submit(GAMES[id].solve(run.currentTrial()), 800);
+      return run.summary();
+    });
+    const result = applySession(ratings, runs);
+    expect(result.updates.map((u) => u.domain)).toEqual(['focus', 'math']);
+    expect(result.ratings.focus.rating).toBeGreaterThan(ratings.focus.rating);
+    expect(result.ratings.math.rating).toBeGreaterThan(ratings.math.rating);
+    expect(result.ratings.memory).toEqual(ratings.memory);
+  });
+});
