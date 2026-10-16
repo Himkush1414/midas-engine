@@ -23,11 +23,33 @@ export const POST = handler(async (req: Request) => {
     profile = data;
   }
 
-  const [ratings, pro, usage] = await Promise.all([getRatings(user.id), isPro(user.id), usageToday(user.id)]);
+  const [ratings, pro, usage, last] = await Promise.all([
+    getRatings(user.id),
+    isPro(user.id),
+    usageToday(user.id),
+    db
+      .from('sessions')
+      .select('session_index')
+      .eq('user_id', user.id)
+      .eq('mode', 'ranked')
+      .order('session_index', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+  ]);
+  if (last.error) throw last.error;
+  const { count: placements, error: placementErr } = await db
+    .from('sessions')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+    .eq('mode', 'placement');
+  if (placementErr) throw placementErr;
   return json({
     profile: { id: profile.id, seed: profile.seed, displayName: profile.display_name },
     ratings,
     isPro: pro,
     usage,
+    // Lets a second device continue the ranked sequence without reusing an index.
+    nextSessionIndex: (last.data?.session_index ?? -1) + 1,
+    placementDone: (placements ?? 0) > 0,
   });
 });
