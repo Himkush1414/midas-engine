@@ -6,12 +6,14 @@ import { Button, Card, PressableScale, Screen, Text } from '@/components/ui';
 import { DomainList } from '@/features/home/DomainList';
 import { RankHero } from '@/features/home/RankHero';
 import { startDaily, startFocus, startRanked } from '@/features/session/start';
+import { useT } from '@/i18n';
 import { useEntitlements } from '@/state/entitlements';
 import { useProgress } from '@/state/progress';
 import { spacing, useTheme } from '@/theme';
 
 export default function Home() {
   const { colors } = useTheme();
+  const t = useT();
   const ratings = useProgress((s) => s.ratings);
   const today = utcDayKey(new Date());
   const usageDay = useProgress((s) => s.usageDay);
@@ -29,12 +31,12 @@ export default function Home() {
   return (
     <Screen scroll>
       <View style={styles.header}>
-        <Text variant="title">Climb</Text>
+        <Text variant="title">{t('tabs.climb')}</Text>
         <View style={styles.headerRight}>
           <View
             style={[styles.chip, { backgroundColor: colors.surface, borderColor: colors.border }]}
             accessible
-            accessibilityLabel={`${streak.current} day streak, ${streak.shields} shields`}
+            accessibilityLabel={t('home.streakA11y', { days: streak.current, shields: streak.shields })}
           >
             <Icon name="flame" size={18} color={streak.current > 0 ? colors.warning : colors.textFaint} />
             <Text weight="semibold" tabular>
@@ -49,7 +51,7 @@ export default function Home() {
               </>
             ) : null}
           </View>
-          <PressableScale onPress={() => router.push('/settings')} accessibilityLabel="Settings" style={styles.iconButton}>
+          <PressableScale onPress={() => router.push('/settings')} accessibilityLabel={t('home.settings')} style={styles.iconButton}>
             <Icon name="settings" size={24} color={colors.textMuted} />
           </PressableScale>
         </View>
@@ -60,35 +62,35 @@ export default function Home() {
 
         <Card raised style={styles.play}>
           <View style={styles.playText}>
-            <Text variant="heading">Ranked session</Text>
-            <Text tone="muted">3 games picked for you · about 4 minutes</Text>
+            <Text variant="heading">{t('home.rankedTitle')}</Text>
+            <Text tone="muted">{t('home.rankedBody')}</Text>
           </View>
           {canRank ? (
             <>
-              <Button label="Play ranked" icon="play" size="lg" fullWidth onPress={startRanked} testID="home-ranked" />
+              <Button label={t('home.playRanked')} icon="play" size="lg" fullWidth onPress={startRanked} testID="home-ranked" />
               {remaining !== null ? (
                 <Text variant="caption" tone="faint" align="center">
-                  {remaining} free ranked {remaining === 1 ? 'session' : 'sessions'} left today
+                  {t('home.freeLeft', { count: remaining })}
                 </Text>
               ) : null}
             </>
           ) : (
             <>
-              <Text tone="muted">You’ve played today’s free ranked session. It refreshes at 00:00 UTC.</Text>
-              <Button label="Keep climbing with Pro" variant="secondary" icon="sparkle" fullWidth onPress={() => router.push('/paywall')} />
+              <Text tone="muted">{t('home.limitReached')}</Text>
+              <Button label={t('home.keepClimbing')} variant="secondary" icon="sparkle" fullWidth onPress={() => router.push('/paywall')} />
             </>
           )}
         </Card>
 
-        <Card onPress={dailyDone ? () => router.push('/daily') : startDaily} accessibilityLabel="Daily Challenge">
+        <Card onPress={dailyDone ? () => router.push('/daily') : startDaily} accessibilityLabel={t('home.dailyTitle')}>
           <View style={styles.rowCard}>
             <View style={[styles.cardIcon, { backgroundColor: colors.surfaceRaised }]}>
               <Icon name="daily" size={24} color={colors.spark} />
             </View>
             <View style={styles.flex}>
-              <Text weight="semibold">Daily Challenge</Text>
+              <Text weight="semibold">{t('home.dailyTitle')}</Text>
               <Text variant="caption" tone="muted">
-                {dailyDone ? 'Done — see how you placed' : 'Same 3 puzzles for everyone today'}
+                {dailyDone ? t('home.dailyDone') : t('home.dailyTodo')}
               </Text>
             </View>
             <Icon name="chevronRight" size={20} color={colors.textFaint} />
@@ -97,17 +99,17 @@ export default function Home() {
 
         <View style={styles.sectionHeader}>
           <Text variant="subheading" weight="semibold">
-            Your domains
+            {t('home.domainsTitle')}
           </Text>
           {!isPro ? (
             <Text variant="caption" tone="faint">
-              Focus training is Pro
+              {t('home.focusIsPro')}
             </Text>
           ) : null}
         </View>
         <DomainList ratings={ratings} onPress={(d) => (isPro ? startFocus(d) : router.push('/paywall'))} />
 
-        <Button label="Zen practice" variant="ghost" icon="zen" onPress={() => router.push('/zen')} />
+        <Button label={t('home.zen')} variant="ghost" icon="zen" onPress={() => router.push('/zen')} />
       </View>
     </Screen>
   );
