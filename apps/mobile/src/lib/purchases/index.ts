@@ -1,7 +1,6 @@
 import { Platform } from 'react-native';
 import { useEntitlements } from '@/state/entitlements';
 import { createFallbackProvider } from './fallback';
-import { createRevenueCatProvider } from './revenuecat';
 import type { EntitlementSnapshot, PurchasesProvider } from './types';
 
 export * from './types';
@@ -11,7 +10,11 @@ const key = Platform.select({
   ios: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY,
 });
 
-export const purchases: PurchasesProvider = key ? createRevenueCatProvider(key) : createFallbackProvider(__DEV__);
+// The native SDK is only loaded when a store key is configured (and never on web).
+export const purchases: PurchasesProvider = key
+  ? // eslint-disable-next-line @typescript-eslint/no-require-imports -- deliberate lazy load of the native SDK
+    (require('./revenuecat') as typeof import('./revenuecat')).createRevenueCatProvider(key)
+  : createFallbackProvider(__DEV__);
 
 export function applyEntitlement(e: EntitlementSnapshot): void {
   useEntitlements.getState().set({

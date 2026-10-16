@@ -18,7 +18,7 @@ const REMINDER_LINES = [
 let initialised = false;
 
 export function initNotifications(): void {
-  if (initialised) return;
+  if (initialised || Platform.OS === 'web') return;
   initialised = true;
   Notifications.setNotificationHandler({
     handleNotification: async () => ({

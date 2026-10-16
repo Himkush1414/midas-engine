@@ -1,6 +1,6 @@
 import 'react-native-url-polyfill/auto';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import Storage from 'expo-sqlite/kv-store';
+import { kv } from './kv';
 import { AppState } from 'react-native';
 import { backendConfigured, config } from './config';
 
@@ -13,9 +13,9 @@ export function supabase(): SupabaseClient | null {
     client = createClient(config.supabaseUrl, config.supabaseAnonKey, {
       auth: {
         storage: {
-          getItem: (k) => Storage.getItemAsync(k),
-          setItem: (k, v) => Storage.setItemAsync(k, v),
-          removeItem: (k) => Storage.removeItemAsync(k).then(() => undefined),
+          getItem: (k) => kv.getItemAsync(k),
+          setItem: (k, v) => kv.setItemAsync(k, v),
+          removeItem: (k) => kv.removeItemAsync(k),
         },
         autoRefreshToken: true,
         persistSession: true,
