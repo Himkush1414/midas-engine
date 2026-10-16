@@ -26,6 +26,11 @@ export function initNotifications(): void {
       shouldSetBadge: false,
     }),
   });
+  setChannels();
+}
+
+/** Android channel names are user-visible in system settings, so they follow the app language. */
+function setChannels(): void {
   if (Platform.OS === 'android') {
     const t = getT();
     void Notifications.setNotificationChannelAsync(CHANNEL_REMINDERS, {
@@ -44,6 +49,18 @@ export function initNotifications(): void {
       importance: Notifications.AndroidImportance.HIGH,
     });
   }
+}
+
+/**
+ * Re-apply the current language to everything already handed to the OS: channel
+ * names and the scheduled daily reminder (only if it is on; never prompts).
+ */
+export async function relocalizeNotifications(reminder: { enabled: boolean; hour: number; minute: number }): Promise<void> {
+  if (Platform.OS === 'web') return;
+  setChannels();
+  if (!reminder.enabled) return;
+  const { granted } = await Notifications.getPermissionsAsync();
+  if (granted) await scheduleDailyReminder(reminder.hour, reminder.minute);
 }
 
 export async function ensurePermission(): Promise<boolean> {

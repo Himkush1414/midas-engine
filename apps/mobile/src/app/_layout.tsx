@@ -10,7 +10,9 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ErrorScreen } from '@/components/ErrorScreen';
 import { useAppLifecycle } from '@/features/sync/useAppLifecycle';
+import { useLanguage, useSyncDeviceLanguage } from '@/i18n';
 import { initCrashReporting, reportError } from '@/lib/crash';
+import { relocalizeNotifications } from '@/lib/notifications';
 import { installDevHooks } from '@/lib/devHooks';
 import { useProgress } from '@/state/progress';
 import { useSettings } from '@/state/settings';
@@ -37,6 +39,13 @@ function AppStack() {
   const { colors, scheme } = useTheme();
   const placementDone = useProgress((s) => s.placementDone);
   useAppLifecycle();
+  useSyncDeviceLanguage();
+  const language = useLanguage();
+
+  useEffect(() => {
+    const { reminderEnabled, reminderHour, reminderMinute } = useSettings.getState();
+    void relocalizeNotifications({ enabled: reminderEnabled, hour: reminderHour, minute: reminderMinute }).catch(() => undefined);
+  }, [language]);
 
   useEffect(() => {
     void SystemUI.setBackgroundColorAsync(colors.background);

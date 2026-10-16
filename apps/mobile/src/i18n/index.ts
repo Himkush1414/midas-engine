@@ -1,4 +1,6 @@
-import { getLocales } from 'expo-localization';
+import { getLocales, useLocales } from 'expo-localization';
+import { useEffect } from 'react';
+import { create } from 'zustand';
 import { useSettings } from '@/state/settings';
 import { resolveLanguage, translate, type Language, type Params, type Path, type Shape } from './core';
 import { en, type EnglishDictionary } from './en';
@@ -18,13 +20,26 @@ export function registerLanguage(lang: Language, dict: Translations): void {
   DICTIONARIES[lang] = dict;
 }
 
-function deviceLanguage(): string | null {
+function readDeviceLanguage(): string | null {
   try {
     return getLocales()[0]?.languageCode ?? null;
   } catch {
     return null;
   }
 }
+
+/** The device language, kept current so a system language change re-renders without an app restart. */
+const useDeviceLanguage = create<{ code: string | null }>(() => ({ code: readDeviceLanguage() }));
+
+/** Mount once near the root: follows system (and Android per-app) language changes. */
+export function useSyncDeviceLanguage(): void {
+  const code = useLocales()[0]?.languageCode ?? null;
+  useEffect(() => {
+    if (useDeviceLanguage.getState().code !== code) useDeviceLanguage.setState({ code });
+  }, [code]);
+}
+
+const deviceLanguage = () => useDeviceLanguage.getState().code;
 
 export function currentLanguage(): Language {
   const lang = resolveLanguage(useSettings.getState().language, deviceLanguage());
@@ -44,13 +59,15 @@ export function getT(): TFunction {
 /** Translate inside components; re-renders when the language setting changes. */
 export function useT(): TFunction {
   const preference = useSettings((s) => s.language);
-  const lang = resolveLanguage(preference, deviceLanguage());
+  const device = useDeviceLanguage((s) => s.code);
+  const lang = resolveLanguage(preference, device);
   return makeT(DICTIONARIES[lang] ? lang : 'en');
 }
 
 export function useLanguage(): Language {
   const preference = useSettings((s) => s.language);
-  const lang = resolveLanguage(preference, deviceLanguage());
+  const device = useDeviceLanguage((s) => s.code);
+  const lang = resolveLanguage(preference, device);
   return DICTIONARIES[lang] ? lang : 'en';
 }
 
