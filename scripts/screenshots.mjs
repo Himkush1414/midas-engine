@@ -246,6 +246,24 @@ const SCENES = [
   },
   { name: '09-paywall', path: '/', before: async (page) => { await store(page, () => globalThis.__mindtier.router.push('/paywall')); await settle(page, 1200); } },
   { name: '10-welcome', path: '/', fresh: true },
+  ...[
+    ['11-game-route', 'route', 2400],
+    ['12-game-grid', 'grid-recall', 2150],
+    ['13-game-clash', 'clash', 2300],
+  ].map(([name, game, wait]) => ({
+    name,
+    path: '/',
+    before: async (page) => {
+      await store(page, (g) => {
+        const { useSession } = globalThis.__mindtier.stores;
+        useSession.getState().start({ mode: 'ranked', seed: `shot|${g}`, games: [g, 'flank', 'pattern'] });
+        globalThis.__mindtier.router.push('/session');
+      }, game);
+      await settle(page);
+      await page.getByTestId('intro-start').click();
+      await settle(page, wait);
+    },
+  })),
 ];
 
 let server = null;
