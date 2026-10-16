@@ -1,4 +1,6 @@
-import { DOMAIN_LABELS, getGame, tierInfo, type RatingUpdate, type Domain, type GameId } from '@mindtier/core';
+import { getGame, tierInfo, type RatingUpdate, type Domain, type GameId } from '@mindtier/core';
+import { useT } from '@/i18n';
+import { domainLabel, tierLabel } from '@/i18n/labels';
 import { StyleSheet, View } from 'react-native';
 import Animated, { FadeInRight } from 'react-native-reanimated';
 import { Icon } from '@/components/icons/Icon';
@@ -16,6 +18,7 @@ export function DeltaRow({
   reduceMotion: boolean;
 }) {
   const { colors } = useTheme();
+  const t = useT();
   const after = tierInfo(update.after);
   const up = update.delta > 0;
   const flat = update.delta === 0;
@@ -25,13 +28,13 @@ export function DeltaRow({
       entering={reduceMotion ? undefined : FadeInRight.delay(200 + index * 160).duration(320)}
       style={[styles.row, { borderColor: colors.border, backgroundColor: colors.surface }]}
       accessible
-      accessibilityLabel={`${DOMAIN_LABELS[update.domain]}: ${flat ? 'no change' : `${up ? 'up' : 'down'} ${Math.abs(update.delta)}`}, now ${after.label}`}
+      accessibilityLabel={t('results.deltaA11y', { domain: domainLabel(t, update.domain), change: flat ? t('results.noChange') : t(up ? 'results.up' : 'results.down', { n: Math.abs(update.delta) }), label: tierLabel(t, after) })}
     >
       <DomainBadge domain={update.domain} size={40} />
       <View style={styles.text}>
         <Text weight="semibold">{getGame(update.gameId).name}</Text>
         <Text variant="caption" tone="muted" tabular>
-          {DOMAIN_LABELS[update.domain]} · {Math.round(update.before.rating)} → {Math.round(update.after.rating)}
+          {domainLabel(t, update.domain)} · {Math.round(update.before.rating)} → {Math.round(update.after.rating)}
         </Text>
       </View>
       <View style={styles.delta}>

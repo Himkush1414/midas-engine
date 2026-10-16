@@ -1,4 +1,4 @@
-import { DOMAINS, DOMAIN_LABELS, initialRatings, overallRating, tierInfo, type Domain } from '@mindtier/core';
+import { DOMAINS, initialRatings, overallRating, tierInfo, type Domain } from '@mindtier/core';
 import { Redirect, router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -12,6 +12,8 @@ import { haptic } from '@/lib/feedback';
 import { play } from '@/lib/sound';
 import { useReduceMotion } from '@/lib/motion';
 import { useTierShare } from '@/features/share/useTierShare';
+import { useT } from '@/i18n';
+import { domainLabel, tierLabel } from '@/i18n/labels';
 import { useEntitlements } from '@/state/entitlements';
 import { useSession } from '@/state/session';
 import { spacing, tierColors, useTheme } from '@/theme';
@@ -21,6 +23,7 @@ const INITIAL = initialRatings();
 
 export default function Reveal() {
   const reduce = useReduceMotion();
+  const t = useT();
   const { domain: domainColor } = useTheme();
   const finished = useSession((s) => s.finished);
   const isPro = useEntitlements((s) => s.isPro);
@@ -60,7 +63,7 @@ export default function Reveal() {
       <Screen>
         <View style={styles.suspense}>
           <Text variant="heading" align="center">
-            Calculating your tier…
+            {t('reveal.calculating')}
           </Text>
           <View style={styles.bars}>
             {DOMAINS.map((d, i) => (
@@ -83,8 +86,8 @@ export default function Reveal() {
       edges={['top', 'left', 'right', 'bottom']}
       footer={
         <View style={styles.footer}>
-          <Button label="Start climbing" size="lg" iconRight="arrowRight" fullWidth onPress={next} testID="reveal-continue" />
-          <Button label="Share my tier" variant="ghost" icon="share" onPress={() => void tierShare.share()} />
+          <Button label={t('reveal.startClimbing')} size="lg" iconRight="arrowRight" fullWidth onPress={next} testID="reveal-continue" />
+          <Button label={t('reveal.shareTier')} variant="ghost" icon="share" onPress={() => void tierShare.share()} />
         </View>
       }
     >
@@ -92,17 +95,17 @@ export default function Reveal() {
       <View style={styles.hero}>
         <Celebration colors={[c.highlight, c.base, '#FFFFFF']} reduceMotion={reduce} top={60} />
         <Text variant="label" tone="muted" align="center">
-          YOU PLACED
+          {t('reveal.placed')}
         </Text>
         <Animated.View entering={reduce ? undefined : ZoomIn.springify().damping(11)}>
           <TierBadge info={info} size={168} showProvisional={false} />
         </Animated.View>
         <Animated.View entering={reduce ? undefined : FadeInUp.delay(250)}>
           <Text variant="hero" align="center">
-            {info.label}
+            {tierLabel(t, info)}
           </Text>
           <Text tone="muted" align="center">
-            Placement ratings settle over your next few sessions.
+            {t('reveal.settles')}
           </Text>
         </Animated.View>
       </View>
@@ -114,26 +117,26 @@ export default function Reveal() {
       <View style={styles.insights}>
         <Card style={styles.insight}>
           <Text variant="caption" tone="faint" weight="semibold">
-            STRONGEST
+            {t('reveal.strongest')}
           </Text>
           <View style={styles.insightRow}>
             <DomainBadge domain={strongest} size={28} />
-            <Text weight="semibold">{DOMAIN_LABELS[strongest]}</Text>
+            <Text weight="semibold">{domainLabel(t, strongest)}</Text>
           </View>
           <Text variant="caption" tone="muted">
-            {tierInfo(ratings[strongest]).label}
+            {tierLabel(t, tierInfo(ratings[strongest]))}
           </Text>
         </Card>
         <Card style={styles.insight}>
           <Text variant="caption" tone="faint" weight="semibold">
-            MOST ROOM TO CLIMB
+            {t('reveal.room')}
           </Text>
           <View style={styles.insightRow}>
             <DomainBadge domain={weakest} size={28} />
-            <Text weight="semibold">{DOMAIN_LABELS[weakest]}</Text>
+            <Text weight="semibold">{domainLabel(t, weakest)}</Text>
           </View>
           <Text variant="caption" tone="muted">
-            {tierInfo(ratings[weakest]).label}
+            {tierLabel(t, tierInfo(ratings[weakest]))}
           </Text>
         </Card>
       </View>

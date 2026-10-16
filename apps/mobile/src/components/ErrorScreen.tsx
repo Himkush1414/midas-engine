@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import { useT } from '@/i18n';
 import { spacing, useTheme } from '@/theme';
 import { Icon } from './icons/Icon';
 import { Button, Screen, Text } from './ui';
@@ -6,6 +7,7 @@ import { Button, Screen, Text } from './ui';
 /** Friendly fallback for unexpected render errors. Progress is stored locally and is not lost. */
 export function ErrorScreen({ error, onRetry }: { error: Error; onRetry(): void }) {
   const { colors } = useTheme();
+  const t = useT();
   return (
     <Screen>
       <View style={styles.center}>
@@ -13,17 +15,17 @@ export function ErrorScreen({ error, onRetry }: { error: Error; onRetry(): void 
           <Icon name="refresh" size={36} color={colors.primaryText} />
         </View>
         <Text variant="title" align="center">
-          Something went sideways
+          {t('error.title')}
         </Text>
         <Text tone="muted" align="center">
-          Your ranks and progress are safe. Try again — if it keeps happening, restart the app.
+          {t('error.body')}
         </Text>
         {__DEV__ ? (
           <Text variant="caption" tone="faint" align="center" selectable>
             {error.message}
           </Text>
         ) : null}
-        <Button label="Try again" icon="refresh" onPress={onRetry} />
+        <Button label={t('common.tryAgain')} icon="refresh" onPress={onRetry} />
       </View>
     </Screen>
   );

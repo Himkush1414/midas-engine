@@ -12,6 +12,8 @@ import { haptic } from '@/lib/feedback';
 import { useReduceMotion } from '@/lib/motion';
 import { maybeAskForReview } from '@/lib/review';
 import { play } from '@/lib/sound';
+import { useT, type TKey } from '@/i18n';
+import { tierLabel } from '@/i18n/labels';
 import { useEntitlements } from '@/state/entitlements';
 import { useSession } from '@/state/session';
 import { spacing, tierColors } from '@/theme';
@@ -22,16 +24,17 @@ function isPromotion(f: { plan: { mode: string }; ratingsBefore: Parameters<type
   return change === 'tier-up' || change === 'promoted';
 }
 
-const PROMOTION_COPY = {
-  'tier-up': 'New tier!',
-  promoted: 'Division up!',
-  demoted: 'Slipped a division — you’ll climb back',
-  'tier-down': 'Dropped a tier — every climber does',
+const PROMOTION_COPY: Record<string, TKey | null> = {
+  'tier-up': 'results.tierUp',
+  promoted: 'results.divisionUp',
+  demoted: 'results.divisionDown',
+  'tier-down': 'results.tierDown',
   none: null,
-} as const;
+};
 
 export default function Results() {
   const reduce = useReduceMotion();
+  const t = useT();
   const finished = useSession((s) => s.finished);
   const isPro = useEntitlements((s) => s.isPro);
   const promoted = finished ? isPromotion(finished) : false;
@@ -69,11 +72,11 @@ export default function Results() {
       footer={
         <View style={styles.footer}>
           {plan.mode === 'daily' ? (
-            <Button label="See today’s board" size="lg" fullWidth icon="trophy" onPress={() => router.replace('/daily')} />
+            <Button label={t('results.board')} size="lg" fullWidth icon="trophy" onPress={() => router.replace('/daily')} />
           ) : null}
           {plan.mode === 'duel' ? (
             <Button
-              label="Send to a friend"
+              label={t('results.sendFriend')}
               size="lg"
               fullWidth
               icon="share"
@@ -83,7 +86,7 @@ export default function Results() {
               }}
             />
           ) : null}
-          <Button label="Done" size="lg" variant={plan.mode === 'daily' || plan.mode === 'duel' ? 'secondary' : 'primary'} fullWidth onPress={done} testID="results-done" />
+          <Button label={t('common.done')} size="lg" variant={plan.mode === 'daily' || plan.mode === 'duel' ? 'secondary' : 'primary'} fullWidth onPress={done} testID="results-done" />
         </View>
       }
     >
@@ -96,24 +99,23 @@ export default function Results() {
           <>
             {PROMOTION_COPY[change] ? (
               <Text variant="label" tone={celebrate ? 'spark' : 'muted'} align="center">
-                {PROMOTION_COPY[change]}
+                {t(PROMOTION_COPY[change]!)}
               </Text>
             ) : null}
             <Text variant="title" align="center">
-              {info.label}
+              {tierLabel(t, info)}
             </Text>
             <Text tone="muted" align="center" tabular>
-              Mind rating {Math.round(after.rating)} ({overallDelta >= 0 ? '+' : '−'}
-              {Math.abs(overallDelta)})
+              {t('results.mindRating', { rating: Math.round(after.rating), delta: `${overallDelta >= 0 ? '+' : '−'}${Math.abs(overallDelta)}` })}
             </Text>
           </>
         ) : (
           <>
             <Text variant="title" align="center" tabular>
-              {plan.mode === 'zen' ? `${Math.round((runs[0]?.accuracy ?? 0) * 100)}% accuracy` : `${points.toLocaleString()} pts`}
+              {plan.mode === 'zen' ? t('results.accuracy', { percent: Math.round((runs[0]?.accuracy ?? 0) * 100) }) : t('common.points', { points })}
             </Text>
             <Text tone="muted" align="center">
-              {plan.mode === 'daily' ? 'Daily Challenge complete' : plan.mode === 'duel' ? 'Your duel run is in' : 'Practice complete — unrated'}
+              {plan.mode === 'daily' ? t('results.dailyDone') : plan.mode === 'duel' ? t('results.duelDone') : t('results.zenDone')}
             </Text>
           </>
         )}
@@ -129,9 +131,9 @@ export default function Results() {
         <View style={styles.list}>
           {runs.map((r, i) => (
             <Card key={`${r.gameId}-${i}`}>
-              <Text weight="semibold">{Math.round(r.accuracy * 100)}% accuracy</Text>
+              <Text weight="semibold">{t('results.accuracy', { percent: Math.round(r.accuracy * 100) })}</Text>
               <Text variant="caption" tone="muted" tabular>
-                {plan.mode === 'zen' ? `Reached level ${Math.max(1, r.peakLevel)}` : `${r.points.toLocaleString()} pts · peak level ${r.peakLevel}`}
+                {plan.mode === 'zen' ? t('results.reached', { level: Math.max(1, r.peakLevel) }) : t('results.pointsPeak', { points: r.points, level: r.peakLevel })}
               </Text>
             </Card>
           ))}
@@ -139,10 +141,10 @@ export default function Results() {
       )}
 
       {plan.mode === 'ranked' && !isPro ? (
-        <Card style={styles.upsell} onPress={() => router.push('/paywall')} accessibilityLabel="Learn about Mindtier Pro">
-          <Text weight="semibold">Want to keep climbing today?</Text>
+        <Card style={styles.upsell} onPress={() => router.push('/paywall')} accessibilityLabel={t('paywall.title')}>
+          <Text weight="semibold">{t('results.upsellTitle')}</Text>
           <Text variant="caption" tone="muted">
-            Pro unlocks unlimited ranked sessions, focus training and full stats. Optional — the free daily session stays free.
+            {t('results.upsellBody')}
           </Text>
         </Card>
       ) : null}

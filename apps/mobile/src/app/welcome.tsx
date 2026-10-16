@@ -6,6 +6,7 @@ import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { TierBadge } from '@/components/tier';
 import { Button, Screen, Text } from '@/components/ui';
 import { track } from '@/lib/analytics';
+import { useT } from '@/i18n';
 import { links } from '@/lib/links';
 import { useReduceMotion } from '@/lib/motion';
 import { useProgress } from '@/state/progress';
@@ -21,6 +22,7 @@ const PREVIEW = (['bronze', 'gold', 'diamond'] as const).map((tier, i) => ({
 
 export default function Welcome() {
   const { colors } = useTheme();
+  const t = useT();
   const reduce = useReduceMotion();
   const userSeed = useProgress((s) => s.userSeed);
   const start = useSession((s) => s.start);
@@ -36,16 +38,15 @@ export default function Welcome() {
       edges={['top', 'left', 'right', 'bottom']}
       footer={
         <View style={styles.footer}>
-          <Button label="Find my tier" size="lg" iconRight="arrowRight" onPress={begin} fullWidth testID="welcome-start" />
+          <Button label={t('welcome.cta')} size="lg" iconRight="arrowRight" onPress={begin} fullWidth testID="welcome-start" />
           <Text variant="caption" tone="faint" align="center">
-            Mindtier is a game. Ranks compare your skill at these puzzles with other players — they are not an IQ or
-            medical assessment. By continuing you agree to the{' '}
+            {t('welcome.disclaimer')}{' '}
             <Text variant="caption" tone="primary" onPress={() => WebBrowser.openBrowserAsync(links.terms)}>
-              Terms
+              {t('welcome.terms')}
             </Text>{' '}
-            and{' '}
+            {t('welcome.and')}{' '}
             <Text variant="caption" tone="primary" onPress={() => WebBrowser.openBrowserAsync(links.privacy)}>
-              Privacy Policy
+              {t('welcome.privacy')}
             </Text>
             .
           </Text>
@@ -62,15 +63,14 @@ export default function Welcome() {
         </Animated.View>
         <Animated.View entering={reduce ? undefined : FadeInDown.delay(150).duration(500)} style={styles.copy}>
           <Text variant="hero" align="center">
-            What tier is your mind?
+            {t('welcome.title')}
           </Text>
           <Text variant="subheading" tone="muted" align="center" weight="regular">
-            Play 5 quick placement games — Memory, Focus, Speed, Logic and Math — to get your starting rank. Then
-            climb all the way to Grandmaster.
+            {t('welcome.body')}
           </Text>
         </Animated.View>
         <View style={styles.facts}>
-          {['About 4 minutes', 'No sign-up needed', 'No ads, ever'].map((f) => (
+          {[t('welcome.factTime'), t('welcome.factSignup'), t('welcome.factAds')].map((f) => (
             <View key={f} style={[styles.fact, { backgroundColor: colors.surface, borderColor: colors.border }]}>
               <Text variant="caption" tone="muted" weight="semibold">
                 {f}
