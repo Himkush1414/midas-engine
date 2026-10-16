@@ -4,6 +4,7 @@ const IS_DEV = process.env.APP_VARIANT === 'development';
 const IS_PREVIEW = process.env.APP_VARIANT === 'preview';
 
 const BRAND_INK = '#0A0D1A';
+const WEB_HOST = new URL(process.env.EXPO_PUBLIC_WEB_URL ?? 'https://midas-engine.vercel.app').host;
 
 const appId = IS_DEV ? 'app.mindtier.dev' : IS_PREVIEW ? 'app.mindtier.preview' : 'app.mindtier';
 const appName = IS_DEV ? 'Mindtier (Dev)' : IS_PREVIEW ? 'Mindtier (Preview)' : 'Mindtier';
@@ -22,6 +23,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     bundleIdentifier: appId,
     supportsTablet: true,
+    associatedDomains: [`applinks:${WEB_HOST}`],
     config: { usesNonExemptEncryption: false },
   },
   android: {
@@ -33,6 +35,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       monochromeImage: './assets/images/android-icon-monochrome.png',
     },
     predictiveBackGestureEnabled: false,
+    // Duel invite links open the app directly (verified via /.well-known/assetlinks.json).
+    intentFilters: [
+      {
+        action: 'VIEW',
+        autoVerify: true,
+        data: [{ scheme: 'https', host: WEB_HOST, pathPrefix: '/duel/' }],
+        category: ['BROWSABLE', 'DEFAULT'],
+      },
+    ],
   },
   plugins: [
     'expo-router',
