@@ -24,24 +24,30 @@ export default function Daily() {
   const [loading, setLoading] = useState(false);
   const [offline, setOffline] = useState(false);
 
-  const loadBoard = useCallback(async () => {
-    if (!backendConfigured) return;
-    setLoading(true);
-    try {
-      await syncNow();
-      setBoard(await api.dailyBoard(today));
-      setOffline(false);
-    } catch {
-      setOffline(true);
-    } finally {
-      setLoading(false);
-    }
-  }, [today]);
-
   useFocusEffect(
     useCallback(() => {
-      if (record) void loadBoard();
-    }, [record, loadBoard]),
+      if (!record || !backendConfigured) return;
+      let cancelled = false;
+      const day = utcDayKey(new Date());
+      setLoading(true);
+      (async () => {
+        try {
+          await syncNow();
+          const next = await api.dailyBoard(day);
+          if (!cancelled) {
+            setBoard(next);
+            setOffline(false);
+          }
+        } catch {
+          if (!cancelled) setOffline(true);
+        } finally {
+          if (!cancelled) setLoading(false);
+        }
+      })();
+      return () => {
+        cancelled = true;
+      };
+    }, [record]),
   );
 
   const next = untilNextDaily(new Date());
