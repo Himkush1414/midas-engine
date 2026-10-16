@@ -1,0 +1,39 @@
+{
+  "name": "@mindtier/mobile",
+  "version": "1.0.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "typecheck": "tsc --noEmit",
+    "lint": "expo lint",
+    "doctor": "expo-doctor"
+  },
+  "dependencies": {
+    "@mindtier/core": "*",
+    "expo": "~57.0.30",
+    "expo-constants": "~57.0.22",
+    "expo-device": "~57.0.2",
+    "expo-font": "~57.0.4",
+    "expo-image": "~57.0.5",
+    "expo-linking": "~57.0.13",
+    "expo-router": "~57.0.28",
+    "expo-splash-screen": "~57.0.10",
+    "expo-status-bar": "~57.0.1",
+    "expo-system-ui": "~57.0.4",
+    "expo-web-browser": "~57.0.3",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-gesture-handler": "~2.32.0",
+    "react-native-reanimated": "4.5.1",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "~4.26.0",
+    "react-native-worklets": "0.10.1"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "typescript": "~6.0.3"
+  }
+}
