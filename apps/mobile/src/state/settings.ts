@@ -2,12 +2,14 @@ import type { GameId } from '@mindtier/core';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { persistStorage } from '@/lib/storage';
+import type { LanguagePreference } from '@/i18n/core';
 import type { ThemePreference } from '@/theme';
 
 export type MotionPreference = 'system' | 'reduced' | 'full';
 
 export interface SettingsState {
   theme: ThemePreference;
+  language: LanguagePreference;
   sound: boolean;
   haptics: boolean;
   motion: MotionPreference;
@@ -19,6 +21,7 @@ export interface SettingsState {
   /** Games excluded from ranked rotation. */
   hiddenGames: GameId[];
   setTheme(theme: ThemePreference): void;
+  setLanguage(language: LanguagePreference): void;
   setSound(on: boolean): void;
   setHaptics(on: boolean): void;
   setMotion(motion: MotionPreference): void;
@@ -30,6 +33,7 @@ export interface SettingsState {
 
 const defaults = {
   theme: 'system' as ThemePreference,
+  language: 'system' as LanguagePreference,
   sound: true,
   haptics: true,
   motion: 'system' as MotionPreference,
@@ -45,6 +49,7 @@ export const useSettings = create<SettingsState>()(
     (set) => ({
       ...defaults,
       setTheme: (theme) => set({ theme }),
+      setLanguage: (language) => set({ language }),
       setSound: (sound) => set({ sound }),
       setHaptics: (haptics) => set({ haptics }),
       setMotion: (motion) => set({ motion }),
