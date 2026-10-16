@@ -1,0 +1,104 @@
+import type { BalanceEquation, BalanceTerm, BalanceTrial } from '@mindtier/core';
+import { useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
+import Svg, { Path } from 'react-native-svg';
+import { Text } from '@/components/ui';
+import { domainColors, radii, spacing, useTheme } from '@/theme';
+import type { GameViewProps } from '../types';
+import { OptionGrid } from './controls';
+import { SHAPE_NAMES, Shape } from './shapes';
+
+/** Balance shape ids 0..3 map to circle, square, triangle, star in the shared shape set. */
+const SHAPE_COLORS = ['#F472B6', '#60A5FA', '#FBBF24', '#34D399'] as const;
+
+function Terms({ terms }: { terms: BalanceTerm[] }) {
+  return (
+    <View style={styles.terms}>
+      {terms.map((t, i) => (
+        <View key={i} style={styles.term}>
+          <Text variant="subheading" tabular weight="semibold">
+            {t.count}
+          </Text>
+          <Shape id={t.shape} size={26} color={SHAPE_COLORS[t.shape] ?? '#FFFFFF'} />
+          {i < terms.length - 1 ? (
+            <Text variant="subheading" tone="muted">
+              +
+            </Text>
+          ) : null}
+        </View>
+      ))}
+    </View>
+  );
+}
+
+const describe = (terms: BalanceTerm[]) =>
+  terms.map((t) => `${t.count} ${SHAPE_NAMES[t.shape]?.toLowerCase()}${t.count === 1 ? '' : 's'}`).join(' plus ');
+
+function Scale({ eq }: { eq: BalanceEquation }) {
+  const { colors } = useTheme();
+  return (
+    <View
+      style={[styles.scale, { backgroundColor: colors.surface, borderColor: colors.border }]}
+      accessible
+      accessibilityLabel={`${describe(eq.left)} balances ${describe(eq.right)}`}
+    >
+      <View style={styles.pan}>
+        <Terms terms={eq.left} />
+      </View>
+      <Svg width={36} height={28} viewBox="0 0 36 28">
+        <Path d="M18 4v20M6 24h24M4 10h28M4 10l-3 7h6zM32 10l-3 7h6z" stroke={colors.textMuted} strokeWidth={2} fill="none" strokeLinejoin="round" />
+      </Svg>
+      <View style={styles.pan}>
+        <Terms terms={eq.right} />
+      </View>
+    </View>
+  );
+}
+
+export function BalanceView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<BalanceTrial, number>) {
+  const { colors } = useTheme();
+  useEffect(() => {
+    onInputOpen();
+  }, [onInputOpen]);
+
+  return (
+    <View style={styles.root}>
+      <View style={styles.scales}>
+        {trial.equations.map((eq, i) => (
+          <Scale key={i} eq={eq} />
+        ))}
+      </View>
+      <View style={[styles.question, { borderColor: domainColors.logic }]}>
+        <Terms terms={[trial.ask]} />
+        <Text variant="subheading">=</Text>
+        <Text variant="heading" tone="primary">
+          ?
+        </Text>
+        <Shape id={trial.unit} size={26} color={SHAPE_COLORS[trial.unit] ?? colors.text} />
+      </View>
+      <View style={styles.actions}>
+        <OptionGrid
+          options={trial.options}
+          disabled={locked}
+          onChoose={onAnswer}
+          renderOption={(opt, i) => (
+            <Text variant="title" tabular tone={demo && i === trial.answerIndex ? 'success' : 'default'}>
+              {opt}
+            </Text>
+          )}
+        />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  root: { flex: 1, gap: spacing.lg, paddingTop: spacing.md },
+  scales: { gap: spacing.sm },
+  scale: { flexDirection: 'row', alignItems: 'center', borderRadius: radii.lg, borderWidth: 1, paddingVertical: spacing.md, paddingHorizontal: spacing.sm },
+  pan: { flex: 1, alignItems: 'center' },
+  terms: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, flexWrap: 'wrap', justifyContent: 'center' },
+  term: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  question: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm, alignSelf: 'center', borderWidth: 1.5, borderRadius: radii.pill, paddingHorizontal: spacing.lg, paddingVertical: spacing.sm },
+  actions: { marginTop: 'auto', marginBottom: spacing.lg },
+});
