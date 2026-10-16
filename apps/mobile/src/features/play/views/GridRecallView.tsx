@@ -17,11 +17,11 @@ export function GridRecallView({ trial, onInputOpen, onAnswer, locked, demo }: G
 
   useEffect(() => {
     if (demo) return;
-    const t = setTimeout(() => {
+    const timer = setTimeout(() => {
       setPhase('recall');
       onInputOpen();
     }, trial.showMs + 350);
-    return () => clearTimeout(t);
+    return () => clearTimeout(timer);
   }, [trial, onInputOpen, demo]);
 
   const boardSize = Math.min(width - spacing.lg * 2, 360);

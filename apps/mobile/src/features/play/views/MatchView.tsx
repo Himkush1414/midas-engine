@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import Svg, { Circle, Rect } from 'react-native-svg';
 import { Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
+import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 import { BinaryChoice } from './controls';
 
@@ -28,6 +29,7 @@ function DotGlyph({ size, cells, dim, color, frame }: { size: number; cells: num
 
 export function MatchView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<MatchTrial, boolean>) {
   const { colors, domain: dc } = useTheme();
+  const t = useT();
   useEffect(() => {
     onInputOpen();
   }, [onInputOpen]);
@@ -36,7 +38,7 @@ export function MatchView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
   return (
     <View style={styles.root}>
       <Text variant="label" tone="muted" align="center">
-        Exactly the same pattern?
+        {t('play.sameAsk')}
       </Text>
       <View style={styles.pair} accessible accessibilityLabel="Two dot patterns">
         <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
@@ -49,8 +51,8 @@ export function MatchView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
       <View style={styles.actions}>
         <BinaryChoice
           disabled={locked}
-          left={{ label: 'Different', icon: 'close', tone: demo && !trial.same ? 'positive' : 'neutral' }}
-          right={{ label: 'Same', icon: 'check', tone: demo && trial.same ? 'positive' : 'neutral' }}
+          left={{ label: t('play.different'), icon: 'close', tone: demo && !trial.same ? 'positive' : 'neutral' }}
+          right={{ label: t('play.same'), icon: 'check', tone: demo && trial.same ? 'positive' : 'neutral' }}
           onChoose={(side) => onAnswer(side === 1)}
         />
       </View>

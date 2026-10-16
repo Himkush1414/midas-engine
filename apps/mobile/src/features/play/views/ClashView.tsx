@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
+import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 import { BinaryChoice } from './controls';
 import { Shape } from './shapes';
@@ -14,19 +15,20 @@ const SHAPE_WORDS = ['CIRCLE', 'SQUARE', 'TRIANGLE', 'STAR', 'HEXAGON'] as const
 
 export function ClashView({ trial, onInputOpen, onAnswer, locked, shapeMode, demo }: GameViewProps<ClashTrial, boolean>) {
   const { colors } = useTheme();
+  const t = useT();
   useEffect(() => {
     onInputOpen();
   }, [onInputOpen]);
 
   const words = shapeMode ? SHAPE_WORDS : COLOR_NAMES;
-  const askLabel = trial.ask === 'ink' ? (shapeMode ? 'SHAPE' : 'INK') : 'MEANING';
+  const askLabel = trial.ask === 'ink' ? (shapeMode ? t('play.clashShape') : t('play.clashInk')) : t('play.clashMeaning');
   const answer = clashAnswer(trial);
 
   return (
     <View style={styles.root}>
       <View style={[styles.cue, { backgroundColor: trial.ask === 'ink' ? colors.surfaceRaised : colors.warning }]}>
         <Text variant="label" style={{ color: trial.ask === 'ink' ? colors.text : colors.textInverse }}>
-          Does the bottom word match the top word’s {askLabel}?
+          {t('play.clashAsk', { property: askLabel })}
         </Text>
       </View>
       <View
@@ -64,8 +66,8 @@ export function ClashView({ trial, onInputOpen, onAnswer, locked, shapeMode, dem
       <View style={styles.actions}>
         <BinaryChoice
           disabled={locked}
-          left={{ label: 'No', icon: 'close', tone: demo && !answer ? 'positive' : 'neutral' }}
-          right={{ label: 'Yes', icon: 'check', tone: demo && answer ? 'positive' : 'neutral' }}
+          left={{ label: t('play.no'), icon: 'close', tone: demo && !answer ? 'positive' : 'neutral' }}
+          right={{ label: t('play.yes'), icon: 'check', tone: demo && answer ? 'positive' : 'neutral' }}
           onChoose={(side) => onAnswer(side === 1)}
         />
       </View>

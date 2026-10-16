@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Text } from '@/components/ui';
 import { spacing, useTheme } from '@/theme';
+import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 import { BinaryChoice } from './controls';
 
@@ -17,6 +18,7 @@ function Arrow({ dir, color, size }: { dir: FlankDirection; color: string; size:
 
 export function FlankView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<FlankTrial, FlankDirection>) {
   const { colors } = useTheme();
+  const t = useT();
   useEffect(() => {
     onInputOpen();
   }, [onInputOpen]);
@@ -29,7 +31,7 @@ export function FlankView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
   return (
     <View style={styles.root}>
       <Text variant="label" tone="muted" align="center">
-        {trial.reverse ? 'Amber centre: answer the OPPOSITE way' : 'Which way does the middle arrow point?'}
+        {trial.reverse ? t('play.flankReverse') : t('play.flankAsk')}
       </Text>
       <View
         style={styles.row}
@@ -49,8 +51,8 @@ export function FlankView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
       <View style={styles.actions}>
         <BinaryChoice
           disabled={locked}
-          left={{ label: 'Left', icon: 'back', tone: demo && answer === 'left' ? 'positive' : 'neutral' }}
-          right={{ label: 'Right', icon: 'chevronRight', tone: demo && answer === 'right' ? 'positive' : 'neutral' }}
+          left={{ label: t('play.left'), icon: 'back', tone: demo && answer === 'left' ? 'positive' : 'neutral' }}
+          right={{ label: t('play.right'), icon: 'chevronRight', tone: demo && answer === 'right' ? 'positive' : 'neutral' }}
           onChoose={(side) => onAnswer(side === 0 ? 'left' : 'right')}
         />
       </View>

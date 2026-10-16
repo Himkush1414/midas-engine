@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { PressableScale, Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
+import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 
 function describeQuantity(q: Quantity): string {
@@ -55,6 +56,7 @@ function QuantityFace({ q, color }: { q: Quantity; color: string }) {
 
 export function EstimateView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<EstimateTrial, 0 | 1>) {
   const { colors, domain: dc } = useTheme();
+  const t = useT();
   useEffect(() => {
     onInputOpen();
   }, [onInputOpen]);
@@ -63,7 +65,7 @@ export function EstimateView({ trial, onInputOpen, onAnswer, locked, demo }: Gam
   return (
     <View style={styles.root}>
       <Text variant="label" tone="muted" align="center">
-        Tap the larger amount
+        {t('play.larger')}
       </Text>
       <View style={styles.pair}>
         {sides.map((q, i) => (

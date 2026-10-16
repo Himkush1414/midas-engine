@@ -3,11 +3,13 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
+import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 import { OptionGrid } from './controls';
 
 export function PatternView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<PatternTrial, number>) {
   const { colors } = useTheme();
+  const t = useT();
   useEffect(() => {
     onInputOpen();
   }, [onInputOpen]);
@@ -18,7 +20,7 @@ export function PatternView({ trial, onInputOpen, onAnswer, locked, demo }: Game
   return (
     <View style={styles.root}>
       <Text variant="label" tone="muted" align="center">
-        What comes next?
+        {t('play.whatNext')}
       </Text>
       <View
         style={styles.sequence}

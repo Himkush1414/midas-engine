@@ -4,6 +4,7 @@ import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { PressableScale, Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
+import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 
 /** Landolt C: a ring with a gap; orientation in 45° steps, 0 = gap at the top, clockwise. */
@@ -29,6 +30,7 @@ function Ring({ orientation, size, color }: { orientation: number; size: number;
 
 export function SpotView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<SpotTrial, number>) {
   const { colors } = useTheme();
+  const t = useT();
   const { width } = useWindowDimensions();
   useEffect(() => {
     onInputOpen();
@@ -41,7 +43,7 @@ export function SpotView({ trial, onInputOpen, onAnswer, locked, demo }: GameVie
   return (
     <View style={styles.root}>
       <Text variant="label" tone="muted" align="center">
-        Tap the ring whose gap points a different way
+        {t('play.spotAsk')}
       </Text>
       <View style={{ width: board, gap }}>
         {Array.from({ length: trial.rows }, (_, r) => (

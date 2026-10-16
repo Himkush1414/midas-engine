@@ -4,6 +4,7 @@ import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { PressableScale, Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
+import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 
 const LABELS = ['A', 'B', 'C', 'D'] as const;
@@ -19,6 +20,7 @@ function ArrowGlyph({ dir, size, color }: { dir: number; size: number; color: st
 
 export function RouteView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<RouteTrial, number>) {
   const { colors, domain: dc } = useTheme();
+  const t = useT();
   const { width } = useWindowDimensions();
   useEffect(() => {
     onInputOpen();
@@ -32,7 +34,7 @@ export function RouteView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
   return (
     <View style={styles.root}>
       <Text variant="label" tone="muted" align="center">
-        From the glowing tile, follow {trial.steps} arrows. Where do you land?
+        {t('play.routeAsk', { count: trial.steps })}
       </Text>
       <View style={{ width: board, gap }}>
         {Array.from({ length: trial.size }, (_, r) => (

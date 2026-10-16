@@ -6,6 +6,7 @@ import { Text } from '@/components/ui';
 import { haptic } from '@/lib/feedback';
 import { spacing, useTheme } from '@/theme';
 import { AnswerButton } from './controls';
+import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 import { Shape } from './shapes';
 
@@ -13,6 +14,7 @@ const SHOW_FRACTION = 0.75;
 
 export function EchoView({ trial, onInputOpen, onAnswer, locked, reduceMotion, demo }: GameViewProps<EchoTrial, boolean[]>) {
   const { colors, domain: dc } = useTheme();
+  const t = useT();
   const [index, setIndex] = useState(-1);
   const [visible, setVisible] = useState(false);
   const pressed = useRef<boolean[]>(trial.symbols.map(() => false));
@@ -50,7 +52,7 @@ export function EchoView({ trial, onInputOpen, onAnswer, locked, reduceMotion, d
   return (
     <View style={styles.root}>
       <Text variant="label" tone="muted" align="center">
-        Tap Match if it’s the same as {trial.n === 1 ? 'the previous one' : `${trial.n} steps back`}
+        {t('play.echoHint', { count: trial.n })}
       </Text>
       <View style={[styles.stage, { borderColor: colors.border, backgroundColor: colors.surface }]}>
         {visible && symbol !== undefined ? (
@@ -74,7 +76,7 @@ export function EchoView({ trial, onInputOpen, onAnswer, locked, reduceMotion, d
       </View>
       <View style={styles.action}>
         <AnswerButton
-          label={pressedNow ? 'Marked' : 'Match'}
+          label={pressedNow ? t('play.marked') : t('play.match')}
           icon={pressedNow ? 'check' : 'memory'}
           tone={pressedNow ? 'positive' : 'neutral'}
           onPress={press}

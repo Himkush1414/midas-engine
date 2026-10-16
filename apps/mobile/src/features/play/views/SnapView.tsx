@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, { ZoomIn } from 'react-native-reanimated';
 import { Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
+import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 import { Shape } from './shapes';
 
@@ -14,6 +15,7 @@ const SNAP_SHAPES = [0, 1, 2, 5] as const;
 
 export function SnapView({ trial, onInputOpen, onAnswer, locked, reduceMotion, demo }: GameViewProps<SnapTrial, boolean>) {
   const { colors } = useTheme();
+  const t = useT();
   const [shown, setShown] = useState(Boolean(demo));
   const [falseStart, setFalseStart] = useState(false);
 
@@ -45,7 +47,7 @@ export function SnapView({ trial, onInputOpen, onAnswer, locked, reduceMotion, d
       accessibilityLabel={shown ? (trial.go ? 'Target shown, tap now' : 'Lure shown, do not tap') : 'Wait for the shape'}
     >
       <Text variant="label" tone="muted" align="center" style={styles.hint}>
-        {falseStart && !shown ? 'Too early — wait for it' : 'Tap anywhere for the teal circle only'}
+        {falseStart && !shown ? t('play.snapEarly') : t('play.snapHint')}
       </Text>
       <View style={styles.center}>
         {shown ? (
