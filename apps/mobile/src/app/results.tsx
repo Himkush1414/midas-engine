@@ -1,5 +1,6 @@
 import { overallRating, tierChange, tierInfo } from '@mindtier/core';
 import { Redirect, router } from 'expo-router';
+import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { ZoomIn } from 'react-native-reanimated';
 import { Celebration } from '@/components/Celebration';
@@ -7,10 +8,18 @@ import { TierBadge } from '@/components/tier';
 import { Button, Card, Screen, Text } from '@/components/ui';
 import { shareDuel } from '@/features/duels/actions';
 import { DeltaRow } from '@/features/results/DeltaRow';
+import { haptic } from '@/lib/feedback';
 import { useReduceMotion } from '@/lib/motion';
+import { play } from '@/lib/sound';
 import { useEntitlements } from '@/state/entitlements';
 import { useSession } from '@/state/session';
 import { spacing, tierColors } from '@/theme';
+
+function isPromotion(f: { plan: { mode: string }; ratingsBefore: Parameters<typeof overallRating>[0]; result: { ratings: Parameters<typeof overallRating>[0] } }): boolean {
+  if (f.plan.mode !== 'ranked' && f.plan.mode !== 'placement') return false;
+  const change = tierChange(overallRating(f.ratingsBefore), overallRating(f.result.ratings));
+  return change === 'tier-up' || change === 'promoted';
+}
 
 const PROMOTION_COPY = {
   'tier-up': 'New tier!',
@@ -24,6 +33,13 @@ export default function Results() {
   const reduce = useReduceMotion();
   const finished = useSession((s) => s.finished);
   const isPro = useEntitlements((s) => s.isPro);
+  const promoted = finished ? isPromotion(finished) : false;
+  useEffect(() => {
+    if (promoted) {
+      haptic.success();
+      play('rankup');
+    }
+  }, [promoted]);
   if (!finished) return <Redirect href="/" />;
 
   const { plan, result, runs, ratingsBefore } = finished;

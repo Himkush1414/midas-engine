@@ -120,7 +120,8 @@ export default function Settings() {
         </SettingsSection>
 
         <SettingsSection title="Gameplay & accessibility" footer="Colour-free mode swaps colours for shapes in Clash. Reduced motion removes celebratory animations.">
-          <SettingsRow first icon="vibrate" label="Haptics" switchValue={s.haptics} onSwitch={s.setHaptics} />
+          <SettingsRow first icon="sound" label="Sound effects" detail="Follows your phone’s silent mode" switchValue={s.sound} onSwitch={s.setSound} />
+          <SettingsRow icon="vibrate" label="Haptics" switchValue={s.haptics} onSwitch={s.setHaptics} />
           <SettingsRow icon="accessibility" label="Colour-free mode" detail="Shapes instead of colours" switchValue={s.shapeMode} onSwitch={s.setShapeMode} />
           <View style={[styles.padded, styles.labelled]}>
             <Text variant="caption" tone="muted">

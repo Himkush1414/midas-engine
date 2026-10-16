@@ -49,3 +49,8 @@ jest.mock('expo-notifications', () => ({
 }));
 
 jest.mock('@sentry/react-native', () => ({ init: jest.fn(), captureException: jest.fn(), wrap: (c) => c }));
+
+jest.mock('expo-audio', () => ({
+  setAudioModeAsync: jest.fn(async () => undefined),
+  createAudioPlayer: jest.fn(() => ({ volume: 1, seekTo: jest.fn(async () => undefined), play: jest.fn(), remove: jest.fn() })),
+}));

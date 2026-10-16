@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { AppState } from 'react-native';
 import { setAnalyticsOptOut, track } from '@/lib/analytics';
 import { initNotifications } from '@/lib/notifications';
+import { initSounds } from '@/lib/sound';
 import { startPurchases } from '@/lib/purchases';
 import { currentUserId } from '@/lib/supabase';
 import { usePrivacy } from '@/state/privacy';
@@ -20,6 +21,7 @@ export function useAppLifecycle(): void {
 
   useEffect(() => {
     initNotifications();
+    void initSounds();
     track('app_opened');
     let lastSync = 0;
 

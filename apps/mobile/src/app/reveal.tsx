@@ -8,6 +8,7 @@ import { SkillRadar } from '@/components/SkillRadar';
 import { DomainBadge, TierBadge } from '@/components/tier';
 import { Button, Card, ProgressBar, Screen, Text } from '@/components/ui';
 import { haptic } from '@/lib/feedback';
+import { play } from '@/lib/sound';
 import { useReduceMotion } from '@/lib/motion';
 import { shareText, tierShareText } from '@/lib/share';
 import { useEntitlements } from '@/state/entitlements';
@@ -28,6 +29,7 @@ export default function Reveal() {
       () => {
         setRevealed(true);
         haptic.success();
+        play('rankup');
       },
       reduce ? 400 : SUSPENSE_MS,
     );

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { AppState, StyleSheet, View } from 'react-native';
 import { Text } from '@/components/ui';
 import { haptic } from '@/lib/feedback';
+import { play } from '@/lib/sound';
 import { useSettings } from '@/state/settings';
 import { spacing } from '@/theme';
 import { FeedbackFlash } from './FeedbackFlash';
@@ -43,8 +44,13 @@ export function RunPlayer({ gameId, mode, seed, rating, trialCount, reduceMotion
   // Hold feedback briefly, then move on.
   useEffect(() => {
     if (!feedback) return;
-    if (feedback === 'correct') haptic.correct();
-    else haptic.wrong();
+    if (feedback === 'correct') {
+      haptic.correct();
+      play('correct');
+    } else {
+      haptic.wrong();
+      play('wrong');
+    }
     const t = setTimeout(advance, feedbackMs(feedback, FAST_GAMES.has(gameId)));
     return () => clearTimeout(t);
   }, [feedback, advance, gameId]);
