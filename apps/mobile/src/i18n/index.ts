@@ -2,12 +2,13 @@ import { getLocales } from 'expo-localization';
 import { useSettings } from '@/state/settings';
 import { resolveLanguage, translate, type Language, type Params, type Path, type Shape } from './core';
 import { en, type EnglishDictionary } from './en';
+import { es } from './es';
 
 export type TKey = Path<EnglishDictionary>;
 export type Translations = Shape<EnglishDictionary>;
 export type TFunction = (key: TKey, params?: Params) => string;
 
-const DICTIONARIES: Partial<Record<Language, Translations>> = { en };
+const DICTIONARIES: Partial<Record<Language, Translations>> = { en, es };
 
 /** Register a translation (kept separate so each language can be lazy-added). */
 export function registerLanguage(lang: Language, dict: Translations): void {
