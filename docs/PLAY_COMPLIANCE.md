@@ -31,7 +31,7 @@ Not collected: location, contacts, photos/videos, audio, files, calendar, health
 
 - Category: **Game** → Puzzle, or **All other app types** if the app category is Education (answers are the same).
 - Violence, fear, sexuality, gambling, language, drugs/alcohol/tobacco, crude humour: **No**.
-- Does the app allow users to interact or exchange content? **No** chat, no messaging and no user-generated media. Display names are chosen from a filtered set and shown on leaderboards/duels. Answer "Users can interact" only if the questionnaire treats leaderboard names as interaction; if so, add that names are moderated.
+- Does the app allow users to interact or exchange content? **No** chat, no messaging and no user-generated media. Display names (screened for profanity and contact details) are shown on leaderboards and duels. Answer "Users can interact" only if the questionnaire treats leaderboard names as interaction; if so, add that names are moderated.
 - Shares user location: **No**. Digital purchases: **Yes**.
 - Expected result: **Everyone / PEGI 3 / USK 0**, with the "In-App Purchases" descriptor.
 
