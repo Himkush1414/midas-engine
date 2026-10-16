@@ -2,6 +2,7 @@ import { memo } from 'react';
 import type { ColorValue } from 'react-native';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import { useTheme } from '@/theme';
+import { svgA11y } from '../svgA11y';
 import { GLYPHS, type IconName, type Primitive } from './glyphs';
 
 export interface IconProps {
@@ -32,15 +33,7 @@ export const Icon = memo(function Icon({ name, size = 24, color, strokeWidth = 1
   const tint = color ?? colors.text;
   const glyph: readonly Primitive[] = GLYPHS[name];
   return (
-    <Svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      accessible={Boolean(label)}
-      accessibilityLabel={label}
-      accessibilityElementsHidden={!label}
-      importantForAccessibility={label ? 'yes' : 'no-hide-descendants'}
-    >
+    <Svg width={size} height={size} viewBox="0 0 24 24" {...svgA11y(label)}>
       {glyph.map((p, i) => renderPrimitive(p, i, tint, strokeWidth))}
     </Svg>
   );

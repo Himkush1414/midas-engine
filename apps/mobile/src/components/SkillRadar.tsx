@@ -1,6 +1,7 @@
 import { DOMAINS, DOMAIN_LABELS, ITEM_RATING_MAX, ITEM_RATING_MIN, type DomainRatings } from '@mindtier/core';
 import Svg, { Circle, Line, Polygon, Text as SvgText } from 'react-native-svg';
 import { fonts, useTheme } from '@/theme';
+import { svgA11y } from './svgA11y';
 
 export function radarPoint(index: number, value: number, radius: number, center: number): [number, number] {
   const angle = -Math.PI / 2 + (index * 2 * Math.PI) / DOMAINS.length;
@@ -22,7 +23,7 @@ export function SkillRadar({ ratings, size = 260 }: { ratings: DomainRatings; si
   const label = DOMAINS.map((d) => `${DOMAIN_LABELS[d]} ${Math.round(ratings[d].rating)}`).join(', ');
 
   return (
-    <Svg width={size} height={size} accessible accessibilityLabel={`Skill shape: ${label}`}>
+    <Svg width={size} height={size} {...svgA11y(`Skill shape: ${label}`)}>
       {[0.25, 0.5, 0.75, 1].map((k) => (
         <Polygon key={k} points={ring(k)} fill="none" stroke={colors.border} strokeWidth={1} />
       ))}

@@ -2,6 +2,7 @@ import { BADGE_INNER, BADGE_OUTER, EMBLEMS, LIGHT_TIERS, PIP_XS, PIP_Y, TIER_LAB
 import { memo, useId } from 'react';
 import Svg, { Circle, Defs, LinearGradient, Path, Polygon, Stop, Text as SvgText } from 'react-native-svg';
 import { tierColors, useTheme } from '@/theme';
+import { svgA11y } from '../svgA11y';
 
 export interface TierBadgeProps {
   info: Pick<TierInfo, 'tier' | 'division' | 'label' | 'provisional'>;
@@ -18,7 +19,7 @@ export const TierBadge = memo(function TierBadge({ info, size = 96, showProvisio
 
   if (provisional) {
     return (
-      <Svg width={size} height={size} viewBox="0 0 100 100" accessible accessibilityLabel={label}>
+      <Svg width={size} height={size} viewBox="0 0 100 100" {...svgA11y(label)}>
         <Polygon
           points={BADGE_OUTER}
           fill={colors.surfaceRaised}
@@ -40,7 +41,7 @@ export const TierBadge = memo(function TierBadge({ info, size = 96, showProvisio
   const filledPips = info.division === null ? 0 : 5 - info.division;
 
   return (
-    <Svg width={size} height={size} viewBox="0 0 100 100" accessible accessibilityLabel={label}>
+    <Svg width={size} height={size} viewBox="0 0 100 100" {...svgA11y(label)}>
       <Defs>
         <LinearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
           <Stop offset="0" stopColor={c.highlight} />
