@@ -15,5 +15,8 @@
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "build": "npm run build --workspaces --if-present"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
   }
 }
