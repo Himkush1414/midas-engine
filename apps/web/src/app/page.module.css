@@ -1,0 +1,122 @@
+.hero {
+  padding: 72px 0 48px;
+  background: radial-gradient(70% 60% at 50% 0%, color-mix(in srgb, var(--primary) 22%, transparent), transparent);
+}
+
+.heroInner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.badges {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.badges > :nth-child(2) {
+  transform: translateY(-16px);
+}
+
+.lead {
+  max-width: 620px;
+  font-size: 1.15rem;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin: 8px 0 16px;
+}
+
+.center {
+  text-align: center;
+  margin-top: 72px;
+  margin-bottom: 28px;
+}
+
+.tierRow {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 16px;
+  text-align: center;
+}
+
+.tierRow li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.step {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--surface-raised);
+  color: var(--primary-text);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.domains {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.gameList,
+.list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.gameList li,
+.list li {
+  margin-bottom: 8px;
+}
+
+.pro {
+  border-color: var(--primary-text);
+}
+
+.faq {
+  display: grid;
+  gap: 12px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.faq summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.faq summary + p {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
