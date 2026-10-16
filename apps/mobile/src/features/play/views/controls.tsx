@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Icon, type IconName } from '@/components/icons/Icon';
 import { PressableScale, Text } from '@/components/ui';
+import { useT } from '@/i18n';
 import { radii, spacing, useTheme } from '@/theme';
 
 export interface AnswerButtonProps {
@@ -103,11 +104,12 @@ export function Keypad({
   disabled: boolean;
 }) {
   const { colors } = useTheme();
+  const t = useT();
   return (
     <View style={styles.keypad}>
       {KEYS.map((k) => {
         const isAction = k === 'del' || k === 'ok';
-        const label = k === 'del' ? 'Delete' : k === 'ok' ? 'Submit' : k;
+        const label = k === 'del' ? t('play.delete') : k === 'ok' ? t('play.submit') : k;
         return (
           <View key={k} style={styles.keyCell}>
             <PressableScale

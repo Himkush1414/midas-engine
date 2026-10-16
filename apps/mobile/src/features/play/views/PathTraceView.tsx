@@ -4,12 +4,14 @@ import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { PressableScale, Text } from '@/components/ui';
 import { haptic } from '@/lib/feedback';
 import { radii, spacing, useTheme } from '@/theme';
+import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 
 const GAP_MS = 180;
 
 export function PathTraceView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<PathTraceTrial, number[]>) {
   const { colors } = useTheme();
+  const t = useT();
   const { width } = useWindowDimensions();
   const [flashIndex, setFlashIndex] = useState(-1);
   const [phase, setPhase] = useState<'watch' | 'repeat'>('watch');
@@ -48,7 +50,7 @@ export function PathTraceView({ trial, onInputOpen, onAnswer, locked, demo }: Ga
   };
 
   const instruction =
-    phase === 'watch' ? 'Watch the order' : trial.reverse ? 'Tap it in REVERSE order' : 'Tap it in the same order';
+    phase === 'watch' ? t('play.watchOrder') : trial.reverse ? t('play.reverseOrder') : t('play.sameOrder');
 
   return (
     <View style={styles.root}>

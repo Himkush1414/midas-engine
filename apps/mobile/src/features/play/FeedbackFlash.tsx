@@ -1,11 +1,13 @@
 import { StyleSheet, View } from 'react-native';
 import Animated, { FadeIn, FadeOut, ZoomIn } from 'react-native-reanimated';
 import { Icon } from '@/components/icons/Icon';
+import { useT } from '@/i18n';
 import { useTheme } from '@/theme';
 import type { FeedbackKind } from './useGameRun';
 
 export function FeedbackFlash({ kind, reduceMotion }: { kind: FeedbackKind; reduceMotion: boolean }) {
   const { colors } = useTheme();
+  const t = useT();
   if (!kind) return null;
   const color = kind === 'correct' ? colors.success : kind === 'partial' ? colors.warning : colors.danger;
   const icon = kind === 'wrong' ? 'close' : 'check';
@@ -16,7 +18,7 @@ export function FeedbackFlash({ kind, reduceMotion }: { kind: FeedbackKind; redu
       exiting={reduceMotion ? undefined : FadeOut.duration(120)}
       style={StyleSheet.absoluteFill}
       accessibilityLiveRegion="polite"
-      accessibilityLabel={kind === 'correct' ? 'Correct' : kind === 'partial' ? 'Partly correct' : 'Incorrect'}
+      accessibilityLabel={kind === 'correct' ? t('play.correct') : kind === 'partial' ? t('play.partly') : t('play.incorrect')}
     >
       <View style={[StyleSheet.absoluteFill, { backgroundColor: color, opacity: 0.08 }]} />
       <View style={styles.center}>

@@ -2,6 +2,7 @@ import { getGame, type GameId, type GameMode, type RunSummary } from '@mindtier/
 import { useCallback, useEffect, useRef } from 'react';
 import { AppState, StyleSheet, View } from 'react-native';
 import { Text } from '@/components/ui';
+import { useT } from '@/i18n';
 import { registerQaAnswer } from '@/lib/devHooks';
 import { haptic } from '@/lib/feedback';
 import { play } from '@/lib/sound';
@@ -31,6 +32,7 @@ function feedbackMs(kind: 'correct' | 'wrong' | 'partial', fast: boolean): numbe
 const FAST_GAMES: ReadonlySet<GameId> = new Set(['flank', 'clash', 'snap', 'match', 'estimate', 'spot']);
 
 export function RunPlayer({ gameId, mode, seed, rating, trialCount, reduceMotion, onDone }: RunPlayerProps) {
+  const t = useT();
   const def = getGame(gameId);
   const shapeMode = useSettings((s) => s.shapeMode);
   const run = useGameRun<unknown, unknown>(def, {
@@ -95,11 +97,11 @@ export function RunPlayer({ gameId, mode, seed, rating, trialCount, reduceMotion
   return (
     <View style={styles.root}>
       <View style={styles.meta}>
-        <Text variant="caption" tone="faint" tabular accessibilityLabel={`Round ${run.index + 1} of ${run.total}`}>
+        <Text variant="caption" tone="faint" tabular accessibilityLabel={t('play.round', { index: run.index + 1, total: run.total })}>
           {run.index + 1} / {run.total}
         </Text>
         <Text variant="caption" tone="faint" tabular>
-          Level {run.level}
+          {t('common.level', { level: run.level })}
         </Text>
       </View>
       <TimerBar durationMs={run.timeLimitMs} startedAt={run.inputOpenedAt} frozen={feedback !== null} onExpire={onExpire} />

@@ -8,6 +8,7 @@ import { Button, PressableScale, Screen, Text } from '@/components/ui';
 import { RunPlayer } from '@/features/play/RunPlayer';
 import { Countdown } from '@/features/session/Countdown';
 import { GameIntro } from '@/features/session/GameIntro';
+import { useT } from '@/i18n';
 import { track } from '@/lib/analytics';
 import { useReduceMotion } from '@/lib/motion';
 import { useSession } from '@/state/session';
@@ -19,6 +20,7 @@ const PRACTICE_TRIALS = 3;
 
 export default function SessionScreen() {
   const { colors } = useTheme();
+  const t = useT();
   const reduceMotion = useReduceMotion();
   const active = useSession((s) => s.active);
   const recordRun = useSession((s) => s.recordRun);
@@ -59,10 +61,10 @@ export default function SessionScreen() {
   };
 
   const quit = () => {
-    Alert.alert('Leave this session?', 'Games you have finished in this session will not count.', [
-      { text: 'Keep playing', style: 'cancel' },
+    Alert.alert(t('session.leaveTitle'), t('session.leaveBody'), [
+      { text: t('session.keepPlaying'), style: 'cancel' },
       {
-        text: 'Leave',
+        text: t('session.leave'),
         style: 'destructive',
         onPress: () => {
           abandon();
@@ -78,10 +80,10 @@ export default function SessionScreen() {
   return (
     <Screen edges={['top', 'left', 'right', 'bottom']}>
       <View style={styles.topBar}>
-        <PressableScale onPress={quit} accessibilityLabel="Leave session" style={styles.close} testID="session-quit">
+        <PressableScale onPress={quit} accessibilityLabel={t('session.leaveA11y')} style={styles.close} testID="session-quit">
           <Icon name="close" size={24} color={colors.textMuted} />
         </PressableScale>
-        <View style={styles.dots} accessibilityLabel={`Game ${Math.min(index + 1, total)} of ${total}`}>
+        <View style={styles.dots} accessibilityLabel={t('session.gameOf', { index: Math.min(index + 1, total), total })}>
           {active.plan.games.map((g, i) => (
             <View
               key={`${g}-${i}`}
@@ -110,7 +112,7 @@ export default function SessionScreen() {
       {phase === 'practice' && gameId ? (
         <View style={styles.flex}>
           <Text variant="label" tone="accent" align="center">
-            Practice round — doesn’t count
+            {t('session.practiceBanner')}
           </Text>
           <RunPlayer
             key={`practice-${practiceNonce}`}
@@ -142,17 +144,17 @@ export default function SessionScreen() {
       {phase === 'between' && last ? (
         <Animated.View entering={reduceMotion ? undefined : FadeIn} style={styles.between}>
           <Text variant="label" tone="faint" align="center">
-            {getGame(last.gameId).name} complete
+            {t('session.complete', { game: getGame(last.gameId).name })}
           </Text>
           <Text variant="hero" align="center" tabular>
             {Math.round(last.accuracy * 100)}%
           </Text>
           <Text tone="muted" align="center">
-            accuracy · reached level {Math.max(last.peakLevel, 1)}
+            {t('session.accuracy', { level: Math.max(last.peakLevel, 1) })}
           </Text>
           <View style={styles.betweenAction}>
             <Button
-              label={isLastGame ? 'See results' : 'Next game'}
+              label={isLastGame ? t('session.seeResults') : t('session.nextGame')}
               iconRight="arrowRight"
               size="lg"
               fullWidth
