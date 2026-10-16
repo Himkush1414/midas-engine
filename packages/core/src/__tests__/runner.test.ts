@@ -151,3 +151,33 @@ describe('applySession', () => {
     expect(result.ratings.memory).toEqual(ratings.memory);
   });
 });
+
+describe('rating bounds', () => {
+  const perfect = (mode: 'placement' | 'ranked', seed: string, rating: number) => {
+    const run = new GameRun<{ value: number }, number>(echoNumber, { mode, seed, rating });
+    while (!run.done) run.submit(run.currentTrial().value, 700);
+    return run.summary();
+  };
+
+  it('caps placement at the top of Diamond', async () => {
+    const { PLACEMENT_CAP } = await import('../rating');
+    const { tierOf } = await import('../tiers');
+    const update = applyRun(newRating(1300, 350), perfect('placement', 'cap', 1300));
+    expect(update.after.rating).toBeLessThanOrEqual(PLACEMENT_CAP);
+    expect(tierOf(update.after.rating)).toBe('diamond');
+  });
+
+  it('never lowers a rating that is already above the placement cap', async () => {
+    const { PLACEMENT_CAP } = await import('../rating');
+    const update = applyRun(newRating(2000, 300), perfect('placement', 'high', 2000));
+    expect(update.after.rating).toBeGreaterThanOrEqual(2000);
+    expect(update.after.rating).toBeGreaterThan(PLACEMENT_CAP);
+  });
+
+  it('bounds ranked ratings at the ceiling', async () => {
+    const { RATING_CEILING } = await import('../rating');
+    let r = newRating(2650, 300);
+    for (let i = 0; i < 20; i++) r = applyRun(r, perfect('ranked', `ceil-${i}`, r.rating)).after;
+    expect(r.rating).toBeLessThanOrEqual(RATING_CEILING);
+  });
+});

@@ -3,7 +3,17 @@ import { newRating, rate, type Rating } from './glicko2';
 import { getGame, isGameId } from './games/registry';
 import { ITEM_RD, type RunSummary } from './games/runner';
 import { RATED_MODES, type GameId } from './games/types';
-import { STARTING_RATING, tierChange, type DomainRatings, type TierChange } from './tiers';
+import { STARTING_RATING, TIER_FLOORS, tierChange, type DomainRatings, type TierChange } from './tiers';
+
+/** Ratings are kept inside this band; items top out at 2400, so 2700 bounds runaway inflation. */
+export const RATING_FLOOR = 400;
+export const RATING_CEILING = 2700;
+/** Placement can reach the top of Diamond at most: Master and Grandmaster are earned in ranked play. */
+export const PLACEMENT_CAP = TIER_FLOORS.master - 1;
+
+export function clampRating(r: Rating, max = RATING_CEILING): Rating {
+  return { ...r, rating: Math.min(max, Math.max(RATING_FLOOR, r.rating)) };
+}
 
 export interface RatingUpdate {
   before: Rating;
@@ -17,10 +27,11 @@ export function applyRun(current: Rating, run: Pick<RunSummary, 'mode' | 'blocks
   if (!RATED_MODES.includes(run.mode) || run.blocks.length === 0) {
     return { before: current, after: current, delta: 0, change: 'none' };
   }
-  const after = rate(
+  const rated = rate(
     current,
     run.blocks.map((b) => ({ opponentRating: b.itemRating, opponentRd: ITEM_RD, score: b.score })),
   );
+  const after = clampRating(rated, run.mode === 'placement' ? Math.max(PLACEMENT_CAP, current.rating) : RATING_CEILING);
   return {
     before: current,
     after,
