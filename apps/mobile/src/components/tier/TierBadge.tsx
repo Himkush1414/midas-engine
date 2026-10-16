@@ -1,7 +1,9 @@
-import { BADGE_INNER, BADGE_OUTER, EMBLEMS, LIGHT_TIERS, PIP_XS, PIP_Y, TIER_LABELS, type TierInfo } from '@mindtier/core';
+import { BADGE_INNER, BADGE_OUTER, EMBLEMS, LIGHT_TIERS, PIP_XS, PIP_Y, type TierInfo } from '@mindtier/core';
 import { memo, useId } from 'react';
 import Svg, { Circle, Defs, LinearGradient, Path, Polygon, Stop, Text as SvgText } from 'react-native-svg';
 import { tierColors, useTheme } from '@/theme';
+import { useT } from '@/i18n';
+import { tierLabel } from '@/i18n/labels';
 import { svgA11y } from '../svgA11y';
 
 export interface TierBadgeProps {
@@ -14,8 +16,10 @@ export interface TierBadgeProps {
 export const TierBadge = memo(function TierBadge({ info, size = 96, showProvisional = true }: TierBadgeProps) {
   const { colors } = useTheme();
   const gradientId = `tier-${useId().replace(/:/g, '')}`;
+  const t = useT();
   const provisional = showProvisional && info.provisional;
-  const label = provisional ? `Provisional rank, ${info.label}` : `${info.label} rank`;
+  const name = tierLabel(t, info);
+  const label = provisional ? t('tiers.provisionalA11y', { label: name }) : t('tiers.rankA11y', { label: name });
 
   if (provisional) {
     return (
@@ -63,7 +67,3 @@ export const TierBadge = memo(function TierBadge({ info, size = 96, showProvisio
     </Svg>
   );
 });
-
-export function tierName(info: Pick<TierInfo, 'tier'>): string {
-  return TIER_LABELS[info.tier];
-}

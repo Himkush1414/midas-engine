@@ -123,6 +123,7 @@ export const en = {
     toNext_one: '{count} point to the next division',
     toNext_other: '{count} points to the next division',
     top: 'Top of the ladder',
+    progressA11y: 'Progress to next division',
     tierA11y: 'Your Mind tier is {label}, rating {rating}',
     rankedTitle: 'Ranked session',
     rankedBody: '3 games picked for you · about 4 minutes',
