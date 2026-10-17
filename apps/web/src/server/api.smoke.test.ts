@@ -3,7 +3,7 @@
  * Skipped unless API_SMOKE_URL, SUPABASE_URL and SUPABASE_ANON_KEY are set.
  *   API_SMOKE_URL=http://localhost:3100 npx vitest run src/server/api.smoke.test.ts
  */
-import { GAMES, GameRun, dailyPlan, gameSeed, placementPlan, toSubmission, utcDayKey, type SessionPlan } from '@mindtier/core';
+import { GAMES, GameRun, dailyPlan, gameSeed, initialRatings, placementPlan, rankedPlan, toSubmission, utcDayKey, type SessionPlan } from '@mindtier/core';
 import { randomUUID } from 'node:crypto';
 import { afterAll, describe, expect, it } from 'vitest';
 
@@ -91,5 +91,23 @@ describe.skipIf(!enabled)('API smoke', { timeout: 60_000 }, () => {
     const board = await (await call(`/api/v1/daily/${day}`)).json();
     expect(board.total).toBeGreaterThanOrEqual(1);
     expect(board.me.points).toBeGreaterThan(0);
+  });
+
+  it('starts out of leagues, then joins on opt-in and scores the first ranked session', async () => {
+    const before = await (await call('/api/v1/league')).json();
+    expect(before).toMatchObject({ optedIn: false, group: null });
+    const joined = await (await call('/api/v1/league', { method: 'PUT', body: JSON.stringify({ optIn: true }) })).json();
+    expect(joined).toMatchObject({ optedIn: true, group: null });
+
+    const plan = rankedPlan(seed, 0, initialRatings());
+    const payload = { id: randomUUID(), mode: 'ranked', seed: plan.seed, games: plan.games, sessionIndex: 0, runs: play(plan) };
+    expect((await call('/api/v1/sessions', { method: 'POST', body: JSON.stringify(payload) })).status).toBe(200);
+    const table = await (await call('/api/v1/league')).json();
+    const me = table.group.members.find((m: { me: boolean }) => m.me);
+    expect(me.points).toBeGreaterThan(0);
+    expect(me.days).toBe(1);
+
+    const left = await (await call('/api/v1/league', { method: 'PUT', body: JSON.stringify({ optIn: false }) })).json();
+    expect(left).toMatchObject({ optedIn: false, group: null });
   });
 });
