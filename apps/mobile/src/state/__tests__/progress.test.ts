@@ -1,5 +1,5 @@
 import { GAMES, GameRun, SEASON_RD, dailyPlan, newRating, placementPlan, rankedPlan, zenPlan, type DomainRatings, type SessionPlan } from '@mindtier/core';
-import { useProgress } from '../progress';
+import { localDayKey, useProgress } from '../progress';
 
 function playPlan(plan: SessionPlan, rating = 1300) {
   return plan.games.map((id, i) => {
@@ -56,6 +56,17 @@ describe('progress store', () => {
     expect(s.gamesPlayed).toBe(1);
   });
 
+  it('logs sessions and games per local day, zen included, and forgets old days', () => {
+    const zen = zenPlan('echo', 'z');
+    const daily = dailyPlan('2026-10-16');
+    useProgress.getState().completeSession(zen, playPlan(zen), day);
+    useProgress.getState().completeSession(daily, playPlan(daily), day);
+    expect(useProgress.getState().activity[localDayKey(day)]).toEqual({ sessions: 2, games: 1 + daily.games.length });
+    const later = new Date(day.getTime() + 80 * 86_400_000);
+    useProgress.getState().completeSession(zen, playPlan(zen), later);
+    expect(Object.keys(useProgress.getState().activity)).toEqual([localDayKey(later)]);
+  });
+
   it('removes uploaded outbox items', () => {
     const plan = dailyPlan('2026-10-16');
     useProgress.getState().completeSession(plan, playPlan(plan), day);
@@ -88,6 +99,7 @@ describe('seasons', () => {
     expect(s.ratings.memory.rating).toBeCloseTo(1930);
     expect(s.ratings.math).toEqual({ ...strong().math, rd: SEASON_RD });
     expect(s.history).toHaveLength(5);
+    expect(s.history.every((p) => p.reason === 'season')).toBe(true);
     expect(s.seasonNotice).toBe(1);
     expect(s.rollSeason(NOV)).toBe(false);
     s.dismissSeasonNotice();

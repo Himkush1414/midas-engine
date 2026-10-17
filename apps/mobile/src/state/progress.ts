@@ -30,6 +30,14 @@ export interface RatingPoint {
   domain: Domain;
   rating: number;
   rd: number;
+  /** Set on points written by a season soft reset, which are not earned in play. */
+  reason?: 'season';
+}
+
+/** Sessions and games finished on one local calendar day. */
+export interface DayActivity {
+  sessions: number;
+  games: number;
 }
 
 export interface DailyRecord {
@@ -61,6 +69,8 @@ export interface ProgressState {
   streak: StreakState;
   daily: Record<string, DailyRecord>;
   gamesPlayed: number;
+  /** Activity per local day key (YYYY-MM-DD), for the weekly recap. Kept for ACTIVITY_DAYS. */
+  activity: Record<string, DayActivity>;
   outbox: OutboxItem[];
   /** Season the local ratings belong to (0 = preseason). */
   ratingsSeason: number;
@@ -90,6 +100,21 @@ export interface ProgressState {
 
 const HISTORY_CAP = 2000;
 const PAST_SEASONS_CAP = 24;
+const ACTIVITY_DAYS = 70;
+
+/** Local calendar day, e.g. "2026-10-17". The weekly recap follows the player's own week. */
+export function localDayKey(date: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+function recordDay(activity: Record<string, DayActivity>, date: Date, games: number): Record<string, DayActivity> {
+  const key = localDayKey(date);
+  const cutoff = localDayKey(new Date(date.getTime() - ACTIVITY_DAYS * 86_400_000));
+  const kept = Object.fromEntries(Object.entries(activity).filter(([day]) => day > cutoff));
+  const day = kept[key] ?? { sessions: 0, games: 0 };
+  return { ...kept, [key]: { sessions: day.sessions + 1, games: day.games + games } };
+}
 const emptyUsage: UsageToday = { rankedSessions: 0, duelsCreated: 0 };
 
 function fresh() {
@@ -104,6 +129,7 @@ function fresh() {
     streak: EMPTY_STREAK,
     daily: {} as Record<string, DailyRecord>,
     gamesPlayed: 0,
+    activity: {} as Record<string, DayActivity>,
     outbox: [] as OutboxItem[],
     ratingsSeason: seasonOf(new Date()),
     seasonStats: null as SeasonStats | null,
@@ -160,6 +186,7 @@ export const useProgress = create<ProgressState>()(
           streak: countsForStreak ? recordActivity(state.streak, day) : state.streak,
           daily,
           gamesPlayed: state.gamesPlayed + runs.length,
+          activity: recordDay(state.activity, now, runs.length),
           outbox: outboxItem ? [...state.outbox, outboxItem] : state.outbox,
           seasonStats:
             plan.mode === 'zen'
@@ -192,7 +219,7 @@ export const useProgress = create<ProgressState>()(
         const points: RatingPoint[] = [];
         for (const [domain, r] of Object.entries(rolled.ratings) as [Domain, DomainRatings[Domain]][]) {
           const before = state.ratings[domain];
-          if (r.rating !== before.rating || r.rd !== before.rd) points.push({ at, domain, rating: r.rating, rd: r.rd });
+          if (r.rating !== before.rating || r.rd !== before.rd) points.push({ at, domain, rating: r.rating, rd: r.rd, reason: 'season' });
         }
         const finished = state.seasonStats && state.seasonStats.season < rolled.season ? state.seasonStats : null;
         set({
