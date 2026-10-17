@@ -37,6 +37,11 @@ HOW IT WORKS
 • Duel: send a friend a link. You both play the exact same puzzles — highest score wins.
 • Daily Challenge: one set of three puzzles for everyone, every day, with a live leaderboard and a spoiler-free result to share.
 
+SEASONS, LEAGUES AND YOUR WEEK
+• Monthly seasons: each calendar month is a season, with a recap of your peak tier and biggest climb.
+• Weekly leagues (optional): a table of up to 30 players at your tier. Your first ranked session each day scores, so free and Pro players have the same chances.
+• Weekly recap: a Sunday-evening summary, only after weeks you played.
+
 GAMES THAT ADAPT TO YOU
 Each of the 13 games is generated at your level, so it is never too easy and never impossible. Ratings use Glicko-2, the system behind many online chess sites: solve harder puzzles and your rating rises.
 
@@ -60,7 +65,7 @@ PLAY YOUR WAY
 • Earn streak shields that protect a missed day — they are never sold.
 
 FREE
-Placement and full results, one ranked session every day, the Daily Challenge and leaderboard, duels with friends, and Zen practice for five games.
+Placement and full results, one ranked session every day, the Daily Challenge and leaderboard, seasons, weekly leagues, duels with friends, and Zen practice for five games.
 
 MINDTIER PRO (OPTIONAL)
 Unlimited ranked sessions, focus training for any skill, all 13 games in Zen, full rating history and trends, and unlimited duel challenges. Choose yearly (with a free trial), monthly, or a one-time lifetime purchase. Subscriptions renew automatically until cancelled; manage or cancel anytime in Google Play.
@@ -70,7 +75,7 @@ Mindtier is a game for entertainment. It does not diagnose, treat or prevent any
 
 ## Localized listings
 
-The app ships in English, Spanish, Portuguese (Brazil), German and French. Add each language under **Grow → Store presence → Main store listing → Manage translations → Add your own translations**, paste the texts below, and upload that language's graphics. Game names (Grid Recall, Clash…) are brand names and stay in English everywhere, as in the app. Tier, skill and mode names match the in-app strings in `apps/mobile/src/i18n/<lang>.ts`.
+The app ships in English, Spanish, Portuguese (Brazil), German, French and Italian. Add each language under **Grow → Store presence → Main store listing → Manage translations → Add your own translations**, paste the texts below, and upload that language's graphics. Game names (Grid Recall, Clash…) are brand names and stay in English everywhere, as in the app. Tier, skill and mode names match the in-app strings in `apps/mobile/src/i18n/<lang>.ts`.
 
 | Language | Play locales | Screenshots | Feature graphic |
 |---|---|---|---|
@@ -78,6 +83,7 @@ The app ships in English, Spanish, Portuguese (Brazil), German and French. Add e
 | Portuguese (Brazil) | `pt-BR` (also usable for `pt-PT`) | `store/screenshots/phone/pt/` | `store/graphics/feature-graphic-pt.png` |
 | German | `de-DE` | `store/screenshots/phone/de/` | `store/graphics/feature-graphic-de.png` |
 | French | `fr-FR`, `fr-CA` | `store/screenshots/phone/fr/` | `store/graphics/feature-graphic-fr.png` |
+| Italian | `it-IT` | `store/screenshots/phone/it/` | `store/graphics/feature-graphic-it.png` |
 
 The same copy rules apply in every language: no claims about improving memory, intelligence or health, and the rating is never called an IQ.
 
@@ -108,6 +114,11 @@ CÓMO FUNCIONA
 • Duelos: envía un enlace a un amigo. Ambos juegan exactamente los mismos puzles y gana la mejor puntuación.
 • Reto diario: los mismos tres puzles para todos, cada día, con una clasificación en directo y un resultado sin spoilers para compartir.
 
+TEMPORADAS, LIGAS Y TU SEMANA
+• Temporadas mensuales: cada mes natural es una temporada, con un resumen de tu rango máximo y tu mayor subida.
+• Ligas semanales (opcionales): una tabla de hasta 30 jugadores de tu rango. Puntúa tu primera sesión clasificada de cada día, así que gratis y Pro tienen las mismas oportunidades.
+• Resumen semanal: el domingo por la tarde, solo después de las semanas en que jugaste.
+
 JUEGOS QUE SE ADAPTAN A TI
 Cada uno de los 13 juegos se genera a tu nivel: nunca demasiado fácil, nunca imposible. La puntuación usa Glicko-2, el sistema de muchos sitios de ajedrez en línea: resuelve puzles más difíciles y tu puntuación sube.
 
@@ -131,7 +142,7 @@ JUEGA A TU MANERA
 • Gana escudos de racha que protegen un día perdido. Nunca se venden.
 
 GRATIS
-Clasificación y resultados completos, una sesión clasificada cada día, el reto diario y su clasificación, duelos con amigos y práctica zen en cinco juegos.
+Clasificación y resultados completos, una sesión clasificada cada día, el reto diario y su clasificación, temporadas, ligas semanales, duelos con amigos y práctica zen en cinco juegos.
 
 MINDTIER PRO (OPCIONAL)
 Sesiones clasificadas ilimitadas, entrenamiento por área para cualquier habilidad, los 13 juegos en modo zen, historial y tendencias completos de tu puntuación, y duelos ilimitados. Elige anual (con prueba gratis), mensual o un pago único de por vida. Las suscripciones se renuevan automáticamente hasta que las canceles; gestiónalas o cancélalas cuando quieras en Google Play.
@@ -166,6 +177,11 @@ COMO FUNCIONA
 • Duelos: envie um link para um amigo. Vocês dois jogam exatamente os mesmos quebra-cabeças, e a maior pontuação vence.
 • Desafio diário: os mesmos três quebra-cabeças para todos, todos os dias, com ranking ao vivo e um resultado sem spoilers para compartilhar.
 
+TEMPORADAS, LIGAS E SUA SEMANA
+• Temporadas mensais: cada mês do calendário é uma temporada, com um resumo do seu nível máximo e da sua maior subida.
+• Ligas semanais (opcionais): uma tabela com até 30 jogadores do seu nível. A primeira sessão ranqueada de cada dia pontua, então grátis e Pro têm as mesmas chances.
+• Resumo semanal: no domingo à noite, só depois de semanas em que você jogou.
+
 JOGOS QUE SE ADAPTAM A VOCÊ
 Cada um dos 13 jogos é gerado no seu nível: nunca fácil demais, nunca impossível. A pontuação usa o Glicko-2, o sistema de muitos sites de xadrez online: resolva quebra-cabeças mais difíceis e sua pontuação sobe.
 
@@ -189,7 +205,7 @@ JOGUE DO SEU JEITO
 • Ganhe escudos de sequência que protegem um dia perdido. Eles nunca são vendidos.
 
 GRÁTIS
-Classificação e resultados completos, uma sessão ranqueada por dia, o desafio diário e seu ranking, duelos com amigos e treino zen em cinco jogos.
+Classificação e resultados completos, uma sessão ranqueada por dia, o desafio diário e seu ranking, temporadas, ligas semanais, duelos com amigos e treino zen em cinco jogos.
 
 MINDTIER PRO (OPCIONAL)
 Sessões ranqueadas ilimitadas, treino por área para qualquer habilidade, os 13 jogos no modo zen, histórico e tendências completos da sua pontuação e duelos ilimitados. Escolha anual (com teste grátis), mensal ou um pagamento único vitalício. As assinaturas são renovadas automaticamente até que você cancele; gerencie ou cancele quando quiser no Google Play.
@@ -224,6 +240,11 @@ SO FUNKTIONIERT ES
 • Duelle: Schick einem Freund einen Link. Ihr spielt beide genau dieselben Rätsel – die höchste Punktzahl gewinnt.
 • Tagesrätsel: jeden Tag dieselben drei Rätsel für alle, mit Live-Bestenliste und einem spoilerfreien Ergebnis zum Teilen.
 
+SAISONS, LIGEN UND DEINE WOCHE
+• Monatliche Saisons: Jeder Kalendermonat ist eine Saison, mit einem Rückblick auf deinen höchsten Rang und deinen größten Aufstieg.
+• Wochenligen (optional): eine Tabelle mit bis zu 30 Spielern deines Rangs. Deine erste gewertete Sitzung pro Tag zählt, damit Gratis- und Pro-Spieler dieselben Chancen haben.
+• Wochenrückblick: sonntagabends, nur nach Wochen, in denen du gespielt hast.
+
 SPIELE, DIE SICH DIR ANPASSEN
 Jedes der 13 Spiele wird auf deinem Niveau erzeugt – nie zu leicht, nie unmöglich. Die Wertung nutzt Glicko-2, das System vieler Online-Schachseiten: Löse schwierigere Rätsel, und deine Wertung steigt.
 
@@ -247,7 +268,7 @@ SPIEL, WIE DU WILLST
 • Verdiene Serien-Schilde, die einen verpassten Tag schützen – sie werden nie verkauft.
 
 GRATIS
-Einstufung und vollständige Ergebnisse, jeden Tag eine gewertete Sitzung, das Tagesrätsel mit Bestenliste, Duelle mit Freunden und Zen-Übung für fünf Spiele.
+Einstufung und vollständige Ergebnisse, jeden Tag eine gewertete Sitzung, das Tagesrätsel mit Bestenliste, Saisons, Wochenligen, Duelle mit Freunden und Zen-Übung für fünf Spiele.
 
 MINDTIER PRO (OPTIONAL)
 Unbegrenzt gewertete Sitzungen, Bereichstraining für jede Fähigkeit, alle 13 Spiele im Zen-Modus, kompletter Wertungsverlauf mit Trends und unbegrenzt Duelle. Wähle jährlich (mit Gratis-Test), monatlich oder einen einmaligen Kauf auf Lebenszeit. Abos verlängern sich automatisch, bis du sie kündigst; verwalte oder kündige sie jederzeit in Google Play.
@@ -282,6 +303,11 @@ COMMENT ÇA MARCHE
 • Duels : envoie un lien à un ami. Vous jouez tous les deux exactement les mêmes énigmes — le meilleur score gagne.
 • Défi du jour : les mêmes trois énigmes pour tous, chaque jour, avec un classement en direct et un résultat sans spoiler à partager.
 
+SAISONS, LIGUES ET TA SEMAINE
+• Saisons mensuelles : chaque mois calendaire est une saison, avec un bilan de ton rang le plus haut et de ta plus forte progression.
+• Ligues hebdomadaires (facultatives) : un classement de jusqu’à 30 joueurs de ton rang. Ta première session classée de chaque jour compte : gratuit ou Pro, tout le monde a les mêmes chances.
+• Bilan de la semaine : le dimanche soir, seulement après les semaines où tu as joué.
+
 DES JEUX QUI S’ADAPTENT À TOI
 Chacun des 13 jeux est généré à ton niveau : jamais trop facile, jamais impossible. Le score utilise Glicko-2, le système de nombreux sites d’échecs en ligne : résous des énigmes plus difficiles et ton score monte.
 
@@ -305,12 +331,75 @@ JOUE À TA FAÇON
 • Gagne des boucliers de série qui protègent un jour manqué — ils ne sont jamais vendus.
 
 GRATUIT
-Placement et résultats complets, une session classée par jour, le défi du jour et son classement, les duels entre amis et l’entraînement zen sur cinq jeux.
+Placement et résultats complets, une session classée par jour, le défi du jour et son classement, les saisons, les ligues hebdomadaires, les duels entre amis et l’entraînement zen sur cinq jeux.
 
 MINDTIER PRO (FACULTATIF)
 Sessions classées illimitées, entraînement par domaine pour chaque compétence, les 13 jeux en mode zen, historique et tendances complets de ton score, et duels illimités. Choisis l’annuel (avec essai gratuit), le mensuel ou un achat unique à vie. Les abonnements se renouvellent automatiquement jusqu’à leur résiliation ; gère-les ou résilie-les à tout moment dans Google Play.
 
 Mindtier est un jeu de divertissement. Il ne diagnostique, ne traite et ne prévient aucune affection.
+```
+
+### Italian — it-IT
+
+App name (≤30):
+
+```
+Mindtier: giochi di logica
+```
+
+Short description (≤80):
+
+```
+Scopri il tuo grado mentale e scala con giochi di logica. Mai pubblicità.
+```
+
+Full description (≤4000):
+
+```
+A che grado è la tua mente?
+
+Mindtier trasforma i giochi di logica in una scalata a gradi. Gioca cinque partite rapide di piazzamento, una per ogni abilità (Memoria, Attenzione, Velocità, Logica e Calcolo), e ottieni il tuo grado, da Ferro a Gran Maestro. Poi scala.
+
+COME FUNZIONA
+• Piazzati: cinque giochi brevi, circa quattro minuti, senza registrazione.
+• Scala: ogni sessione classificata fa salire o scendere il tuo punteggio. Grado e divisione si aggiornano man mano.
+• Duelli: invia un link a un amico. Giocate esattamente gli stessi rompicapi e vince il punteggio più alto.
+• Sfida del giorno: gli stessi tre rompicapi per tutti, ogni giorno, con una classifica in tempo reale e un risultato senza spoiler da condividere.
+
+STAGIONI, LEGHE E LA TUA SETTIMANA
+• Stagioni mensili: ogni mese di calendario è una stagione, con un riepilogo del tuo grado massimo e della tua salita più grande.
+• Leghe settimanali (facoltative): una classifica con fino a 30 giocatori del tuo grado. Conta la prima sessione classificata di ogni giorno, così gratis e Pro hanno le stesse possibilità.
+• Riepilogo settimanale: la domenica sera, solo dopo le settimane in cui hai giocato.
+
+GIOCHI CHE SI ADATTANO A TE
+Ognuno dei 13 giochi viene generato al tuo livello: mai troppo facile, mai impossibile. Il punteggio usa Glicko-2, il sistema di molti siti di scacchi online: risolvi rompicapi più difficili e il tuo punteggio sale.
+
+13 GIOCHI, 5 ABILITÀ
+• Memoria: Grid Recall, Path Trace, Echo
+• Attenzione: Flank, Clash, Spot
+• Velocità: Snap, Match
+• Logica: Pattern, Balance, Route
+• Calcolo: Quick Sum, Estimate
+
+QUATTRO PROMESSE
+• Mai pubblicità. Né tra un gioco e l’altro, né per chi gioca gratis.
+• I tuoi risultati sono tuoi. Grado, storico e scheda da condividere sono gratis. Pro aggiunge più gioco e non blocca mai un risultato che hai già ottenuto.
+• Pagamenti onesti. Le condizioni della prova sul pulsante, un promemoria prima della fine e un tocco per gestire l’abbonamento.
+• Un gioco, non una diagnosi. I gradi confrontano la tua abilità in questi rompicapi con quella degli altri giocatori. Non sono un test del QI né una valutazione medica.
+
+GIOCA A MODO TUO
+• Modalità zen: pratica senza tempo e senza punteggio.
+• Modalità senza colori per Clash, vibrazione e suoni regolabili, movimento ridotto e supporto al testo grande.
+• Nascondi dalla rotazione classificata i giochi che non ti piacciono.
+• Guadagna scudi della serie che proteggono un giorno saltato. Non si vendono mai.
+
+GRATIS
+Piazzamento e risultati completi, una sessione classificata al giorno, la sfida del giorno e la sua classifica, stagioni, leghe settimanali, duelli con gli amici e pratica zen in cinque giochi.
+
+MINDTIER PRO (FACOLTATIVO)
+Sessioni classificate illimitate, allenamento per area in qualsiasi abilità, tutti i 13 giochi in modalità zen, storico completo e tendenze del punteggio e duelli illimitati. Scegli il piano annuale (con prova gratuita), mensile o un acquisto unico a vita. Gli abbonamenti si rinnovano automaticamente fino alla disdetta; gestiscili o disdicili quando vuoi su Google Play.
+
+Mindtier è un gioco di intrattenimento. Non diagnostica, non cura e non previene alcuna condizione.
 ```
 
 ## Graphics
@@ -320,7 +409,7 @@ Mindtier est un jeu de divertissement. Il ne diagnostique, ne traite et ne prév
 | App icon | `store/graphics/play-icon-512.png` | 512×512 PNG, 32-bit |
 | Feature graphic | `store/graphics/feature-graphic.png` | 1024×500 PNG |
 | Phone screenshots (8) | `store/screenshots/phone/01…08-*.png` | 1080×1920 (9:16), real UI captures |
-| Localized graphics | `store/screenshots/phone/<lang>/`, `store/graphics/feature-graphic-<lang>.png` | Same specs, for es/pt/de/fr (see Localized listings) |
+| Localized graphics | `store/screenshots/phone/<lang>/`, `store/graphics/feature-graphic-<lang>.png` | Same specs, for es/pt/de/fr/it (see Localized listings) |
 | Raw captures | `store/screenshots/raw/{dark,light}/` | Unframed, for tablets/other uses |
 
 Regenerate everything from code:
