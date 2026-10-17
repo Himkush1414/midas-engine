@@ -21,8 +21,10 @@ export function Landing({ copy }: { copy: LandingCopy }) {
             <a className="button" href={SITE.playUrl}>
               {copy.ctaPlay}
             </a>
-            <a className="button secondary" href="#how">
-              {copy.ctaHow}
+            {/* /play is the app's own single-page bundle, not a Next.js route: a full page load is right. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a className="button secondary" href="/play">
+              {copy.ctaWeb}
             </a>
           </div>
           <p className="faint">{copy.heroFacts}</p>

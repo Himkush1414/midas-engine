@@ -9,7 +9,7 @@ export const pt: LandingCopy = {
   heroLead:
     'Jogos mentais ranqueados. Descubra seu nível, do Ferro ao Grão-Mestre, em cinco partidas rápidas de classificação e depois suba com quebra-cabeças que se adaptam a você, um desafio diário e duelos com amigos.',
   ctaPlay: 'Disponível no Google Play',
-  ctaHow: 'Como funciona',
+  ctaWeb: 'Jogue o desafio de hoje',
   heroFacts: 'Grátis · Sem anúncios, nunca · iOS em breve',
   tiersTitle: 'Oito níveis. Uma subida.',
   tiers: {

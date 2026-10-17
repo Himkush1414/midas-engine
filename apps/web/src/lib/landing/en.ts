@@ -13,7 +13,8 @@ export interface LandingCopy {
   heroTitle: string;
   heroLead: string;
   ctaPlay: string;
-  ctaHow: string;
+  /** Opens the web Daily Challenge at /play. */
+  ctaWeb: string;
   heroFacts: string;
   tiersTitle: string;
   tiers: Record<TierId, string>;
@@ -45,7 +46,7 @@ export const en: LandingCopy = {
   heroLead:
     'Ranked brain games. Find your rank from Iron to Grandmaster in five quick placement games — then climb with adaptive puzzles, a Daily Challenge and duels with friends.',
   ctaPlay: 'Get it on Google Play',
-  ctaHow: 'How it works',
+  ctaWeb: 'Play today’s challenge',
   heroFacts: 'Free to play · No ads, ever · iOS coming soon',
   tiersTitle: 'Eight tiers. One climb.',
   tiers: {

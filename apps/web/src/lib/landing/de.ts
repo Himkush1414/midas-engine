@@ -9,7 +9,7 @@ export const de: LandingCopy = {
   heroLead:
     'Denkspiele mit Rang. Finde deinen Rang von Eisen bis Großmeister in fünf kurzen Einstufungsspielen – und steig dann mit Rätseln auf, die sich dir anpassen, mit einem Tagesrätsel und Duellen gegen Freunde.',
   ctaPlay: 'Jetzt bei Google Play',
-  ctaHow: 'So funktioniert es',
+  ctaWeb: 'Heutiges Rätsel spielen',
   heroFacts: 'Kostenlos · Niemals Werbung · iOS folgt bald',
   tiersTitle: 'Acht Ränge. Ein Aufstieg.',
   tiers: {

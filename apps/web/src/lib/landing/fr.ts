@@ -9,7 +9,7 @@ export const fr: LandingCopy = {
   heroLead:
     'Des jeux de réflexion classés. Découvre ton rang, de Fer à Grand Maître, en cinq parties de placement rapides — puis grimpe avec des énigmes qui s’adaptent à toi, un défi du jour et des duels entre amis.',
   ctaPlay: 'Disponible sur Google Play',
-  ctaHow: 'Comment ça marche',
+  ctaWeb: 'Joue le défi du jour',
   heroFacts: 'Gratuit · Jamais de pub · iOS bientôt',
   tiersTitle: 'Huit rangs. Une ascension.',
   tiers: {

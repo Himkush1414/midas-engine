@@ -9,7 +9,7 @@ export const es: LandingCopy = {
   heroLead:
     'Juegos mentales clasificados. Descubre tu rango, de Hierro a Gran Maestro, en cinco partidas rápidas de clasificación y después escala con puzles que se adaptan a ti, un reto diario y duelos con amigos.',
   ctaPlay: 'Disponible en Google Play',
-  ctaHow: 'Cómo funciona',
+  ctaWeb: 'Juega el reto de hoy',
   heroFacts: 'Gratis · Sin anuncios, nunca · iOS muy pronto',
   tiersTitle: 'Ocho rangos. Una escalada.',
   tiers: {

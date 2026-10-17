@@ -9,13 +9,13 @@ type Lang = (typeof LANGS)[number];
 
 const NAMES: Record<Lang, string> = { en: 'English', es: 'Español', pt: 'Português', de: 'Deutsch', fr: 'Français', it: 'Italiano' };
 
-const LABELS: Record<Lang, { home: string; how: string; pricing: string; support: string; tagline: string; languages: string }> = {
-  en: { home: 'Mindtier home', how: 'How it works', pricing: 'Pricing', support: 'Support', tagline: 'Ranked brain games. No ads, ever.', languages: 'Languages' },
-  es: { home: 'Inicio de Mindtier', how: 'Cómo funciona', pricing: 'Precios', support: 'Soporte', tagline: 'Juegos mentales clasificados. Sin anuncios, nunca.', languages: 'Idiomas' },
-  pt: { home: 'Início do Mindtier', how: 'Como funciona', pricing: 'Preços', support: 'Suporte', tagline: 'Jogos mentais ranqueados. Sem anúncios, nunca.', languages: 'Idiomas' },
-  de: { home: 'Mindtier-Startseite', how: 'So funktioniert es', pricing: 'Preise', support: 'Support', tagline: 'Denkspiele mit Rang. Niemals Werbung.', languages: 'Sprachen' },
-  fr: { home: 'Accueil Mindtier', how: 'Comment ça marche', pricing: 'Tarifs', support: 'Assistance', tagline: 'Jeux de réflexion classés. Jamais de pub.', languages: 'Langues' },
-  it: { home: 'Home di Mindtier', how: 'Come funziona', pricing: 'Prezzi', support: 'Assistenza', tagline: 'Giochi di logica a gradi. Mai pubblicità.', languages: 'Lingue' },
+const LABELS: Record<Lang, { home: string; play: string; how: string; pricing: string; support: string; tagline: string; languages: string }> = {
+  en: { home: 'Mindtier home', play: 'Daily Challenge', how: 'How it works', pricing: 'Pricing', support: 'Support', tagline: 'Ranked brain games. No ads, ever.', languages: 'Languages' },
+  es: { home: 'Inicio de Mindtier', play: 'Reto diario', how: 'Cómo funciona', pricing: 'Precios', support: 'Soporte', tagline: 'Juegos mentales clasificados. Sin anuncios, nunca.', languages: 'Idiomas' },
+  pt: { home: 'Início do Mindtier', play: 'Desafio diário', how: 'Como funciona', pricing: 'Preços', support: 'Suporte', tagline: 'Jogos mentais ranqueados. Sem anúncios, nunca.', languages: 'Idiomas' },
+  de: { home: 'Mindtier-Startseite', play: 'Tagesrätsel', how: 'So funktioniert es', pricing: 'Preise', support: 'Support', tagline: 'Denkspiele mit Rang. Niemals Werbung.', languages: 'Sprachen' },
+  fr: { home: 'Accueil Mindtier', play: 'Défi du jour', how: 'Comment ça marche', pricing: 'Tarifs', support: 'Assistance', tagline: 'Jeux de réflexion classés. Jamais de pub.', languages: 'Langues' },
+  it: { home: 'Home di Mindtier', play: 'Sfida del giorno', how: 'Come funziona', pricing: 'Prezzi', support: 'Assistenza', tagline: 'Giochi di logica a gradi. Mai pubblicità.', languages: 'Lingue' },
 };
 
 /** Language of the page being shown: a translated landing page, or English everywhere else. */
@@ -40,6 +40,9 @@ export function MainNav() {
   const l = LABELS[lang];
   return (
     <nav className={styles.nav} aria-label="Main" lang={lang}>
+      {/* /play is a separate single-page bundle, so it gets a full page load. */}
+      {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+      <a href="/play">{l.play}</a>
       <Link href={`${homeOf(lang)}#how`}>{l.how}</Link>
       <Link href={`${homeOf(lang)}#pricing`}>{l.pricing}</Link>
       <Link href="/support">{l.support}</Link>

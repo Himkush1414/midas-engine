@@ -9,7 +9,7 @@ export const it: LandingCopy = {
   heroLead:
     'Giochi di logica a gradi. Scopri il tuo grado, da Ferro a Gran Maestro, in cinque partite rapide di piazzamento, poi scala con rompicapi che si adattano a te, una sfida del giorno e duelli con gli amici.',
   ctaPlay: 'Disponibile su Google Play',
-  ctaHow: 'Come funziona',
+  ctaWeb: 'Gioca la sfida di oggi',
   heroFacts: 'Gratis · Mai pubblicità · iOS in arrivo',
   tiersTitle: 'Otto gradi. Una scalata.',
   tiers: {
