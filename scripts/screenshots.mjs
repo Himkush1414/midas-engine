@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // Captures real screenshots of the app rendered with react-native-web.
 // Build once:  cd apps/mobile && EXPO_PUBLIC_QA_HOOKS=1 npx expo export --platform web --output-dir ../../.qa-web
-// Then:        node scripts/screenshots.mjs [--dist .qa-web] [--scheme dark|light] [--lang en|es|pt|de|fr] [--only name]
+// Then:        node scripts/screenshots.mjs [--dist .qa-web] [--scheme dark|light] [--lang en|es|pt|de|fr] [--only name] [--out dir]
 // (or point --base at a running `expo start --web` dev server)
-// Writes raw captures to store/screenshots/raw/<scheme>[-<lang>]/ (1080×1920, 9:16 for Google Play).
+// Writes raw captures to store/screenshots/raw/<scheme>[-<lang>]/ (1080×1920, 9:16 for Google Play),
+// or to --out for QA-only captures that should stay out of git.
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import { createServer } from 'node:http';
@@ -38,7 +39,7 @@ function serve(dir) {
 const SCHEME = arg('scheme', 'dark');
 const ONLY = arg('only', null);
 const LANG = arg('lang', 'en');
-const OUT = join(root, 'store/screenshots/raw', LANG === 'en' ? SCHEME : `${SCHEME}-${LANG}`);
+const OUT = arg('out', null) ?? join(root, 'store/screenshots/raw', LANG === 'en' ? SCHEME : `${SCHEME}-${LANG}`);
 
 // 412×732 CSS px at 2.625× ≈ 1080×1920.
 const VIEWPORT = { width: 412, height: 732 };
@@ -263,6 +264,23 @@ const SCENES = [
       await settle(page);
       await page.getByTestId('intro-start').click();
       await settle(page, wait);
+    },
+  })),
+  // QA only (not used for the store): settings is the longest localized list.
+  ...[
+    ['14-settings', 0],
+    ['15-settings-mid', 640],
+    ['16-settings-end', 10_000],
+  ].map(([name, scroll]) => ({
+    name,
+    path: '/',
+    before: async (page) => {
+      await store(page, () => globalThis.__mindtier.router.push('/settings'));
+      await settle(page, 1200);
+      if (!scroll) return;
+      await page.mouse.move(VIEWPORT.width / 2, VIEWPORT.height / 2);
+      await page.mouse.wheel(0, scroll);
+      await settle(page, 800);
     },
   })),
 ];
