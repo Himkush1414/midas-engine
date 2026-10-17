@@ -46,7 +46,7 @@ These steps publish to production, so they need the owner to run them (or allow 
    `set -a; . ./.env.local; set +a; PATH=$HOME/.local/node-linux/bin:$PATH node scripts/deploy-web.mjs`
    Then smoke-test /, /privacy, /terms, /refunds, /delete-account, /support, /api/health, /api/v1/bootstrap (401 without a token) and /.well-known/assetlinks.json.
 2. Fresh Android production build:
-   `cd apps/mobile && set -a && . ../../.env.local && set +a && PATH=$HOME/.local/node-linux/bin:$PATH npx eas build -p android --profile production --non-interactive`
+   `cd apps/mobile && set -a && . ../../.env.local && set +a && PATH=$HOME/.local/node-linux/bin:$PATH npx --yes eas-cli@latest build -p android --profile production --non-interactive`
 
 ### Next steps
 1. After the build, check the AAB manifest (permissions, locale config).
