@@ -292,6 +292,9 @@ const SCENES = [
     ['11-game-route', 'route', 2400],
     ['12-game-grid', 'grid-recall', 2150],
     ['13-game-clash', 'clash', 2300],
+    // QA only: the Language games.
+    ['25-game-sort', 'sort', 2300],
+    ['26-game-misfit', 'misfit', 2300],
   ].map(([name, game, wait]) => ({
     name,
     path: '/',
