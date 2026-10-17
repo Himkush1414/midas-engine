@@ -90,6 +90,16 @@ try {
   await page.getByTestId('results-done').click();
   check(await page.getByText('You’ve played today’s free ranked session').waitFor({ timeout: 10_000 }).then(() => true, () => false), 'free daily limit applied');
   await snap('home-limit');
+
+  const after = await page.evaluate(() => JSON.parse(localStorage.getItem('mindtier.progress.v1') ?? '{}').state);
+  const today = Object.values(after?.activity ?? {}).reduce((n, d) => n + d.sessions, 0);
+  check(after?.seasonStats?.sessions === 2 && today === 2, 'season stats and weekly activity count both sessions');
+  await page.getByTestId('season-card').click();
+  check(await page.getByText('Sessions', { exact: true }).waitFor({ timeout: 10_000 }).then(() => true, () => false), 'season recap opens from home');
+  await snap('season');
+  await page.goto(`${base}/week`, { waitUntil: 'networkidle' });
+  check(await page.getByText('Days played', { exact: true }).waitFor({ timeout: 20_000 }).then(() => true, () => false), 'weekly recap shows this week');
+  await snap('week');
 } finally {
   check(errors.length === 0, `no uncaught page errors${errors.length ? `: ${errors.slice(0, 3).join(' | ')}` : ''}`);
   await browser.close();

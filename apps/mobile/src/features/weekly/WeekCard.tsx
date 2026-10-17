@@ -17,7 +17,7 @@ export function WeekCard() {
   const recap = weeklyRecap({ activity, history, daily }, weekRange(new Date()));
 
   return (
-    <Card onPress={() => router.push('/week')} accessibilityLabel={t('week.open')}>
+    <Card onPress={() => router.push('/week')} accessibilityLabel={t('week.open')} testID="week-card">
       <View style={styles.row}>
         <View style={[styles.icon, { backgroundColor: colors.surfaceRaised }]}>
           <Icon name="chart" size={24} color={colors.primary} />

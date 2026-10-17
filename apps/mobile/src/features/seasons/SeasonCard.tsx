@@ -57,7 +57,7 @@ export function SeasonCard({ announce = false }: { announce?: boolean }) {
   const days = seasonDaysLeft(now);
   const timing = seasonOf(now) === 0 ? t('season.startsIn', { count: days }) : t('season.daysLeft', { count: days });
   return (
-    <Card onPress={() => openRecap(season)} accessibilityLabel={t('season.open')}>
+    <Card onPress={() => openRecap(season)} accessibilityLabel={t('season.open')} testID="season-card">
       <View style={styles.row}>
         <View style={[styles.icon, { backgroundColor: colors.surfaceRaised }]}>
           <Icon name="trophy" size={24} color={colors.spark} />
