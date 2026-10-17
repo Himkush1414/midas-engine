@@ -94,6 +94,9 @@ try {
   const after = await page.evaluate(() => JSON.parse(localStorage.getItem('mindtier.progress.v1') ?? '{}').state);
   const today = Object.values(after?.activity ?? {}).reduce((n, d) => n + d.sessions, 0);
   check(after?.seasonStats?.sessions === 2 && today === 2, 'season stats and weekly activity count both sessions');
+  const values = Object.values(after?.ratings ?? {});
+  const overall = values.reduce((sum, r) => sum + r.rating, 0) / Math.max(1, values.length);
+  check(values.length === 5 && overall < 2100, `a perfect bot is not Grandmaster after placement plus one session (overall ${Math.round(overall)})`);
   await page.getByTestId('season-card').click();
   // By test id: the off-screen share card repeats the recap's labels.
   check(await visible('season-stats'), 'season recap opens from home');
