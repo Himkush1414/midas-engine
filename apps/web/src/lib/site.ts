@@ -4,7 +4,7 @@ export const SITE = {
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://midas-engine.vercel.app').replace(/\/$/, ''),
   tagline: 'Ranked brain games',
   description:
-    'Find your brain rank in five quick placement games, then climb from Iron to Grandmaster. Adaptive puzzles, daily challenges and friend duels. No ads, ever.',
+    'Find your brain rank in five quick placement games, then climb from Iron to Grandmaster. Adaptive puzzles, daily challenges, friend duels, monthly seasons and weekly leagues. No ads, ever.',
   playUrl: 'https://play.google.com/store/apps/details?id=app.mindtier',
   androidPackage: 'app.mindtier',
   supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? 'support@example.com',
