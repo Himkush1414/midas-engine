@@ -26,6 +26,14 @@ jobs:
       - name: Build web
         run: npm run build -w @mindtier/web
 
+  db:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply migrations to a throwaway Postgres and run SQL tests
+        run: scripts/db-check.sh
+
   e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 30
