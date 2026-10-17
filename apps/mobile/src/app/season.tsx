@@ -1,14 +1,15 @@
 import { useLocalSearchParams, router } from 'expo-router';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BackHeader } from '@/components/BackHeader';
 import { DomainBadge, TierBadge } from '@/components/tier';
 import { Button, Card, Screen, Text } from '@/components/ui';
+import { SeasonShareCard } from '@/features/seasons/SeasonShareCard';
 import { seasonMonth, seasonName, seasonRecap, seasonShareText } from '@/features/seasons/season';
+import { useCardShare } from '@/features/share/useCardShare';
 import { useLanguage, useT } from '@/i18n';
 import { domainLabel, tierLabel } from '@/i18n/labels';
 import { track } from '@/lib/analytics';
-import { shareText } from '@/lib/share';
 import { useProgress } from '@/state/progress';
 import { spacing, useTheme } from '@/theme';
 
@@ -34,8 +35,12 @@ export default function SeasonScreen() {
     track('season_recap_viewed', { season, current: isCurrent });
   }, [season, isCurrent]);
 
+  const text = useCallback(() => (recap ? seasonShareText(t, recap) : ''), [recap, t]);
+  const sharing = useCardShare((ref) => (recap ? <SeasonShareCard ref={ref} recap={recap} /> : null), text, 'season');
+
   return (
     <Screen scroll>
+      {sharing.card}
       <BackHeader title={t('season.recapTitle', { season: name })} />
       <View style={styles.stack}>
         <Text variant="caption" tone="faint" weight="semibold" align="center">
@@ -117,10 +122,7 @@ export default function SeasonScreen() {
               icon="share"
               variant="secondary"
               fullWidth
-              onPress={() => {
-                track('share_tapped', { what: 'season' });
-                void shareText(seasonShareText(t, recap));
-              }}
+              onPress={() => void sharing.share()}
             />
           </>
         ) : (
