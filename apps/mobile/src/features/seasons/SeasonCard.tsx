@@ -11,8 +11,11 @@ import { seasonName, tierAt } from './season';
 
 const openRecap = (season: number) => router.push({ pathname: '/season', params: { n: String(season) } });
 
-/** Home card: the current season at a glance, or the intro to a season that just started. */
-export function SeasonCard() {
+/**
+ * The current season at a glance. With `announce`, a season that just started
+ * shows its intro instead, until the player dismisses it.
+ */
+export function SeasonCard({ announce = false }: { announce?: boolean }) {
   const { colors } = useTheme();
   const t = useT();
   const season = useProgress((s) => s.ratingsSeason);
@@ -22,7 +25,7 @@ export function SeasonCard() {
   const previous = useProgress((s) => s.pastSeasons[0] ?? null);
   const now = new Date();
 
-  if (notice !== null) {
+  if (announce && notice !== null) {
     const name = seasonName(t, notice);
     return (
       <Card raised style={[styles.notice, { borderColor: colors.accent }]} testID="season-notice">

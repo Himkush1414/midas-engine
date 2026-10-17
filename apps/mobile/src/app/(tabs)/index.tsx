@@ -60,7 +60,7 @@ export default function Home() {
 
       <View style={styles.stack}>
         <RankHero ratings={ratings} />
-        <SeasonCard />
+        <SeasonCard announce />
 
         <Card raised style={styles.play}>
           <View style={styles.playText}>

@@ -10,6 +10,7 @@ import { SkillRadar } from '@/components/SkillRadar';
 import { DomainBadge, TierBadge } from '@/components/tier';
 import { Button, Card, PressableScale, Screen, Text } from '@/components/ui';
 import { domainSeries, windowDelta } from '@/features/profile/history';
+import { SeasonCard } from '@/features/seasons/SeasonCard';
 import { ApiError, api } from '@/lib/api';
 import { useTierShare } from '@/features/share/useTierShare';
 import { useAccount } from '@/state/account';
@@ -114,6 +115,8 @@ export default function Profile() {
           </View>
           <Button label={t('profile.shareTier')} icon="share" variant="secondary" fullWidth onPress={() => void tierShare.share()} />
         </Card>
+
+        <SeasonCard />
 
         <View style={styles.stats}>
           {stats.map((s) => (
