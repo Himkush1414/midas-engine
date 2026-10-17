@@ -110,7 +110,7 @@ export function DailyScreen({ header, footer, onNamePress = () => router.push('/
               <Text variant="title" tabular align="center">
                 {t('common.points', { points: record.points })}
               </Text>
-              <Button label={t('daily.shareResult')} icon="share" variant="secondary" fullWidth onPress={share} />
+              <Button label={t('daily.shareResult')} icon="share" variant="secondary" fullWidth onPress={share} testID="daily-share" />
               <Text variant="caption" tone="faint" align="center">
                 {t('daily.next', { hours: next.hours, minutes: next.minutes })}
               </Text>

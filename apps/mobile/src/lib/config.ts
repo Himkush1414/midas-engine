@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { WEB_URL } from './links';
 
 /**
@@ -14,3 +15,9 @@ export const config = {
 
 /** False in builds without backend config: the app then runs fully offline. */
 export const backendConfigured = Boolean(config.supabaseUrl && config.supabaseAnonKey);
+
+/**
+ * The public web build served at /play on the website: just today's Daily
+ * Challenge, with a link to the app. Set EXPO_PUBLIC_WEB_PLAY=1 when exporting for web.
+ */
+export const webPlay = Platform.OS === 'web' && process.env.EXPO_PUBLIC_WEB_PLAY === '1';

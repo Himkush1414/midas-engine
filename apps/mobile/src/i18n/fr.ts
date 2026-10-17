@@ -551,6 +551,16 @@ export const fr: Translations = {
     offline: 'Les ligues nécessitent une connexion internet.',
     nameHint: 'Choisis un nom pour que ton groupe sache qui tu es.',
   },
+  web: {
+    title: 'Le défi du jour',
+    subtitle: 'Trois énigmes, les mêmes pour tous aujourd’hui. Environ deux minutes, sans inscription.',
+    appTitle: 'Découvre ton rang',
+    appBody: 'L’app Mindtier te place entre Fer et Grand Maître en cinq parties rapides. Ensuite, grimpe avec les sessions classées, les saisons mensuelles et les ligues hebdomadaires. Jamais de pub.',
+    getApp: 'Disponible sur Google Play',
+    iosSoon: 'iOS bientôt',
+    privacy: 'Confidentialité',
+    terms: 'Conditions',
+  },
   share: {
     placed: 'Mon esprit est {label} sur Mindtier.',
     yours: 'Et toi, quel est ton rang ? {url}',

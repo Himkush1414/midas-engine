@@ -14,6 +14,7 @@ import { useLanguage, useSyncDeviceLanguage } from '@/i18n';
 import { initCrashReporting, reportError } from '@/lib/crash';
 import { relocalizeNotifications } from '@/lib/notifications';
 import { refreshWeeklyRecap } from '@/features/weekly/schedule';
+import { webPlay } from '@/lib/config';
 import { installDevHooks } from '@/lib/devHooks';
 import { useProgress } from '@/state/progress';
 import { useSettings } from '@/state/settings';
@@ -57,10 +58,14 @@ function AppStack() {
     <>
       <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background }, animation: 'fade' }}>
-        <Stack.Protected guard={placementDone}>
+        {/* The web build at /play is only today's Daily Challenge. */}
+        <Stack.Protected guard={webPlay}>
+          <Stack.Screen name="today" />
+        </Stack.Protected>
+        <Stack.Protected guard={!webPlay && placementDone}>
           <Stack.Screen name="(tabs)" />
         </Stack.Protected>
-        <Stack.Protected guard={!placementDone}>
+        <Stack.Protected guard={!webPlay && !placementDone}>
           <Stack.Screen name="welcome" />
         </Stack.Protected>
         <Stack.Screen name="session" options={{ gestureEnabled: false, animation: 'slide_from_bottom' }} />

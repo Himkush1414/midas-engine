@@ -27,7 +27,9 @@ export type EventName =
   | 'season_recap_viewed'
   | 'weekly_recap_viewed'
   | 'league_joined'
-  | 'league_left';
+  | 'league_left'
+  | 'web_daily_viewed'
+  | 'web_get_app_tapped';
 
 export type EventProps = Record<string, string | number | boolean | null>;
 

@@ -550,6 +550,16 @@ export const it: Translations = {
     offline: 'Le leghe richiedono una connessione a internet.',
     nameHint: 'Scegli un nome così il tuo gruppo sa chi sei.',
   },
+  web: {
+    title: 'La sfida di oggi',
+    subtitle: 'Tre rompicapi, gli stessi per tutti oggi. Circa due minuti, senza registrazione.',
+    appTitle: 'Scopri il tuo grado',
+    appBody: 'L’app Mindtier ti assegna un grado da Ferro a Gran Maestro in cinque partite rapide. Poi scala con sessioni classificate, stagioni mensili e leghe settimanali. Mai pubblicità.',
+    getApp: 'Disponibile su Google Play',
+    iosSoon: 'iOS in arrivo',
+    privacy: 'Privacy',
+    terms: 'Termini',
+  },
   share: {
     placed: 'La mia mente è al grado {label} su Mindtier.',
     yours: 'E la tua a che grado è? {url}',

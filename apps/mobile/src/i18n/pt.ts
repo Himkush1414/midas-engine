@@ -551,6 +551,16 @@ export const pt: Translations = {
     offline: 'As ligas precisam de conexão com a internet.',
     nameHint: 'Escolha um nome para seu grupo saber quem você é.',
   },
+  web: {
+    title: 'Desafio diário de hoje',
+    subtitle: 'Três quebra-cabeças, os mesmos para todos hoje. Cerca de dois minutos, sem cadastro.',
+    appTitle: 'Descubra seu nível',
+    appBody: 'O app Mindtier coloca você entre Ferro e Grão-Mestre em cinco partidas rápidas. Depois, suba com sessões ranqueadas, temporadas mensais e ligas semanais. Sem anúncios, nunca.',
+    getApp: 'Disponível no Google Play',
+    iosSoon: 'iOS em breve',
+    privacy: 'Privacidade',
+    terms: 'Termos',
+  },
   share: {
     placed: 'Minha mente está em {label} no Mindtier.',
     yours: 'Qual é o seu nível? {url}',

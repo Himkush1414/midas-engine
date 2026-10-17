@@ -549,6 +549,16 @@ export const en = {
     offline: 'League tables need an internet connection.',
     nameHint: 'Pick a display name so your group knows who you are.',
   },
+  web: {
+    title: 'Today’s Daily Challenge',
+    subtitle: 'Three puzzles, the same for everyone today. About two minutes, no sign-up.',
+    appTitle: 'Find your tier',
+    appBody: 'The Mindtier app places you from Iron to Grandmaster in five quick games. Then climb with ranked sessions, monthly seasons and weekly leagues. No ads, ever.',
+    getApp: 'Get it on Google Play',
+    iosSoon: 'iOS coming soon',
+    privacy: 'Privacy',
+    terms: 'Terms',
+  },
   share: {
     placed: 'My mind placed {label} on Mindtier.',
     yours: 'What tier is yours? {url}',

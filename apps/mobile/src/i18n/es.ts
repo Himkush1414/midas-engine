@@ -551,6 +551,16 @@ export const es: Translations = {
     offline: 'Las ligas necesitan conexión a internet.',
     nameHint: 'Elige un nombre para que tu grupo sepa quién eres.',
   },
+  web: {
+    title: 'Reto diario de hoy',
+    subtitle: 'Tres puzles, los mismos para todos hoy. Unos dos minutos, sin registro.',
+    appTitle: 'Descubre tu rango',
+    appBody: 'La app de Mindtier te clasifica de Hierro a Gran Maestro en cinco partidas rápidas. Después, escala con sesiones clasificadas, temporadas mensuales y ligas semanales. Sin anuncios, nunca.',
+    getApp: 'Disponible en Google Play',
+    iosSoon: 'iOS muy pronto',
+    privacy: 'Privacidad',
+    terms: 'Términos',
+  },
   share: {
     placed: 'Mi mente está en {label} en Mindtier.',
     yours: '¿Cuál es tu rango? {url}',

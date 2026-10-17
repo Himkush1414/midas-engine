@@ -551,6 +551,16 @@ export const de: Translations = {
     offline: 'Ligen brauchen eine Internetverbindung.',
     nameHint: 'Wähle einen Namen, damit deine Gruppe weiß, wer du bist.',
   },
+  web: {
+    title: 'Heutiges Tagesrätsel',
+    subtitle: 'Drei Rätsel, heute für alle dieselben. Etwa zwei Minuten, ohne Anmeldung.',
+    appTitle: 'Finde deinen Rang',
+    appBody: 'Die Mindtier-App stuft dich in fünf kurzen Spielen von Eisen bis Großmeister ein. Dann steigst du mit gewerteten Sitzungen, monatlichen Saisons und Wochenligen auf. Niemals Werbung.',
+    getApp: 'Jetzt bei Google Play',
+    iosSoon: 'iOS folgt bald',
+    privacy: 'Datenschutz',
+    terms: 'Nutzungsbedingungen',
+  },
   share: {
     placed: 'Mein Kopf ist bei Mindtier auf {label}.',
     yours: 'Welchen Rang hast du? {url}',

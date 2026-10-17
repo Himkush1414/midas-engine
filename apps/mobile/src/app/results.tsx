@@ -8,6 +8,7 @@ import { TierBadge } from '@/components/tier';
 import { Button, Card, Screen, Text } from '@/components/ui';
 import { shareDuel } from '@/features/duels/actions';
 import { DeltaRow } from '@/features/results/DeltaRow';
+import { webPlay } from '@/lib/config';
 import { haptic } from '@/lib/feedback';
 import { useReduceMotion } from '@/lib/motion';
 import { maybeAskForReview } from '@/lib/review';
@@ -62,7 +63,7 @@ export default function Results() {
 
   const done = () => {
     useSession.getState().clearFinished();
-    router.dismissTo('/');
+    router.dismissTo(webPlay ? '/today' : '/');
   };
 
   return (
@@ -72,7 +73,7 @@ export default function Results() {
       footer={
         <View style={styles.footer}>
           {plan.mode === 'daily' ? (
-            <Button label={t('results.board')} size="lg" fullWidth icon="trophy" onPress={() => router.replace('/daily')} />
+            <Button label={t('results.board')} size="lg" fullWidth icon="trophy" onPress={() => router.replace(webPlay ? '/today' : '/daily')} />
           ) : null}
           {plan.mode === 'duel' ? (
             <Button

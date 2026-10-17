@@ -15,4 +15,6 @@ export const links = {
       ? `https://play.google.com/store/account/subscriptions?sku=${encodeURIComponent(sku)}&package=app.mindtier`
       : 'https://play.google.com/store/account/subscriptions?package=app.mindtier',
   appStoreSubscriptions: 'https://apps.apple.com/account/subscriptions',
+  /** Store listing, tagged so installs from the web Daily Challenge can be counted. */
+  playStore: 'https://play.google.com/store/apps/details?id=app.mindtier&referrer=utm_source%3Dweb_daily',
 } as const;
