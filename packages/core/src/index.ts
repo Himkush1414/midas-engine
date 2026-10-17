@@ -23,5 +23,6 @@ export * from './games/quick-sum';
 export * from './games/estimate';
 export * from './verify';
 export * from './streak';
+export * from './seasons';
 export * from './limits';
 export * from './art/badges';
