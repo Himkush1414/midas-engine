@@ -95,7 +95,8 @@ try {
   const today = Object.values(after?.activity ?? {}).reduce((n, d) => n + d.sessions, 0);
   check(after?.seasonStats?.sessions === 2 && today === 2, 'season stats and weekly activity count both sessions');
   await page.getByTestId('season-card').click();
-  check(await page.getByText('Sessions', { exact: true }).waitFor({ timeout: 10_000 }).then(() => true, () => false), 'season recap opens from home');
+  // By test id: the off-screen share card repeats the recap's labels.
+  check(await visible('season-stats'), 'season recap opens from home');
   await snap('season');
   await page.goto(`${base}/week`, { waitUntil: 'networkidle' });
   check(await page.getByText('Days played', { exact: true }).waitFor({ timeout: 20_000 }).then(() => true, () => false), 'weekly recap shows this week');

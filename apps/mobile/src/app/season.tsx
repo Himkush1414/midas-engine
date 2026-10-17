@@ -66,7 +66,7 @@ export default function SeasonScreen() {
               </View>
             </Card>
 
-            <View style={styles.stats}>
+            <View style={styles.stats} testID="season-stats">
               {[
                 { label: t('season.sessions'), value: recap.sessions },
                 { label: t('season.games'), value: recap.games },
