@@ -49,3 +49,5 @@ jobs:
         with:
           name: e2e-screenshots
           path: .qa-web-e2e
+          # The folder name starts with a dot; v4 skips hidden paths unless told otherwise.
+          include-hidden-files: true
