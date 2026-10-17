@@ -327,8 +327,8 @@ Regenerate everything from code:
 
 ```bash
 cd apps/mobile && EXPO_PUBLIC_QA_HOOKS=1 npx expo export --platform web --output-dir ../../.qa-web && cd ../..
-node scripts/screenshots.mjs --dist .qa-web            # needs Playwright Chromium
-node scripts/store-graphics.mjs                         # needs Space Grotesk + Inter installed for librsvg
+node scripts/screenshots.mjs --dist .qa-web --now 2026-11-18T12:00:00Z   # needs Playwright Chromium; --now pins a mid-season date (add --lang es|pt|de|fr|it per language)
+node scripts/store-graphics.mjs [--lang …]              # needs Space Grotesk + Inter installed for librsvg
 node scripts/render-brand.mjs                           # icons and adaptive icon layers
 ```
 

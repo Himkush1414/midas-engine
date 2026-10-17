@@ -93,6 +93,20 @@ const COPY = {
     tagline: 'À quel rang est ton esprit ?',
     strap: 'Jeux de réflexion classés · Défi du jour · Duels',
   },
+  it: {
+    frames: [
+      ['A che grado è la tua mente?', 'Cinque partite rapide di piazzamento. Da Ferro a Gran Maestro.'],
+      ['Un grado che si muove', 'Ogni sessione classificata aggiorna il tuo punteggio.'],
+      ['Giochi che si adattano a te', 'Mai troppo facili, mai impossibili.'],
+      ['Vedi cosa è cambiato', 'Guadagni e perdite chiari per ogni abilità.'],
+      ['Una sfida al giorno', 'Gli stessi rompicapi per tutti. Una classifica.'],
+      ['Sfida i tuoi amici', 'Rompicapi identici. Vince il punteggio più alto.'],
+      ['Le tue cinque abilità', 'Memoria, Attenzione, Velocità, Logica e Calcolo.'],
+      ['Niente pubblicità. Mai.', 'Gratis ogni giorno. Pro se vuoi di più.'],
+    ],
+    tagline: 'A che grado è la tua mente?',
+    strap: 'Giochi di logica a gradi · Sfida del giorno · Duelli',
+  },
 };
 const copy = COPY[lang];
 if (!copy) throw new Error(`Unknown --lang ${lang}; expected one of ${Object.keys(COPY).join(', ')}`);

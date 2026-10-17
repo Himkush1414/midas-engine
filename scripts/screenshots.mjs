@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Captures real screenshots of the app rendered with react-native-web.
 // Build once:  cd apps/mobile && EXPO_PUBLIC_QA_HOOKS=1 npx expo export --platform web --output-dir ../../.qa-web
-// Then:        node scripts/screenshots.mjs [--dist .qa-web] [--scheme dark|light] [--lang en|es|pt|de|fr] [--only name] [--out dir]
+// Then:        node scripts/screenshots.mjs [--dist .qa-web] [--scheme dark|light] [--lang en|es|pt|de|fr|it] [--only name] [--out dir] [--now ISO]
+// --now pins the page clock (e.g. mid-season for store assets, so they never show the preseason).
 // (or point --base at a running `expo start --web` dev server)
 // Writes raw captures to store/screenshots/raw/<scheme>[-<lang>]/ (1080×1920, 9:16 for Google Play),
 // or to --out for QA-only captures that should stay out of git.
@@ -46,7 +47,9 @@ const VIEWPORT = { width: 412, height: 732 };
 const DPR = 1080 / 412;
 
 const DAY = 86_400_000;
-const now = Date.now();
+const NOW = arg('now', null);
+const now = NOW ? Date.parse(NOW) : Date.now();
+if (Number.isNaN(now)) throw new Error(`Bad --now ${NOW}`);
 const today = new Date(now).toISOString().slice(0, 10);
 
 /** Sample player for screenshots: a steadily improving Platinum climber. */
@@ -62,6 +65,13 @@ function demoState() {
   }
   history.sort((a, b) => a.at - b.at);
   const ratings = Object.fromEntries(Object.entries(targets).map(([d, r]) => [d, { rating: r, rd: 68, volatility: 0.06 }]));
+  // One or two sessions a day for the past week, keyed by local day like the app.
+  const pad = (n) => String(n).padStart(2, '0');
+  const activity = {};
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(now - i * DAY);
+    activity[`${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`] = { sessions: 1 + (i % 2), games: 3 + 3 * (i % 2) };
+  }
   return {
     'mindtier.progress.v1': {
       state: {
@@ -75,6 +85,7 @@ function demoState() {
         streak: { current: 12, best: 19, shields: 1, lastDay: new Date(now - DAY).toISOString().slice(0, 10) },
         daily: {},
         gamesPlayed: 186,
+        activity,
         outbox: [],
       },
       version: 1,
@@ -388,6 +399,7 @@ for (const scene of SCENES) {
     sessionStorage.setItem('seeded', '1');
   }, state);
   const page = await context.newPage();
+  if (NOW) await page.clock.setFixedTime(now);
   page.on('pageerror', (e) => console.error(`  [${scene.name}] page error: ${e.message}`));
   await stubNetwork(page, { fresh: Boolean(scene.fresh), league: scene.league });
   await page.goto(`${BASE}${scene.path}`, { waitUntil: 'networkidle' });
