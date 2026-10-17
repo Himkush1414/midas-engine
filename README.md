@@ -44,6 +44,7 @@ Requirements: Node 24 (`.nvmrc`), npm 11.
 npm install
 cp .env.example .env.local                 # fill in values (never commit)
 scripts/verify.sh                          # typecheck + lint + tests for every workspace
+scripts/db-check.sh                        # apply migrations to a throwaway Postgres (Docker) and run SQL tests
 ```
 
 Mobile (needs a development build, because the app uses native modules):
@@ -72,6 +73,7 @@ node scripts/configure-auth.mjs    # idempotent auth settings
 ## Quality gates
 
 - `scripts/verify.sh [core|mobile|web]` — strict typecheck, lint (zero warnings) and tests; CI runs the same on every push.
+- `scripts/db-check.sh` — migrations plus `supabase/tests/*.test.sql` against Postgres 17 in Docker, with minimal Supabase stand-ins; CI runs it too.
 - Core: property tests run every game at every level against its `solve()` oracle, plus the Glicko-2 reference example and replay-based anti-cheat tests.
 - Web: session validation, entitlement mapping, name moderation, and an opt-in end-to-end smoke test against a running API (`API_SMOKE_URL=…`).
 - Mobile: stores, sync, purchases, notifications, analytics and render tests for all 13 game views.

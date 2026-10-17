@@ -41,7 +41,7 @@ export default function Privacy() {
           </tr>
           <tr>
             <td>Gameplay data: games played, scores, accuracy, difficulty reached, ratings and their history, timestamps</td>
-            <td>To calculate your rank, run the Daily Challenge leaderboard and duels, and detect cheating</td>
+            <td>To calculate your rank, run the Daily Challenge leaderboard, duels and weekly leagues (if you join), and detect cheating</td>
             <td>Yes</td>
           </tr>
           <tr>
@@ -51,7 +51,7 @@ export default function Privacy() {
           </tr>
           <tr>
             <td>Display name</td>
-            <td>Only if you set one; shown to friends in duels and on leaderboards</td>
+            <td>Only if you set one; shown to friends in duels, on leaderboards and to your weekly league group</td>
             <td>No</td>
           </tr>
           <tr>
@@ -122,7 +122,7 @@ export default function Privacy() {
       <h2>How long we keep data</h2>
       <p>
         We keep your account data while your account exists. When you delete your account, your profile, ratings,
-        results, leaderboard entries and duel entries are deleted immediately from our live database, and removed from
+        results, leaderboard, league and duel entries are deleted immediately from our live database, and removed from
         backups within 30 days. Aggregated statistics that cannot identify you may be kept. Requests submitted through
         our website are processed within 30 days.
       </p>

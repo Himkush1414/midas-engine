@@ -15,7 +15,7 @@ Answers for every Play Console declaration, derived from what the code actually 
 | Category → data type | Collected | Optional? | Purposes | Ephemeral? |
 |---|---|---|---|---|
 | Personal info → **Email address** | Yes | Optional (only if the player saves progress to email) | Account management | No |
-| Personal info → **Name** (display name) | Yes | Optional | App functionality (shown in duels/leaderboards) | No |
+| Personal info → **Name** (display name) | Yes | Optional | App functionality (shown in duels, leaderboards and opt-in weekly leagues) | No |
 | Personal info → **User IDs** (anonymous account ID) | Yes | Required | App functionality, Account management, Fraud prevention, security and compliance | No |
 | Financial info → **Purchase history** (Pro plan + expiry, via RevenueCat) | Yes | Required for Pro buyers only | App functionality | No |
 | App activity → **App interactions** (anonymous usage events) | Yes | Optional (Settings → Privacy) | Analytics | No |
