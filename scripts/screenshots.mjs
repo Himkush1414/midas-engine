@@ -54,7 +54,7 @@ const today = new Date(now).toISOString().slice(0, 10);
 
 /** Sample player for screenshots: a steadily improving Platinum climber. */
 function demoState() {
-  const targets = { memory: 1655, focus: 1560, speed: 1735, logic: 1490, math: 1610 };
+  const targets = { memory: 1655, focus: 1560, speed: 1735, logic: 1490, math: 1610, language: 1580 };
   const history = [];
   for (const [domain, end] of Object.entries(targets)) {
     for (let i = 0; i < 28; i++) {

@@ -25,13 +25,13 @@ const FILES = ['02-reveal.png', '01-home.png', '12-game-grid.png', '04-results.p
 const COPY = {
   en: {
     frames: [
-      ['What tier is your mind?', 'Five quick placement games. Iron to Grandmaster.'],
+      ['What tier is your mind?', 'Six quick placement games. Iron to Grandmaster.'],
       ['A rank that moves', 'Every ranked session updates your rating.'],
       ['Games that adapt to you', 'Never too easy, never impossible.'],
       ['See exactly what changed', 'Clear rating gains and losses per skill.'],
       ['One Daily Challenge', 'Same puzzles for everyone. One leaderboard.'],
       ['Duel your friends', 'Identical puzzles. Highest score wins.'],
-      ['Your five-skill shape', 'Memory, Focus, Speed, Logic and Math.'],
+      ['Your six-skill shape', 'Memory, Focus, Speed, Logic, Math and Language.'],
       ['No ads. Ever.', 'Free to play daily. Pro if you want more.'],
     ],
     tagline: 'What tier is your mind?',
@@ -39,13 +39,13 @@ const COPY = {
   },
   es: {
     frames: [
-      ['¿En qué rango está tu mente?', 'Cinco juegos rápidos de clasificación. De Hierro a Gran Maestro.'],
+      ['¿En qué rango está tu mente?', 'Seis juegos rápidos de clasificación. De Hierro a Gran Maestro.'],
       ['Un rango que se mueve', 'Cada sesión clasificada actualiza tu puntuación.'],
       ['Juegos que se adaptan a ti', 'Nunca demasiado fáciles, nunca imposibles.'],
       ['Mira exactamente qué cambió', 'Subidas y bajadas claras en cada habilidad.'],
       ['Un reto diario', 'Los mismos puzles para todos. Una clasificación.'],
       ['Reta a tus amigos', 'Puzles idénticos. Gana la mejor puntuación.'],
-      ['Tus cinco habilidades', 'Memoria, Atención, Velocidad, Lógica y Cálculo.'],
+      ['Tus seis habilidades', 'Memoria, Atención, Velocidad, Lógica, Cálculo y Lenguaje.'],
       ['Sin anuncios. Nunca.', 'Gratis cada día. Pro si quieres más.'],
     ],
     tagline: '¿En qué rango está tu mente?',
@@ -53,13 +53,13 @@ const COPY = {
   },
   pt: {
     frames: [
-      ['Em que nível está sua mente?', 'Cinco jogos rápidos de classificação. Do Ferro ao Grão-Mestre.'],
+      ['Em que nível está sua mente?', 'Seis jogos rápidos de classificação. Do Ferro ao Grão-Mestre.'],
       ['Um nível que se move', 'Cada sessão ranqueada atualiza sua pontuação.'],
       ['Jogos que se adaptam a você', 'Nunca fáceis demais, nunca impossíveis.'],
       ['Veja exatamente o que mudou', 'Ganhos e perdas claros em cada habilidade.'],
       ['Um desafio diário', 'Os mesmos quebra-cabeças para todos. Um ranking.'],
       ['Desafie seus amigos', 'Quebra-cabeças idênticos. Vence a maior pontuação.'],
-      ['Suas cinco habilidades', 'Memória, Foco, Velocidade, Lógica e Cálculo.'],
+      ['Suas seis habilidades', 'Memória, Foco, Velocidade, Lógica, Cálculo e Linguagem.'],
       ['Sem anúncios. Nunca.', 'Grátis todo dia. Pro se quiser mais.'],
     ],
     tagline: 'Em que nível está sua mente?',
@@ -67,13 +67,13 @@ const COPY = {
   },
   de: {
     frames: [
-      ['Auf welchem Rang ist dein Kopf?', 'Fünf kurze Einstufungsspiele. Von Eisen bis Großmeister.'],
+      ['Auf welchem Rang ist dein Kopf?', 'Sechs kurze Einstufungsspiele. Von Eisen bis Großmeister.'],
       ['Ein Rang, der sich bewegt', 'Jede gewertete Sitzung ändert deine Wertung.'],
       ['Spiele, die sich anpassen', 'Nie zu leicht, nie unmöglich.'],
       ['Sieh genau, was sich ändert', 'Klare Gewinne und Verluste pro Fähigkeit.'],
       ['Ein Tagesrätsel', 'Dieselben Rätsel für alle. Eine Bestenliste.'],
       ['Fordere Freunde heraus', 'Identische Rätsel. Die höchste Punktzahl gewinnt.'],
-      ['Deine fünf Fähigkeiten', 'Gedächtnis, Fokus, Tempo, Logik und Rechnen.'],
+      ['Deine sechs Fähigkeiten', 'Gedächtnis, Fokus, Tempo, Logik, Rechnen und Sprache.'],
       ['Keine Werbung. Niemals.', 'Täglich gratis spielen. Pro, wenn du mehr willst.'],
     ],
     tagline: 'Auf welchem Rang ist dein Kopf?',
@@ -81,13 +81,13 @@ const COPY = {
   },
   fr: {
     frames: [
-      ['À quel rang est ton esprit ?', 'Cinq jeux de placement rapides. Du Fer au Grand Maître.'],
+      ['À quel rang est ton esprit ?', 'Six jeux de placement rapides. Du Fer au Grand Maître.'],
       ['Un rang qui bouge', 'Chaque session classée met à jour ton score.'],
       ['Des jeux qui s’adaptent', 'Jamais trop faciles, jamais impossibles.'],
       ['Vois exactement ce qui change', 'Gains et pertes clairs pour chaque compétence.'],
       ['Un défi par jour', 'Les mêmes énigmes pour tous. Un classement.'],
       ['Défie tes amis', 'Des énigmes identiques. Le meilleur score gagne.'],
-      ['Tes cinq compétences', 'Mémoire, Attention, Vitesse, Logique et Calcul.'],
+      ['Tes six compétences', 'Mémoire, Attention, Vitesse, Logique, Calcul et Langage.'],
       ['Pas de pub. Jamais.', 'Gratuit chaque jour. Pro si tu veux plus.'],
     ],
     tagline: 'À quel rang est ton esprit ?',
@@ -95,13 +95,13 @@ const COPY = {
   },
   it: {
     frames: [
-      ['A che grado è la tua mente?', 'Cinque partite rapide di piazzamento. Da Ferro a Gran Maestro.'],
+      ['A che grado è la tua mente?', 'Sei partite rapide di piazzamento. Da Ferro a Gran Maestro.'],
       ['Un grado che si muove', 'Ogni sessione classificata aggiorna il tuo punteggio.'],
       ['Giochi che si adattano a te', 'Mai troppo facili, mai impossibili.'],
       ['Vedi cosa è cambiato', 'Guadagni e perdite chiari per ogni abilità.'],
       ['Una sfida al giorno', 'Gli stessi rompicapi per tutti. Una classifica.'],
       ['Sfida i tuoi amici', 'Rompicapi identici. Vince il punteggio più alto.'],
-      ['Le tue cinque abilità', 'Memoria, Attenzione, Velocità, Logica e Calcolo.'],
+      ['Le tue sei abilità', 'Memoria, Attenzione, Velocità, Logica, Calcolo e Linguaggio.'],
       ['Niente pubblicità. Mai.', 'Gratis ogni giorno. Pro se vuoi di più.'],
     ],
     tagline: 'A che grado è la tua mente?',
