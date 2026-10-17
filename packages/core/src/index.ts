@@ -24,5 +24,6 @@ export * from './games/estimate';
 export * from './verify';
 export * from './streak';
 export * from './seasons';
+export * from './leagues';
 export * from './limits';
 export * from './art/badges';
