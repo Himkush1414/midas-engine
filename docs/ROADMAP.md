@@ -47,6 +47,7 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-17.
 - ☑ Duel invite landing page with deep links
 - ☑ Open Graph preview images for the site and duel links
 - ☑ `assetlinks.json` / AASA for app links
+- ☑ Web Daily Challenge at `/play`: the real app built for web in a Daily-only mode (no placement, paywall or tabs), with the leaderboard, sharing and a Google Play link; built by `scripts/build-play.mjs` during the Vercel build and linked from the landing page
 - ☑ Landing page in English, Spanish, Portuguese, German, French and Italian (`/`, `/es`, `/pt`, `/de`, `/fr`, `/it`) with hreflang alternates, localized header/footer and a language switcher; legal pages stay English
 
 ## M5 — Store readiness
@@ -60,4 +61,3 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-17.
 - Live real-time duels (Supabase Realtime) once DAU supports matchmaking
 - More languages (JA, KO, NL, PL…); translated legal pages (have them reviewed first)
 - Word/language domain (per-locale dictionaries)
-- Web version of the Daily Challenge (top-of-funnel)

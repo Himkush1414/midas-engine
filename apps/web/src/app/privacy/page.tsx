@@ -90,6 +90,13 @@ export default function Privacy() {
         removes the token.
       </p>
 
+      <h2>Playing in your browser</h2>
+      <p>
+        The Daily Challenge at <code>/play</code> works the same way as the app: it signs you in anonymously, keeps your
+        progress in your browser&rsquo;s local storage and sends your verified result to the leaderboard. Clearing your
+        browser data removes the local copy; to delete the server copy, use our account deletion page.
+      </p>
+
       <h2>Service providers</h2>
       <p>We use a small number of processors who handle data on our behalf under contract:</p>
       <ul>
