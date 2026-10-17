@@ -301,7 +301,24 @@ const SCENES = [
       await settle(page, 800);
     },
   })),
+  // QA only: the weekly recap and the profile entries to it.
+  { name: '20-week', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/week')); await settle(page, 1200); } },
+  { name: '21-profile-cards', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/profile')); await settle(page, 1200); } },
 ];
+
+/** Runs in the page: sessions on most days of the current local week. */
+function seedWeek() {
+  const now = new Date();
+  const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7));
+  const pad = (n) => String(n).padStart(2, '0');
+  const activity = {};
+  for (let i = 0; i <= (now.getDay() + 6) % 7; i++) {
+    if (i === 2) continue; // a rest day
+    const d = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i);
+    activity[`${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`] = { sessions: 1 + (i % 2), games: 3 + 3 * (i % 2) };
+  }
+  globalThis.__mindtier.stores.useProgress.setState({ activity });
+}
 
 /** Runs in the page: three seasons of sample stats on top of the demo player. */
 function seedSeasons({ notice }) {
