@@ -31,3 +31,23 @@
 3. Add localized store listing texts (es/pt/de/fr) to `docs/STORE_LISTING.md` and update `docs/HANDOFF.md` and `docs/ROADMAP.md`.
 4. Visually review the paywall and settings in es/pt/fr.
 5. Continue with roadmap features (seasons/leagues, weekly recap).
+
+## 2026-10-17
+
+### Done
+- Store listing texts for Spanish, Portuguese (Brazil), German and French in `docs/STORE_LISTING.md`, using the in-app terms, with Play locale codes and asset paths. All fields are within Play's length limits.
+- `docs/ROADMAP.md` and `docs/HANDOFF.md` now cover localization, image share cards and duel push notifications.
+- The screenshot script has QA scenes for the settings screen and an `--out` flag, so QA captures stay out of git.
+- Visual check of the paywall (es/pt/fr) and settings (es/pt/fr/de): nothing clipped or overflowing.
+
+### Waiting on the owner
+These steps publish to production, so they need the owner to run them (or allow them):
+1. Web deploy, after 2026-10-17 08:13 UTC when the Vercel quota resets:
+   `set -a; . ./.env.local; set +a; PATH=$HOME/.local/node-linux/bin:$PATH node scripts/deploy-web.mjs`
+   Then smoke-test /, /privacy, /terms, /refunds, /delete-account, /support, /api/health, /api/v1/bootstrap (401 without a token) and /.well-known/assetlinks.json.
+2. Fresh Android production build:
+   `cd apps/mobile && set -a && . ../../.env.local && set +a && PATH=$HOME/.local/node-linux/bin:$PATH npx eas build -p android --profile production --non-interactive`
+
+### Next steps
+1. After the build, check the AAB manifest (permissions, locale config).
+2. Roadmap features: seasons, weekly recap, leagues.
