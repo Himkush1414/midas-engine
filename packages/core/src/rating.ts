@@ -10,6 +10,14 @@ export const RATING_FLOOR = 400;
 export const RATING_CEILING = 2700;
 /** Placement can reach the top of Diamond at most: Master and Grandmaster are earned in ranked play. */
 export const PLACEMENT_CAP = TIER_FLOORS.master - 1;
+/**
+ * Most a single ranked game can move a domain rating, either way. Placement
+ * leaves deviations high, so without this one perfect session after placement
+ * could jump from Diamond to Grandmaster. While a game hits the limit its
+ * deviation is kept, so a strong player keeps climbing at this pace until the
+ * results stop surprising the rating.
+ */
+export const MAX_GAME_STEP = 75;
 
 export function clampRating(r: Rating, max = RATING_CEILING): Rating {
   return { ...r, rating: Math.min(max, Math.max(RATING_FLOOR, r.rating)) };
@@ -31,13 +39,20 @@ export function applyRun(current: Rating, run: Pick<RunSummary, 'mode' | 'blocks
     current,
     run.blocks.map((b) => ({ opponentRating: b.itemRating, opponentRd: ITEM_RD, score: b.score })),
   );
-  const after = clampRating(rated, run.mode === 'placement' ? Math.max(PLACEMENT_CAP, current.rating) : RATING_CEILING);
+  const stepped = run.mode === 'placement' ? rated : limitStep(current, rated);
+  const after = clampRating(stepped, run.mode === 'placement' ? Math.max(PLACEMENT_CAP, current.rating) : RATING_CEILING);
   return {
     before: current,
     after,
     delta: Math.round(after.rating) - Math.round(current.rating),
     change: tierChange(current, after),
   };
+}
+
+function limitStep(before: Rating, after: Rating): Rating {
+  const step = after.rating - before.rating;
+  if (Math.abs(step) <= MAX_GAME_STEP) return after;
+  return { ...after, rating: before.rating + Math.sign(step) * MAX_GAME_STEP, rd: before.rd };
 }
 
 export interface SessionUpdate {
