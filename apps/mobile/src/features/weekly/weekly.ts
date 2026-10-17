@@ -56,12 +56,16 @@ export function weeklyRecap(input: WeeklyInput, range: WeekRange): WeeklyRecap {
     if (p.at < from || p.at >= to || p.reason === 'season' || prev === undefined) continue;
     totals.set(p.domain, (totals.get(p.domain) ?? 0) + p.rating - prev);
   }
-  const gains = DOMAINS.map((domain) => ({ domain, gain: Math.round(totals.get(domain) ?? 0) })).filter((g) => g.gain !== 0);
+  const sessions = days.reduce((s, d) => s + (d?.sessions ?? 0), 0);
+  // Rating moves without logged sessions predate the activity log (an app
+  // update mid-week): leave them out so the recap never says "0 sessions, +117".
+  const gains =
+    sessions === 0 ? [] : DOMAINS.map((domain) => ({ domain, gain: Math.round(totals.get(domain) ?? 0) })).filter((g) => g.gain !== 0);
   const best = gains.reduce<WeeklyRecap['best']>((b, g) => (g.gain > 0 && (!b || g.gain > b.gain) ? g : b), null);
 
   return {
     range,
-    sessions: days.reduce((s, d) => s + (d?.sessions ?? 0), 0),
+    sessions,
     games: days.reduce((s, d) => s + (d?.games ?? 0), 0),
     played,
     activeDays: played.filter(Boolean).length,

@@ -74,12 +74,18 @@ describe('weekly recap', () => {
       point(at(2026, 10, 16), 'logic', 1390),
       point(at(2026, 10, 20), 'speed', 1700), // next week
     ];
-    const r = weeklyRecap({ activity: {}, history, daily: {} }, weekRange(WED));
+    const r = weeklyRecap({ activity: { [localDayKey(WED)]: { sessions: 3, games: 9 } }, history, daily: {} }, weekRange(WED));
     expect(r.gains).toEqual([
       { domain: 'memory', gain: 52 },
       { domain: 'logic', gain: -10 },
     ]);
     expect(r.best).toEqual({ domain: 'memory', gain: 52 });
+  });
+
+  it('reports no rating change for a week without logged sessions', () => {
+    const history = [point(at(2026, 10, 5), 'speed', 1600), point(at(2026, 10, 13), 'speed', 1717)];
+    const r = weeklyRecap({ activity: {}, history, daily: {} }, weekRange(WED));
+    expect(r).toMatchObject({ sessions: 0, gains: [], best: null });
   });
 
   it('is empty for a quiet week', () => {
