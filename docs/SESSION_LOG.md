@@ -80,5 +80,17 @@ These steps publish to production, so they need the owner to run them (or allow 
 - All six landing pages, the legal pages, `assetlinks.json` and the OG image load correctly.
 - All 7 live API smoke tests pass. The first run caught a real bug: league sessions scored 0, because ranked games are adaptive and carry no puzzle points. Leagues now score rated blocks (difficulty × chance-corrected accuracy ÷ 10). The test user was deleted afterwards; one empty league group remains, which is harmless.
 
+### Web Daily Challenge and the Language skill
+- **Web Daily Challenge at `/play`:** the real app built for the web in a Daily-only mode (`EXPO_PUBLIC_WEB_PLAY=1`): today's three puzzles, result, leaderboard, share and a Google Play link. No placement, paywall or tabs. `scripts/build-play.mjs` builds it during the Vercel build. It's linked from the landing hero and the nav, and CI plays it end to end.
+- **Language skill (sixth domain):**
+  - Two word games, Sort and Misfit, built on a language-independent taxonomy of 18 categories.
+  - Words exist in all six app languages; concepts that are ambiguous in any of them were swapped out.
+  - Trials store concept ids, so every player gets the same puzzles in their own language, and the server verifies runs without knowing the language.
+  - The overall rating counts played skills only, so existing players' tiers don't move.
+  - Saved progress from before the update gets the new skill filled in; this was found through a screenshot crash.
+  - Migration `0005` passed the CI `db` job.
+- **Store:** every listing and store asset now says 6 skills and 15 games.
+
 ### Next steps
-1. Roadmap features: seasons, weekly recap, leagues.
+1. Owner: `node scripts/db-migrate.mjs` (0005), then `node scripts/deploy-web.mjs` (also builds /play), then a new EAS build (placement is six games now; older builds would be rejected by the new server's placement check).
+2. Roadmap features: seasons, weekly recap, leagues.
