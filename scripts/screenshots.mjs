@@ -259,7 +259,18 @@ const SCENES = [
       await settle(page, 1500);
     },
   },
-  { name: '06-profile', path: '/', before: async (page) => { await store(page, () => globalThis.__mindtier.router.push('/profile')); await settle(page, 1200); } },
+  {
+    name: '06-profile',
+    path: '/',
+    before: async (page) => {
+      await store(page, () => globalThis.__mindtier.router.push('/profile'));
+      await settle(page, 1200);
+      // Bring the skill radar (the store caption's subject) fully into view below the season and week cards.
+      await page.mouse.move(VIEWPORT.width / 2, VIEWPORT.height / 2);
+      await page.mouse.wheel(0, 330);
+      await settle(page, 800);
+    },
+  },
   { name: '07-duels', path: '/', before: async (page) => { await store(page, () => globalThis.__mindtier.router.push('/duels')); await settle(page); } },
   {
     name: '08-game-pattern',
