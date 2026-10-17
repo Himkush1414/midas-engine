@@ -63,7 +63,7 @@ Verified by dumping the AAB manifest (bundletool) after blocking unused library 
 |---|---|
 | `INTERNET`, `ACCESS_NETWORK_STATE` | Sync, leaderboards, duels |
 | `com.android.vending.BILLING` | Google Play Billing (Mindtier Pro) |
-| `POST_NOTIFICATIONS` | Optional daily reminder and trial-ending notice (runtime prompt only when enabled) |
+| `POST_NOTIFICATIONS` | Optional daily reminder, weekly recap (Sunday evening, only after weeks the player played) and trial-ending notice; runtime prompt only when the player turns one on |
 | `RECEIVE_BOOT_COMPLETED`, `WAKE_LOCK` | Keep scheduled local reminders after a reboot |
 | `VIBRATE` | Haptic feedback (can be turned off) |
 | `com.google.android.c2dm.permission.RECEIVE` | Duel notifications via Firebase Cloud Messaging (only if the player allows notifications) |

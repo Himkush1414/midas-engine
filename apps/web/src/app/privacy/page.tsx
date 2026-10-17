@@ -84,9 +84,9 @@ export default function Privacy() {
 
       <h2>Reminders and notifications</h2>
       <p>
-        Daily reminders and trial-ending reminders are scheduled locally on your device. If you allow notifications when
-        you create or play a duel, we store a push notification token for your device so we can tell you when the other
-        player finishes. You can turn notifications off at any time in your device settings; deleting your account
+        Daily reminders, the weekly recap and trial-ending reminders are scheduled locally on your device. If you allow
+        notifications when you create or play a duel, we store a push notification token for your device so we can tell
+        you when the other player finishes. You can turn notifications off at any time in your device settings; deleting your account
         removes the token.
       </p>
 
