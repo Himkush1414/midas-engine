@@ -45,9 +45,10 @@ These steps publish to production, so they need the owner to run them (or allow 
 1. Web deploy, after 2026-10-17 08:13 UTC when the Vercel quota resets:
    `set -a; . ./.env.local; set +a; PATH=$HOME/.local/node-linux/bin:$PATH node scripts/deploy-web.mjs`
    Then smoke-test /, /privacy, /terms, /refunds, /delete-account, /support, /api/health, /api/v1/bootstrap (401 without a token) and /.well-known/assetlinks.json.
-2. Fresh Android production build:
-   `cd apps/mobile && set -a && . ../../.env.local && set +a && PATH=$HOME/.local/node-linux/bin:$PATH npx --yes eas-cli@latest build -p android --profile production --non-interactive`
+2. ~~Fresh Android production build~~: done, see below.
+
+### Android build
+- Production build `7d2145b5` (versionCode 3) is finished. Its manifest checks out: target SDK 36, min SDK 24, only the 10 expected permissions (INTERNET, VIBRATE, ACCESS_NETWORK_STATE, MODIFY_AUDIO_SETTINGS, RECEIVE_BOOT_COMPLETED, POST_NOTIFICATIONS, WAKE_LOCK, C2DM RECEIVE, BILLING, and the dynamic-receiver permission). None of the blocked permissions are present, the locale config lists en/es/pt/de/fr, the duel app link has autoVerify set, and the bundle includes 64-bit native libraries.
 
 ### Next steps
-1. After the build, check the AAB manifest (permissions, locale config).
-2. Roadmap features: seasons, weekly recap, leagues.
+1. Roadmap features: seasons, weekly recap, leagues.
