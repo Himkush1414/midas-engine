@@ -96,7 +96,7 @@ export const POST = handler(async (req: Request) => {
   }
 
   if (status === 'ok' && body.mode === 'ranked' && result.update) {
-    await recordLeagueSession(profile, { now, day: result.day, points: result.points, ratings: result.update.ratings });
+    await recordLeagueSession(profile, { now, day: result.day, runs: result.summaries, ratings: result.update.ratings });
   }
 
   if (status === 'ok' && body.mode === 'duel' && result.duelId) {

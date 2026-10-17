@@ -1,5 +1,5 @@
 import 'server-only';
-import { addDays, leagueBand, leagueWeek, leagueWeekEnd, type DomainRatings } from '@mindtier/core';
+import { addDays, leagueBand, leaguePoints, leagueWeek, leagueWeekEnd, type DomainRatings, type RunSummary } from '@mindtier/core';
 import type { Profile } from './players';
 import { supabaseAdmin } from './supabase';
 
@@ -43,8 +43,15 @@ export async function leagueView(profile: Profile, now = new Date()): Promise<Le
   return { ...base, group, lastWeek: me && previous ? { place: me.place, size: previous.size, points: me.points } : null };
 }
 
-/** Score a finished ranked session for an opted-in player. Best effort: never fails the upload. */
-export async function recordLeagueSession(profile: Profile, input: { now: Date; day: string; points: number; ratings: DomainRatings }): Promise<void> {
+/**
+ * Score a finished ranked session for an opted-in player. Ranked games are
+ * adaptive and carry no puzzle points, so league points come from the rated
+ * blocks (see leaguePoints). Best effort: never fails the upload.
+ */
+export async function recordLeagueSession(
+  profile: Profile,
+  input: { now: Date; day: string; runs: ReadonlyArray<Pick<RunSummary, 'blocks'>>; ratings: DomainRatings },
+): Promise<void> {
   if (!profile.league_opt_in) return;
   try {
     const { error } = await supabaseAdmin().rpc('league_record', {
@@ -52,7 +59,7 @@ export async function recordLeagueSession(profile: Profile, input: { now: Date; 
       p_week: leagueWeek(input.now),
       p_day: input.day,
       p_band: leagueBand(input.ratings),
-      p_points: input.points,
+      p_points: leaguePoints(input.runs),
     });
     if (error) throw error;
   } catch (e) {

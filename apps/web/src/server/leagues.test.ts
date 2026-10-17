@@ -80,21 +80,25 @@ describe('league view', () => {
 });
 
 describe('recording sessions', () => {
-  it('sends the week, day, tier band and points', async () => {
+  it('scores adaptive games from their rated blocks, not their (zero) puzzle points', async () => {
     db.rpc.mockResolvedValue({ data: { counted: true }, error: null });
-    await recordLeagueSession(profile(true), { now: WED, day: '2026-10-21', points: 950, ratings: gold });
-    expect(db.rpc).toHaveBeenCalledWith('league_record', { p_user: 'u', p_week: '2026-10-19', p_day: '2026-10-21', p_band: 3, p_points: 950 });
+    const runs = [
+      { points: 0, blocks: [{ itemRating: 1500, score: 1 }, { itemRating: 1550, score: 0.5 }] },
+      { points: 0, blocks: [{ itemRating: 1400, score: 0.25 }] },
+    ];
+    await recordLeagueSession(profile(true), { now: WED, day: '2026-10-21', runs, ratings: gold });
+    expect(db.rpc).toHaveBeenCalledWith('league_record', { p_user: 'u', p_week: '2026-10-19', p_day: '2026-10-21', p_band: 3, p_points: 263 });
   });
 
   it('skips players who have not opted in', async () => {
-    await recordLeagueSession(profile(false), { now: WED, day: '2026-10-21', points: 950, ratings: gold });
+    await recordLeagueSession(profile(false), { now: WED, day: '2026-10-21', runs: [], ratings: gold });
     expect(db.rpc).not.toHaveBeenCalled();
   });
 
   it('never fails the upload when the league write fails', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     db.rpc.mockResolvedValue({ data: null, error: new Error('db down') });
-    await expect(recordLeagueSession(profile(true), { now: WED, day: '2026-10-21', points: 1, ratings: gold })).resolves.toBeUndefined();
+    await expect(recordLeagueSession(profile(true), { now: WED, day: '2026-10-21', runs: [], ratings: gold })).resolves.toBeUndefined();
     expect(warn).toHaveBeenCalled();
     warn.mockRestore();
   });
