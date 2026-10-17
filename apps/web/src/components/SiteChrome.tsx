@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { SITE } from '@/lib/site';
+import { HomeLink, LanguageLinks, MainNav, Tagline } from './SiteNav';
 import styles from './SiteChrome.module.css';
 
 export function Logo({ size = 32 }: { size?: number }) {
@@ -26,15 +27,11 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={`container ${styles.headerInner}`}>
-        <Link href="/" className={styles.brand} aria-label="Mindtier home">
+        <HomeLink>
           <Logo />
           <span>{SITE.name}</span>
-        </Link>
-        <nav className={styles.nav} aria-label="Main">
-          <Link href="/#how">How it works</Link>
-          <Link href="/#pricing">Pricing</Link>
-          <Link href="/support">Support</Link>
-        </nav>
+        </HomeLink>
+        <MainNav />
       </div>
     </header>
   );
@@ -49,7 +46,8 @@ export function Footer() {
             <Logo size={24} />
             <span>{SITE.name}</span>
           </div>
-          <p className="faint">Ranked brain games. No ads, ever.</p>
+          <Tagline />
+          <LanguageLinks />
         </div>
         <nav className={styles.footerNav} aria-label="Legal">
           <Link href="/privacy">Privacy Policy</Link>

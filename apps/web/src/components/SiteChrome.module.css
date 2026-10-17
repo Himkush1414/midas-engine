@@ -78,3 +78,21 @@
   margin-top: 24px;
   font-size: 0.85rem;
 }
+
+.languages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+}
+
+.languages a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.languages a[aria-current='page'] {
+  color: var(--text);
+  font-weight: 600;
+}
