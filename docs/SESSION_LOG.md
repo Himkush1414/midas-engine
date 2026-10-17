@@ -72,6 +72,9 @@ These steps publish to production, so they need the owner to run them (or allow 
 - **Weekly leagues** (migration `0004_leagues.sql`): players opt in and are grouped with up to 30 others at their tier for a UTC Monday–Sunday week. Only the first ranked session of each UTC day scores, so Pro gives no advantage. There is a Home card, a league table and last week's finish. Group filling is serialized with an advisory lock; tested with 40 players joining at once, which produced groups of 30 and 10.
 - **Website:** the landing page now covers seasons, leagues and the weekly recap, and is served in es/pt/de/fr at `/es`, `/pt`, `/de` and `/fr`, with hreflang links, a localized header and footer, and a language switcher.
 
+- **Italian:** a full app dictionary, game content included, plus the `/it` landing page, the Play listing text, store screenshots and a feature graphic. Every language's store assets were refreshed with a mid-season date (`--now`), so none of them show the preseason, and the profile shot now frames the skill radar.
+- **Weekly recap fix:** weeks with no logged sessions no longer show rating changes. Players updating mid-week would otherwise have seen "0 sessions · Speed +117".
+
 ### Next steps
 1. Owner: run `node scripts/db-migrate.mjs` (applies 0003 and 0004), then `node scripts/deploy-web.mjs`, then smoke-test, including `API_SMOKE_URL=… npx vitest run src/server/api.smoke.test.ts` in apps/web, which now covers leagues.
 2. Roadmap features: seasons, weekly recap, leagues.

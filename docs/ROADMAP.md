@@ -34,7 +34,7 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-17.
 - ☑ Settings: theme, sounds, haptics, reminders, accessibility, manage subscription, restore, delete account, legal links
 - ☑ Offline outbox + background sync
 - ☑ Notifications: daily reminder, trial reminder, duel push notifications
-- ☑ Localization: English, Spanish, Portuguese (Brazil), German, French — UI, game content, notifications; follows the system/per-app language
+- ☑ Localization: English, Spanish, Portuguese (Brazil), German, French, Italian — UI, game content, notifications; follows the system/per-app language
 - ☑ RevenueCat paywall (with a mock provider until keys exist)
 - ☑ Opt-in weekly leagues: groups of up to 30 players per tier band, UTC Monday–Sunday, first ranked session of each UTC day scores (equal for free and Pro); Home card + table, last week's finish
 - ☑ Weekly recap: this week / last week screen (local Monday–Sunday), Sunday 18:00 local notification only after weeks with play, settings toggle
@@ -47,17 +47,17 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-17.
 - ☑ Duel invite landing page with deep links
 - ☑ Open Graph preview images for the site and duel links
 - ☑ `assetlinks.json` / AASA for app links
-- ☑ Landing page in English, Spanish, Portuguese, German and French (`/`, `/es`, `/pt`, `/de`, `/fr`) with hreflang alternates, localized header/footer and a language switcher; legal pages stay English
+- ☑ Landing page in English, Spanish, Portuguese, German, French and Italian (`/`, `/es`, `/pt`, `/de`, `/fr`, `/it`) with hreflang alternates, localized header/footer and a language switcher; legal pages stay English
 
 ## M5 — Store readiness
-- ☑ Icon (SVG master, adaptive icon, all PNG sizes), feature graphic, screenshots — localized for es/pt/de/fr
-- ☑ Store listing copy in all five languages, Data Safety answers, content-rating answers
+- ☑ Icon (SVG master, adaptive icon, all PNG sizes), feature graphic, screenshots — localized for es/pt/de/fr/it
+- ☑ Store listing copy in all six languages, Data Safety answers, content-rating answers
 - ☑ EAS build profiles (AAB, production), target API level current, 64-bit
 - ☑ iOS: privacy manifest, universal links; Sign in with Apple not required (no social login); no ATT (no tracking)
 - ☑ HANDOFF.md with exact manual steps
 
 ## Post-launch
 - Live real-time duels (Supabase Realtime) once DAU supports matchmaking
-- More languages (JA, KO, IT…); translated legal pages (have them reviewed first)
+- More languages (JA, KO, NL, PL…); translated legal pages (have them reviewed first)
 - Word/language domain (per-locale dictionaries)
 - Web version of the Daily Challenge (top-of-funnel)
