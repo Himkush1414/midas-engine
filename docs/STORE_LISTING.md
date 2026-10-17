@@ -29,10 +29,10 @@ Find your brain rank. Climb tiers in daily brain games. No ads, ever.
 ```
 What tier is your mind?
 
-Mindtier turns brain games into a ranked ladder. Play five quick placement games — one each for Memory, Focus, Speed, Logic and Math — and get your rank, from Iron to Grandmaster. Then climb.
+Mindtier turns brain games into a ranked ladder. Play six quick placement games — one each for Memory, Focus, Speed, Logic, Math and Language — and get your rank, from Iron to Grandmaster. Then climb.
 
 HOW IT WORKS
-• Place: five short placement games, about four minutes, no sign-up needed.
+• Place: six short placement games, about five minutes, no sign-up needed.
 • Climb: every ranked session moves your rating up or down. Your tier and division update as you go.
 • Duel: send a friend a link. You both play the exact same puzzles — highest score wins.
 • Daily Challenge: one set of three puzzles for everyone, every day, with a live leaderboard and a spoiler-free result to share.
@@ -43,14 +43,15 @@ SEASONS, LEAGUES AND YOUR WEEK
 • Weekly recap: a Sunday-evening summary, only after weeks you played.
 
 GAMES THAT ADAPT TO YOU
-Each of the 13 games is generated at your level, so it is never too easy and never impossible. Ratings use Glicko-2, the system behind many online chess sites: solve harder puzzles and your rating rises.
+Each of the 15 games is generated at your level, so it is never too easy and never impossible. Ratings use Glicko-2, the system behind many online chess sites: solve harder puzzles and your rating rises.
 
-13 GAMES, 5 SKILLS
+15 GAMES, 6 SKILLS
 • Memory — Grid Recall, Path Trace, Echo
 • Focus — Flank, Clash, Spot
 • Speed — Snap, Match
 • Logic — Pattern, Balance, Route
 • Math — Quick Sum, Estimate
+• Language — Sort, Misfit
 
 BUILT ON FOUR PROMISES
 • No ads. Ever. Not between games, not for free players.
@@ -65,10 +66,10 @@ PLAY YOUR WAY
 • Earn streak shields that protect a missed day — they are never sold.
 
 FREE
-Placement and full results, one ranked session every day, the Daily Challenge and leaderboard, seasons, weekly leagues, duels with friends, and Zen practice for five games.
+Placement and full results, one ranked session every day, the Daily Challenge and leaderboard, seasons, weekly leagues, duels with friends, and Zen practice for six games.
 
 MINDTIER PRO (OPTIONAL)
-Unlimited ranked sessions, focus training for any skill, all 13 games in Zen, full rating history and trends, and unlimited duel challenges. Choose yearly (with a free trial), monthly, or a one-time lifetime purchase. Subscriptions renew automatically until cancelled; manage or cancel anytime in Google Play.
+Unlimited ranked sessions, focus training for any skill, all 15 games in Zen, full rating history and trends, and unlimited duel challenges. Choose yearly (with a free trial), monthly, or a one-time lifetime purchase. Subscriptions renew automatically until cancelled; manage or cancel anytime in Google Play.
 
 Mindtier is a game for entertainment. It does not diagnose, treat or prevent any condition.
 ```
@@ -106,10 +107,10 @@ Full description (≤4000):
 ```
 ¿En qué rango está tu mente?
 
-Mindtier convierte los juegos mentales en una escalera clasificatoria. Juega cinco partidas rápidas de clasificación, una para cada habilidad (Memoria, Atención, Velocidad, Lógica y Cálculo), y obtén tu rango, de Hierro a Gran Maestro. Después, escala.
+Mindtier convierte los juegos mentales en una escalera clasificatoria. Juega seis partidas rápidas de clasificación, una para cada habilidad (Memoria, Atención, Velocidad, Lógica, Cálculo y Lenguaje), y obtén tu rango, de Hierro a Gran Maestro. Después, escala.
 
 CÓMO FUNCIONA
-• Clasifícate: cinco juegos cortos, unos cuatro minutos, sin registro.
+• Clasifícate: seis juegos cortos, unos cinco minutos, sin registro.
 • Escala: cada sesión clasificada sube o baja tu puntuación. Tu rango y tu división se actualizan sobre la marcha.
 • Duelos: envía un enlace a un amigo. Ambos juegan exactamente los mismos puzles y gana la mejor puntuación.
 • Reto diario: los mismos tres puzles para todos, cada día, con una clasificación en directo y un resultado sin spoilers para compartir.
@@ -120,14 +121,15 @@ TEMPORADAS, LIGAS Y TU SEMANA
 • Resumen semanal: el domingo por la tarde, solo después de las semanas en que jugaste.
 
 JUEGOS QUE SE ADAPTAN A TI
-Cada uno de los 13 juegos se genera a tu nivel: nunca demasiado fácil, nunca imposible. La puntuación usa Glicko-2, el sistema de muchos sitios de ajedrez en línea: resuelve puzles más difíciles y tu puntuación sube.
+Cada uno de los 15 juegos se genera a tu nivel: nunca demasiado fácil, nunca imposible. La puntuación usa Glicko-2, el sistema de muchos sitios de ajedrez en línea: resuelve puzles más difíciles y tu puntuación sube.
 
-13 JUEGOS, 5 HABILIDADES
+15 JUEGOS, 6 HABILIDADES
 • Memoria: Grid Recall, Path Trace, Echo
 • Atención: Flank, Clash, Spot
 • Velocidad: Snap, Match
 • Lógica: Pattern, Balance, Route
 • Cálculo: Quick Sum, Estimate
+• Lenguaje: Sort, Misfit
 
 CUATRO PROMESAS
 • Sin anuncios. Nunca. Ni entre juegos ni para quien juega gratis.
@@ -142,10 +144,10 @@ JUEGA A TU MANERA
 • Gana escudos de racha que protegen un día perdido. Nunca se venden.
 
 GRATIS
-Clasificación y resultados completos, una sesión clasificada cada día, el reto diario y su clasificación, temporadas, ligas semanales, duelos con amigos y práctica zen en cinco juegos.
+Clasificación y resultados completos, una sesión clasificada cada día, el reto diario y su clasificación, temporadas, ligas semanales, duelos con amigos y práctica zen en seis juegos.
 
 MINDTIER PRO (OPCIONAL)
-Sesiones clasificadas ilimitadas, entrenamiento por área para cualquier habilidad, los 13 juegos en modo zen, historial y tendencias completos de tu puntuación, y duelos ilimitados. Elige anual (con prueba gratis), mensual o un pago único de por vida. Las suscripciones se renuevan automáticamente hasta que las canceles; gestiónalas o cancélalas cuando quieras en Google Play.
+Sesiones clasificadas ilimitadas, entrenamiento por área para cualquier habilidad, los 15 juegos en modo zen, historial y tendencias completos de tu puntuación, y duelos ilimitados. Elige anual (con prueba gratis), mensual o un pago único de por vida. Las suscripciones se renuevan automáticamente hasta que las canceles; gestiónalas o cancélalas cuando quieras en Google Play.
 
 Mindtier es un juego de entretenimiento. No diagnostica, trata ni previene ninguna afección.
 ```
@@ -169,10 +171,10 @@ Full description (≤4000):
 ```
 Em que nível está sua mente?
 
-O Mindtier transforma jogos mentais em um ranking de níveis. Jogue cinco partidas rápidas de classificação, uma para cada habilidade (Memória, Foco, Velocidade, Lógica e Cálculo), e descubra seu nível, do Ferro ao Grão-Mestre. Depois, suba.
+O Mindtier transforma jogos mentais em um ranking de níveis. Jogue seis partidas rápidas de classificação, uma para cada habilidade (Memória, Foco, Velocidade, Lógica, Cálculo e Linguagem), e descubra seu nível, do Ferro ao Grão-Mestre. Depois, suba.
 
 COMO FUNCIONA
-• Classifique-se: cinco jogos curtos, cerca de quatro minutos, sem cadastro.
+• Classifique-se: seis jogos curtos, cerca de cinco minutos, sem cadastro.
 • Suba: cada sessão ranqueada faz sua pontuação subir ou descer. Seu nível e sua divisão são atualizados na hora.
 • Duelos: envie um link para um amigo. Vocês dois jogam exatamente os mesmos quebra-cabeças, e a maior pontuação vence.
 • Desafio diário: os mesmos três quebra-cabeças para todos, todos os dias, com ranking ao vivo e um resultado sem spoilers para compartilhar.
@@ -183,14 +185,15 @@ TEMPORADAS, LIGAS E SUA SEMANA
 • Resumo semanal: no domingo à noite, só depois de semanas em que você jogou.
 
 JOGOS QUE SE ADAPTAM A VOCÊ
-Cada um dos 13 jogos é gerado no seu nível: nunca fácil demais, nunca impossível. A pontuação usa o Glicko-2, o sistema de muitos sites de xadrez online: resolva quebra-cabeças mais difíceis e sua pontuação sobe.
+Cada um dos 15 jogos é gerado no seu nível: nunca fácil demais, nunca impossível. A pontuação usa o Glicko-2, o sistema de muitos sites de xadrez online: resolva quebra-cabeças mais difíceis e sua pontuação sobe.
 
-13 JOGOS, 5 HABILIDADES
+15 JOGOS, 6 HABILIDADES
 • Memória: Grid Recall, Path Trace, Echo
 • Foco: Flank, Clash, Spot
 • Velocidade: Snap, Match
 • Lógica: Pattern, Balance, Route
 • Cálculo: Quick Sum, Estimate
+• Linguagem: Sort, Misfit
 
 QUATRO PROMESSAS
 • Sem anúncios. Nunca. Nem entre jogos, nem para quem joga grátis.
@@ -205,10 +208,10 @@ JOGUE DO SEU JEITO
 • Ganhe escudos de sequência que protegem um dia perdido. Eles nunca são vendidos.
 
 GRÁTIS
-Classificação e resultados completos, uma sessão ranqueada por dia, o desafio diário e seu ranking, temporadas, ligas semanais, duelos com amigos e treino zen em cinco jogos.
+Classificação e resultados completos, uma sessão ranqueada por dia, o desafio diário e seu ranking, temporadas, ligas semanais, duelos com amigos e treino zen em seis jogos.
 
 MINDTIER PRO (OPCIONAL)
-Sessões ranqueadas ilimitadas, treino por área para qualquer habilidade, os 13 jogos no modo zen, histórico e tendências completos da sua pontuação e duelos ilimitados. Escolha anual (com teste grátis), mensal ou um pagamento único vitalício. As assinaturas são renovadas automaticamente até que você cancele; gerencie ou cancele quando quiser no Google Play.
+Sessões ranqueadas ilimitadas, treino por área para qualquer habilidade, os 15 jogos no modo zen, histórico e tendências completos da sua pontuação e duelos ilimitados. Escolha anual (com teste grátis), mensal ou um pagamento único vitalício. As assinaturas são renovadas automaticamente até que você cancele; gerencie ou cancele quando quiser no Google Play.
 
 O Mindtier é um jogo de entretenimento. Ele não diagnostica, não trata e não previne nenhuma condição.
 ```
@@ -232,10 +235,10 @@ Full description (≤4000):
 ```
 Auf welchem Rang ist dein Kopf?
 
-Mindtier macht aus Denkspielen eine Rangliste. Spiel fünf kurze Einstufungsspiele – je eins für Gedächtnis, Fokus, Tempo, Logik und Rechnen – und erhalte deinen Rang, von Eisen bis Großmeister. Dann steig auf.
+Mindtier macht aus Denkspielen eine Rangliste. Spiel sechs kurze Einstufungsspiele – je eins für Gedächtnis, Fokus, Tempo, Logik, Rechnen und Sprache – und erhalte deinen Rang, von Eisen bis Großmeister. Dann steig auf.
 
 SO FUNKTIONIERT ES
-• Einstufen: fünf kurze Spiele, etwa vier Minuten, ohne Anmeldung.
+• Einstufen: sechs kurze Spiele, etwa fünf Minuten, ohne Anmeldung.
 • Aufsteigen: Jede gewertete Sitzung bewegt deine Wertung nach oben oder unten. Rang und Division aktualisieren sich laufend.
 • Duelle: Schick einem Freund einen Link. Ihr spielt beide genau dieselben Rätsel – die höchste Punktzahl gewinnt.
 • Tagesrätsel: jeden Tag dieselben drei Rätsel für alle, mit Live-Bestenliste und einem spoilerfreien Ergebnis zum Teilen.
@@ -246,14 +249,15 @@ SAISONS, LIGEN UND DEINE WOCHE
 • Wochenrückblick: sonntagabends, nur nach Wochen, in denen du gespielt hast.
 
 SPIELE, DIE SICH DIR ANPASSEN
-Jedes der 13 Spiele wird auf deinem Niveau erzeugt – nie zu leicht, nie unmöglich. Die Wertung nutzt Glicko-2, das System vieler Online-Schachseiten: Löse schwierigere Rätsel, und deine Wertung steigt.
+Jedes der 15 Spiele wird auf deinem Niveau erzeugt – nie zu leicht, nie unmöglich. Die Wertung nutzt Glicko-2, das System vieler Online-Schachseiten: Löse schwierigere Rätsel, und deine Wertung steigt.
 
-13 SPIELE, 5 FÄHIGKEITEN
+15 SPIELE, 6 FÄHIGKEITEN
 • Gedächtnis – Grid Recall, Path Trace, Echo
 • Fokus – Flank, Clash, Spot
 • Tempo – Snap, Match
 • Logik – Pattern, Balance, Route
 • Rechnen – Quick Sum, Estimate
+• Sprache – Sort, Misfit
 
 VIER VERSPRECHEN
 • Niemals Werbung. Nicht zwischen den Spielen, nicht für Gratis-Spieler.
@@ -268,10 +272,10 @@ SPIEL, WIE DU WILLST
 • Verdiene Serien-Schilde, die einen verpassten Tag schützen – sie werden nie verkauft.
 
 GRATIS
-Einstufung und vollständige Ergebnisse, jeden Tag eine gewertete Sitzung, das Tagesrätsel mit Bestenliste, Saisons, Wochenligen, Duelle mit Freunden und Zen-Übung für fünf Spiele.
+Einstufung und vollständige Ergebnisse, jeden Tag eine gewertete Sitzung, das Tagesrätsel mit Bestenliste, Saisons, Wochenligen, Duelle mit Freunden und Zen-Übung für sechs Spiele.
 
 MINDTIER PRO (OPTIONAL)
-Unbegrenzt gewertete Sitzungen, Bereichstraining für jede Fähigkeit, alle 13 Spiele im Zen-Modus, kompletter Wertungsverlauf mit Trends und unbegrenzt Duelle. Wähle jährlich (mit Gratis-Test), monatlich oder einen einmaligen Kauf auf Lebenszeit. Abos verlängern sich automatisch, bis du sie kündigst; verwalte oder kündige sie jederzeit in Google Play.
+Unbegrenzt gewertete Sitzungen, Bereichstraining für jede Fähigkeit, alle 15 Spiele im Zen-Modus, kompletter Wertungsverlauf mit Trends und unbegrenzt Duelle. Wähle jährlich (mit Gratis-Test), monatlich oder einen einmaligen Kauf auf Lebenszeit. Abos verlängern sich automatisch, bis du sie kündigst; verwalte oder kündige sie jederzeit in Google Play.
 
 Mindtier ist ein Spiel zur Unterhaltung. Es dient nicht der Diagnose, Behandlung oder Vorbeugung von Erkrankungen.
 ```
@@ -295,10 +299,10 @@ Full description (≤4000):
 ```
 À quel rang est ton esprit ?
 
-Mindtier transforme les jeux de réflexion en une échelle classée. Joue cinq parties de placement rapides — une par compétence : Mémoire, Attention, Vitesse, Logique et Calcul — et obtiens ton rang, de Fer à Grand Maître. Ensuite, grimpe.
+Mindtier transforme les jeux de réflexion en une échelle classée. Joue six parties de placement rapides — une par compétence : Mémoire, Attention, Vitesse, Logique, Calcul et Langage — et obtiens ton rang, de Fer à Grand Maître. Ensuite, grimpe.
 
 COMMENT ÇA MARCHE
-• Place-toi : cinq jeux courts, environ quatre minutes, sans inscription.
+• Place-toi : six jeux courts, environ cinq minutes, sans inscription.
 • Grimpe : chaque session classée fait monter ou descendre ton score. Ton rang et ta division se mettent à jour au fil du jeu.
 • Duels : envoie un lien à un ami. Vous jouez tous les deux exactement les mêmes énigmes — le meilleur score gagne.
 • Défi du jour : les mêmes trois énigmes pour tous, chaque jour, avec un classement en direct et un résultat sans spoiler à partager.
@@ -309,14 +313,15 @@ SAISONS, LIGUES ET TA SEMAINE
 • Bilan de la semaine : le dimanche soir, seulement après les semaines où tu as joué.
 
 DES JEUX QUI S’ADAPTENT À TOI
-Chacun des 13 jeux est généré à ton niveau : jamais trop facile, jamais impossible. Le score utilise Glicko-2, le système de nombreux sites d’échecs en ligne : résous des énigmes plus difficiles et ton score monte.
+Chacun des 15 jeux est généré à ton niveau : jamais trop facile, jamais impossible. Le score utilise Glicko-2, le système de nombreux sites d’échecs en ligne : résous des énigmes plus difficiles et ton score monte.
 
-13 JEUX, 5 COMPÉTENCES
+15 JEUX, 6 COMPÉTENCES
 • Mémoire — Grid Recall, Path Trace, Echo
 • Attention — Flank, Clash, Spot
 • Vitesse — Snap, Match
 • Logique — Pattern, Balance, Route
 • Calcul — Quick Sum, Estimate
+• Langage — Sort, Misfit
 
 QUATRE PROMESSES
 • Jamais de pub. Ni entre les parties, ni pour les joueurs gratuits.
@@ -331,10 +336,10 @@ JOUE À TA FAÇON
 • Gagne des boucliers de série qui protègent un jour manqué — ils ne sont jamais vendus.
 
 GRATUIT
-Placement et résultats complets, une session classée par jour, le défi du jour et son classement, les saisons, les ligues hebdomadaires, les duels entre amis et l’entraînement zen sur cinq jeux.
+Placement et résultats complets, une session classée par jour, le défi du jour et son classement, les saisons, les ligues hebdomadaires, les duels entre amis et l’entraînement zen sur six jeux.
 
 MINDTIER PRO (FACULTATIF)
-Sessions classées illimitées, entraînement par domaine pour chaque compétence, les 13 jeux en mode zen, historique et tendances complets de ton score, et duels illimités. Choisis l’annuel (avec essai gratuit), le mensuel ou un achat unique à vie. Les abonnements se renouvellent automatiquement jusqu’à leur résiliation ; gère-les ou résilie-les à tout moment dans Google Play.
+Sessions classées illimitées, entraînement par domaine pour chaque compétence, les 15 jeux en mode zen, historique et tendances complets de ton score, et duels illimités. Choisis l’annuel (avec essai gratuit), le mensuel ou un achat unique à vie. Les abonnements se renouvellent automatiquement jusqu’à leur résiliation ; gère-les ou résilie-les à tout moment dans Google Play.
 
 Mindtier est un jeu de divertissement. Il ne diagnostique, ne traite et ne prévient aucune affection.
 ```
@@ -358,10 +363,10 @@ Full description (≤4000):
 ```
 A che grado è la tua mente?
 
-Mindtier trasforma i giochi di logica in una scalata a gradi. Gioca cinque partite rapide di piazzamento, una per ogni abilità (Memoria, Attenzione, Velocità, Logica e Calcolo), e ottieni il tuo grado, da Ferro a Gran Maestro. Poi scala.
+Mindtier trasforma i giochi di logica in una scalata a gradi. Gioca sei partite rapide di piazzamento, una per ogni abilità (Memoria, Attenzione, Velocità, Logica, Calcolo e Linguaggio), e ottieni il tuo grado, da Ferro a Gran Maestro. Poi scala.
 
 COME FUNZIONA
-• Piazzati: cinque giochi brevi, circa quattro minuti, senza registrazione.
+• Piazzati: sei giochi brevi, circa cinque minuti, senza registrazione.
 • Scala: ogni sessione classificata fa salire o scendere il tuo punteggio. Grado e divisione si aggiornano man mano.
 • Duelli: invia un link a un amico. Giocate esattamente gli stessi rompicapi e vince il punteggio più alto.
 • Sfida del giorno: gli stessi tre rompicapi per tutti, ogni giorno, con una classifica in tempo reale e un risultato senza spoiler da condividere.
@@ -372,14 +377,15 @@ STAGIONI, LEGHE E LA TUA SETTIMANA
 • Riepilogo settimanale: la domenica sera, solo dopo le settimane in cui hai giocato.
 
 GIOCHI CHE SI ADATTANO A TE
-Ognuno dei 13 giochi viene generato al tuo livello: mai troppo facile, mai impossibile. Il punteggio usa Glicko-2, il sistema di molti siti di scacchi online: risolvi rompicapi più difficili e il tuo punteggio sale.
+Ognuno dei 15 giochi viene generato al tuo livello: mai troppo facile, mai impossibile. Il punteggio usa Glicko-2, il sistema di molti siti di scacchi online: risolvi rompicapi più difficili e il tuo punteggio sale.
 
-13 GIOCHI, 5 ABILITÀ
+15 GIOCHI, 6 ABILITÀ
 • Memoria: Grid Recall, Path Trace, Echo
 • Attenzione: Flank, Clash, Spot
 • Velocità: Snap, Match
 • Logica: Pattern, Balance, Route
 • Calcolo: Quick Sum, Estimate
+• Linguaggio: Sort, Misfit
 
 QUATTRO PROMESSE
 • Mai pubblicità. Né tra un gioco e l’altro, né per chi gioca gratis.
@@ -394,10 +400,10 @@ GIOCA A MODO TUO
 • Guadagna scudi della serie che proteggono un giorno saltato. Non si vendono mai.
 
 GRATIS
-Piazzamento e risultati completi, una sessione classificata al giorno, la sfida del giorno e la sua classifica, stagioni, leghe settimanali, duelli con gli amici e pratica zen in cinque giochi.
+Piazzamento e risultati completi, una sessione classificata al giorno, la sfida del giorno e la sua classifica, stagioni, leghe settimanali, duelli con gli amici e pratica zen in sei giochi.
 
 MINDTIER PRO (FACOLTATIVO)
-Sessioni classificate illimitate, allenamento per area in qualsiasi abilità, tutti i 13 giochi in modalità zen, storico completo e tendenze del punteggio e duelli illimitati. Scegli il piano annuale (con prova gratuita), mensile o un acquisto unico a vita. Gli abbonamenti si rinnovano automaticamente fino alla disdetta; gestiscili o disdicili quando vuoi su Google Play.
+Sessioni classificate illimitate, allenamento per area in qualsiasi abilità, tutti i 15 giochi in modalità zen, storico completo e tendenze del punteggio e duelli illimitati. Scegli il piano annuale (con prova gratuita), mensile o un acquisto unico a vita. Gli abbonamenti si rinnovano automaticamente fino alla disdetta; gestiscili o disdicili quando vuoi su Google Play.
 
 Mindtier è un gioco di intrattenimento. Non diagnostica, non cura e non previene alcuna condizione.
 ```
