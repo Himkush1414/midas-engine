@@ -3,6 +3,8 @@
 // welcome → 5 placement games → tier reveal → paywall → home → ranked session → results → free limit.
 //   cd apps/mobile && EXPO_PUBLIC_QA_HOOKS=1 npx expo export --platform web --output-dir ../../.qa-web && cd ../..
 //   node scripts/e2e-flow.mjs [--dist .qa-web]
+// With --web-play, checks the public web build instead (export with EXPO_PUBLIC_WEB_PLAY=1 as well):
+// today's Daily Challenge → three games → results → back to today with the result and the app link.
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import { createServer } from 'node:http';
@@ -60,50 +62,71 @@ async function playSession(label) {
   return true;
 }
 
-try {
+async function webPlayFlow() {
   await page.goto(base, { waitUntil: 'networkidle' });
-  check(await visible('welcome-start', 60_000), 'new player lands on welcome');
-  await snap('welcome');
-  await page.getByTestId('welcome-start').click();
-
-  await playSession('placement');
-  check(await page.getByText('YOU PLACED').waitFor({ timeout: 10_000 }).then(() => true, () => false), 'tier reveal shown after placement');
-  await snap('reveal');
-  await page.getByTestId('reveal-continue').click();
-
-  check(await visible('paywall-close'), 'paywall offered after reveal (dismissible)');
-  await snap('paywall');
-  await page.getByTestId('paywall-close').click();
-
-  check(await visible('home-ranked'), 'home shows ranked session after placement');
-  const state = await page.evaluate(() => JSON.parse(localStorage.getItem('mindtier.progress.v1') ?? '{}').state);
-  check(state?.placementDone === true, 'placement persisted');
-  check(state?.outbox?.length === 1, 'placement queued for upload while offline');
-  const low = Object.entries(state?.ratings ?? {}).filter(([, r]) => r.rating <= 1300);
-  check(low.length === 0, `perfect placement raised every domain above the start rating${low.length ? ` (low: ${JSON.stringify(low)})` : ''}`);
-  await snap('home');
-
-  await page.getByTestId('home-ranked').click();
-  await playSession('ranked');
-  check(await visible('results-done'), 'results shown after ranked session');
-  await snap('results');
+  check(await visible('daily-play', 60_000), 'web build opens on today’s Daily Challenge');
+  check(await visible('web-get-app'), 'web build links to the app');
+  await snap('web-today');
+  await page.getByTestId('daily-play').click();
+  await playSession('daily');
+  check(await visible('results-done'), 'results shown after the daily games');
   await page.getByTestId('results-done').click();
-  check(await page.getByText('You’ve played today’s free ranked session').waitFor({ timeout: 10_000 }).then(() => true, () => false), 'free daily limit applied');
-  await snap('home-limit');
+  check(await visible('daily-share'), 'back on today with a result to share');
+  await snap('web-done');
+  const state = await page.evaluate(() => JSON.parse(localStorage.getItem('mindtier.progress.v1') ?? '{}').state);
+  check(Object.keys(state?.daily ?? {}).length === 1 && state?.placementDone === false, 'daily result saved without placement');
+  await page.goto(`${base}/profile`, { waitUntil: 'networkidle' });
+  check(await visible('daily-share', 20_000), 'app-only screens send web players back to today');
+}
 
-  const after = await page.evaluate(() => JSON.parse(localStorage.getItem('mindtier.progress.v1') ?? '{}').state);
-  const today = Object.values(after?.activity ?? {}).reduce((n, d) => n + d.sessions, 0);
-  check(after?.seasonStats?.sessions === 2 && today === 2, 'season stats and weekly activity count both sessions');
-  const values = Object.values(after?.ratings ?? {});
-  const overall = values.reduce((sum, r) => sum + r.rating, 0) / Math.max(1, values.length);
-  check(values.length === 5 && overall < 2100, `a perfect bot is not Grandmaster after placement plus one session (overall ${Math.round(overall)})`);
-  await page.getByTestId('season-card').click();
-  // By test id: the off-screen share card repeats the recap's labels.
-  check(await visible('season-stats'), 'season recap opens from home');
-  await snap('season');
-  await page.goto(`${base}/week`, { waitUntil: 'networkidle' });
-  check(await page.getByText('Days played', { exact: true }).waitFor({ timeout: 20_000 }).then(() => true, () => false), 'weekly recap shows this week');
-  await snap('week');
+try {
+  if (process.argv.includes('--web-play')) {
+    await webPlayFlow();
+  } else {
+    await page.goto(base, { waitUntil: 'networkidle' });
+    check(await visible('welcome-start', 60_000), 'new player lands on welcome');
+    await snap('welcome');
+    await page.getByTestId('welcome-start').click();
+
+    await playSession('placement');
+    check(await page.getByText('YOU PLACED').waitFor({ timeout: 10_000 }).then(() => true, () => false), 'tier reveal shown after placement');
+    await snap('reveal');
+    await page.getByTestId('reveal-continue').click();
+
+    check(await visible('paywall-close'), 'paywall offered after reveal (dismissible)');
+    await snap('paywall');
+    await page.getByTestId('paywall-close').click();
+
+    check(await visible('home-ranked'), 'home shows ranked session after placement');
+    const state = await page.evaluate(() => JSON.parse(localStorage.getItem('mindtier.progress.v1') ?? '{}').state);
+    check(state?.placementDone === true, 'placement persisted');
+    check(state?.outbox?.length === 1, 'placement queued for upload while offline');
+    const low = Object.entries(state?.ratings ?? {}).filter(([, r]) => r.rating <= 1300);
+    check(low.length === 0, `perfect placement raised every domain above the start rating${low.length ? ` (low: ${JSON.stringify(low)})` : ''}`);
+    await snap('home');
+
+    await page.getByTestId('home-ranked').click();
+    await playSession('ranked');
+    check(await visible('results-done'), 'results shown after ranked session');
+    await snap('results');
+    await page.getByTestId('results-done').click();
+    check(await page.getByText('You’ve played today’s free ranked session').waitFor({ timeout: 10_000 }).then(() => true, () => false), 'free daily limit applied');
+    await snap('home-limit');
+
+    const after = await page.evaluate(() => JSON.parse(localStorage.getItem('mindtier.progress.v1') ?? '{}').state);
+    const today = Object.values(after?.activity ?? {}).reduce((n, d) => n + d.sessions, 0);
+    check(after?.seasonStats?.sessions === 2 && today === 2, 'season stats and weekly activity count both sessions');
+    const values = Object.values(after?.ratings ?? {});
+    const overall = values.reduce((sum, r) => sum + r.rating, 0) / Math.max(1, values.length);
+    check(values.length === 5 && overall < 2100, `a perfect bot is not Grandmaster after placement plus one session (overall ${Math.round(overall)})`);
+    await page.getByTestId('season-card').click();
+    // By test id: the off-screen share card repeats the recap's labels.
+    check(await visible('season-stats'), 'season recap opens from home');
+    await snap('season');
+    await page.goto(`${base}/week`, { waitUntil: 'networkidle' });
+    check(await page.getByText('Days played', { exact: true }).waitFor({ timeout: 20_000 }).then(() => true, () => false), 'weekly recap shows this week');
+    await snap('week');
+  }
 } finally {
   check(errors.length === 0, `no uncaught page errors${errors.length ? `: ${errors.slice(0, 3).join(' | ')}` : ''}`);
   await browser.close();
