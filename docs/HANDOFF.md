@@ -12,7 +12,7 @@ Secrets referenced below live in your local `.env.local` (git-ignored). Nothing 
 |---|---|
 | GitHub repo | `main` with CI (typecheck, lint, tests for core, mobile and web) |
 | Supabase | Schema + RLS + API functions applied (`supabase/migrations`), anonymous sign-in on, 6-digit email codes (15 min) |
-| Vercel | Project `midas-engine` → root `apps/web`, Node 24, env vars set. Git auto-deploy **disabled** (plan limits); deploy with `node scripts/deploy-web.mjs` |
+| Vercel | Project `midas-engine` → root `apps/web`, Node 24, env vars set. It is the only project linked to the GitHub repo. Git auto-deploy is **disabled** twice over (plan limits): `git.deploymentEnabled: false` in `vercel.json`, and Settings → Git → *Create deployments* off. Deploy with `node scripts/deploy-web.mjs` |
 | EAS | Project `@midas-hq/mindtier`, remote Android keystore, env vars per environment, update channels, first production AAB built |
 | Store assets | Listing copy, 8 screenshots, feature graphic and icon in `store/` — see `docs/STORE_LISTING.md` |
 | Compliance | Data safety, content rating and permission answers in `docs/PLAY_COMPLIANCE.md` |
@@ -30,7 +30,7 @@ curl https://midas-engine.vercel.app/api/health
 ```
 
 Recommended:
-1. **Delete the duplicate project `midas-engine-pggb`** in Vercel → Settings → Advanced. It's linked to the same repo and only fails builds. The root `vercel.json` already stops it auto-deploying.
+1. **Delete the stray project `midas-engine-pggb`** (Vercel → midas-engine-pggb → Settings → Advanced → Delete). It was an accidental duplicate with no env vars, no custom domain and no working build. It has been unlinked from the repo (2026-10-17), so it can no longer post failing checks to GitHub; deleting it just tidies the dashboard.
 2. Add legal identity env vars (Project → Settings → Environment Variables, Production and Preview), then redeploy:
    - `NEXT_PUBLIC_SUPPORT_EMAIL` = `[support@yourdomain]`
    - `NEXT_PUBLIC_LEGAL_NAME` = `[Your company or full legal name]`
