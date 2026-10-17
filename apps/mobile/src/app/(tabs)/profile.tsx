@@ -11,6 +11,7 @@ import { DomainBadge, TierBadge } from '@/components/tier';
 import { Button, Card, PressableScale, Screen, Text } from '@/components/ui';
 import { domainSeries, windowDelta } from '@/features/profile/history';
 import { SeasonCard } from '@/features/seasons/SeasonCard';
+import { WeekCard } from '@/features/weekly/WeekCard';
 import { ApiError, api } from '@/lib/api';
 import { useTierShare } from '@/features/share/useTierShare';
 import { useAccount } from '@/state/account';
@@ -117,6 +118,7 @@ export default function Profile() {
         </Card>
 
         <SeasonCard />
+        <WeekCard />
 
         <View style={styles.stats}>
           {stats.map((s) => (

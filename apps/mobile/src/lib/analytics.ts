@@ -24,7 +24,8 @@ export type EventName =
   | 'account_linked'
   | 'account_deleted'
   | 'season_started'
-  | 'season_recap_viewed';
+  | 'season_recap_viewed'
+  | 'weekly_recap_viewed';
 
 export type EventProps = Record<string, string | number | boolean | null>;
 
