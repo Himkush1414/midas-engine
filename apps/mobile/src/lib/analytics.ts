@@ -22,7 +22,9 @@ export type EventName =
   | 'duel_accepted'
   | 'reminder_enabled'
   | 'account_linked'
-  | 'account_deleted';
+  | 'account_deleted'
+  | 'season_started'
+  | 'season_recap_viewed';
 
 export type EventProps = Record<string, string | number | boolean | null>;
 

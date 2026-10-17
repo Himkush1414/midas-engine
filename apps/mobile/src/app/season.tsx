@@ -1,4 +1,5 @@
 import { useLocalSearchParams, router } from 'expo-router';
+import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BackHeader } from '@/components/BackHeader';
 import { DomainBadge, TierBadge } from '@/components/tier';
@@ -6,6 +7,7 @@ import { Button, Card, Screen, Text } from '@/components/ui';
 import { seasonMonth, seasonName, seasonRecap, seasonShareText } from '@/features/seasons/season';
 import { useLanguage, useT } from '@/i18n';
 import { domainLabel, tierLabel } from '@/i18n/labels';
+import { track } from '@/lib/analytics';
 import { shareText } from '@/lib/share';
 import { useProgress } from '@/state/progress';
 import { spacing, useTheme } from '@/theme';
@@ -27,6 +29,10 @@ export default function SeasonScreen() {
   const recap = stats ? seasonRecap(stats) : null;
   const name = seasonName(t, season);
   const month = seasonMonth(season, language);
+
+  useEffect(() => {
+    track('season_recap_viewed', { season, current: isCurrent });
+  }, [season, isCurrent]);
 
   return (
     <Screen scroll>
@@ -106,7 +112,16 @@ export default function SeasonScreen() {
               </>
             ) : null}
 
-            <Button label={t('season.share')} icon="share" variant="secondary" fullWidth onPress={() => void shareText(seasonShareText(t, recap))} />
+            <Button
+              label={t('season.share')}
+              icon="share"
+              variant="secondary"
+              fullWidth
+              onPress={() => {
+                track('share_tapped', { what: 'season' });
+                void shareText(seasonShareText(t, recap));
+              }}
+            />
           </>
         ) : (
           <Card>
