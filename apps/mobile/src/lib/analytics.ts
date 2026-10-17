@@ -25,7 +25,9 @@ export type EventName =
   | 'account_deleted'
   | 'season_started'
   | 'season_recap_viewed'
-  | 'weekly_recap_viewed';
+  | 'weekly_recap_viewed'
+  | 'league_joined'
+  | 'league_left';
 
 export type EventProps = Record<string, string | number | boolean | null>;
 

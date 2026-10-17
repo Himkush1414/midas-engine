@@ -5,6 +5,7 @@ import { Icon } from '@/components/icons/Icon';
 import { Button, Card, PressableScale, Screen, Text } from '@/components/ui';
 import { DomainList } from '@/features/home/DomainList';
 import { RankHero } from '@/features/home/RankHero';
+import { LeagueCard } from '@/features/leagues/LeagueCard';
 import { SeasonCard } from '@/features/seasons/SeasonCard';
 import { startDaily, startFocus, startRanked } from '@/features/session/start';
 import { useT } from '@/i18n';
@@ -98,6 +99,8 @@ export default function Home() {
             <Icon name="chevronRight" size={20} color={colors.textFaint} />
           </View>
         </Card>
+
+        <LeagueCard />
 
         <View style={styles.sectionHeader}>
           <Text variant="subheading" weight="semibold">

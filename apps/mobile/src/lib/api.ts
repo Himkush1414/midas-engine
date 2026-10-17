@@ -63,6 +63,23 @@ export interface BoardEntry {
   me: boolean;
 }
 
+export interface LeagueMember {
+  place: number;
+  name: string;
+  points: number;
+  days: number;
+  me: boolean;
+}
+
+export interface LeagueView {
+  optedIn: boolean;
+  /** UTC day key of the Monday the week starts. */
+  week: string;
+  endsAt: string;
+  group: { week: string; band: number; size: number; members: LeagueMember[] } | null;
+  lastWeek: { place: number; size: number; points: number } | null;
+}
+
 export interface DailyBoard {
   day: string;
   total: number;
@@ -98,6 +115,10 @@ export const api = {
     }),
 
   dailyBoard: (day: string) => request<DailyBoard>(`/api/v1/daily/${day}`),
+
+  league: () => request<LeagueView>('/api/v1/league'),
+
+  setLeagueOptIn: (optIn: boolean) => request<LeagueView>('/api/v1/league', { method: 'PUT', body: JSON.stringify({ optIn }) }),
 
   createDuel: () => request<{ id: string; url: string; expiresAt: string; games: string[] }>('/api/v1/duels', { method: 'POST' }),
 
