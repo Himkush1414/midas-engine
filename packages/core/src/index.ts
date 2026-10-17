@@ -21,6 +21,7 @@ export * from './games/balance';
 export * from './games/route';
 export * from './games/quick-sum';
 export * from './games/estimate';
+export * from './games/words';
 export * from './verify';
 export * from './streak';
 export * from './seasons';
