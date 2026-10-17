@@ -2,18 +2,10 @@ import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
 import { Card, Text } from '@/components/ui';
-import { useT, type TFunction } from '@/i18n';
-import { domainLabel } from '@/i18n/labels';
+import { useT } from '@/i18n';
 import { useProgress } from '@/state/progress';
 import { spacing, useTheme } from '@/theme';
-import { weekRange, weeklyRecap, type WeeklyRecap } from './weekly';
-
-/** One line about a week, e.g. "3 sessions · Memory +32". Shared with the recap notification. */
-export function weekSummary(t: TFunction, recap: Pick<WeeklyRecap, 'sessions' | 'best'>): string {
-  const parts = [t('week.summary', { count: recap.sessions })];
-  if (recap.best) parts.push(t('week.bestShort', { domain: domainLabel(t, recap.best.domain), gain: recap.best.gain }));
-  return parts.join(' · ');
-}
+import { weekRange, weekSummary, weeklyRecap } from './weekly';
 
 /** Profile entry to the weekly recap. */
 export function WeekCard() {

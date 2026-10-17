@@ -7,8 +7,10 @@ import { syncStorage } from './storage';
 
 const CHANNEL_REMINDERS = 'reminders';
 const CHANNEL_ACCOUNT = 'account';
+const CHANNEL_RECAPS = 'recaps';
 const KEY_DAILY = 'mindtier.notif.daily';
 const KEY_TRIAL = 'mindtier.notif.trial';
+const KEY_WEEKLY = 'mindtier.notif.weekly';
 
 /** Gentle copy: invitations, never guilt. */
 const REMINDER_LINES: TKey[] = ['notify.reminder1', 'notify.reminder2', 'notify.reminder3', 'notify.reminder4'];
@@ -41,6 +43,11 @@ function setChannels(): void {
     void Notifications.setNotificationChannelAsync('duels', {
       name: t('notify.channelDuels'),
       description: t('notify.channelDuelsDesc'),
+      importance: Notifications.AndroidImportance.DEFAULT,
+    });
+    void Notifications.setNotificationChannelAsync(CHANNEL_RECAPS, {
+      name: t('notify.channelRecaps'),
+      description: t('notify.channelRecapsDesc'),
       importance: Notifications.AndroidImportance.DEFAULT,
     });
     void Notifications.setNotificationChannelAsync(CHANNEL_ACCOUNT, {
@@ -129,6 +136,27 @@ export async function cancelAllLocalNotifications(): Promise<void> {
   await Notifications.cancelAllScheduledNotificationsAsync();
   syncStorage.removeItem(KEY_DAILY);
   syncStorage.removeItem(KEY_TRIAL);
+  syncStorage.removeItem(KEY_WEEKLY);
+}
+
+/**
+ * Put this week's recap in place for Sunday evening, replacing any earlier
+ * copy so the text matches the latest session. Pass null to cancel it.
+ * Never asks for permission: the recap only goes to players who already
+ * allowed notifications.
+ */
+export async function scheduleWeeklyRecap(recap: { at: Date; summary: string } | null): Promise<void> {
+  if (Platform.OS === 'web') return;
+  await cancelStored(KEY_WEEKLY);
+  if (!recap || recap.at.getTime() <= Date.now() + 60_000) return;
+  const { granted } = await Notifications.getPermissionsAsync();
+  if (!granted) return;
+  const t = getT();
+  const id = await Notifications.scheduleNotificationAsync({
+    content: { title: t('notify.weeklyTitle'), body: t('notify.weeklyBody', { summary: recap.summary }), data: { url: 'mindtier://week' } },
+    trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: recap.at, channelId: CHANNEL_RECAPS },
+  });
+  syncStorage.setItem(KEY_WEEKLY, id);
 }
 
 const KEY_PUSH = 'mindtier.notif.pushToken';
@@ -158,6 +186,7 @@ export async function registerForDuelPush(): Promise<boolean> {
 export function notificationPath(data: unknown): string | null {
   const url = (data as { url?: unknown } | null)?.url;
   if (typeof url !== 'string') return null;
+  if (url === 'mindtier://week') return '/week?from=notification';
   const m = /^mindtier:\/\/duel\/([a-z0-9]{8})$/.exec(url);
   return m ? `/duel/${m[1]}` : null;
 }

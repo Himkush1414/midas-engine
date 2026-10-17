@@ -18,6 +18,8 @@ export interface SettingsState {
   reminderEnabled: boolean;
   reminderHour: number;
   reminderMinute: number;
+  /** Sunday-evening recap of weeks the player played (needs notification permission). */
+  weeklyRecap: boolean;
   /** Games excluded from ranked rotation. */
   hiddenGames: GameId[];
   setTheme(theme: ThemePreference): void;
@@ -27,6 +29,7 @@ export interface SettingsState {
   setMotion(motion: MotionPreference): void;
   setShapeMode(on: boolean): void;
   setReminder(enabled: boolean, hour?: number, minute?: number): void;
+  setWeeklyRecap(on: boolean): void;
   toggleHiddenGame(game: GameId): void;
   reset(): void;
 }
@@ -41,6 +44,7 @@ const defaults = {
   reminderEnabled: false,
   reminderHour: 19,
   reminderMinute: 0,
+  weeklyRecap: true,
   hiddenGames: [] as GameId[],
 };
 
@@ -60,6 +64,7 @@ export const useSettings = create<SettingsState>()(
           reminderHour: hour ?? s.reminderHour,
           reminderMinute: minute ?? s.reminderMinute,
         })),
+      setWeeklyRecap: (weeklyRecap) => set({ weeklyRecap }),
       toggleHiddenGame: (game) =>
         set((s) => ({
           hiddenGames: s.hiddenGames.includes(game) ? s.hiddenGames.filter((g) => g !== game) : [...s.hiddenGames, game],

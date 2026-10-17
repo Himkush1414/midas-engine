@@ -1,4 +1,6 @@
 import { DOMAINS, type Domain } from '@mindtier/core';
+import type { TFunction } from '@/i18n';
+import { domainLabel } from '@/i18n/labels';
 import { localDayKey, type DailyRecord, type DayActivity, type RatingPoint } from '@/state/progress';
 
 /** A player's calendar week: Monday 00:00 to the next Monday 00:00, local time. */
@@ -73,4 +75,11 @@ export function weeklyRecap(input: WeeklyInput, range: WeekRange): WeeklyRecap {
 export function weeklyRecapTime(now: Date): Date {
   const { end } = weekRange(now);
   return new Date(end.getFullYear(), end.getMonth(), end.getDate() - 1, 18, 0, 0, 0);
+}
+
+/** One line about a week, e.g. "3 sessions · Memory +32". Shared by the profile card and the notification. */
+export function weekSummary(t: TFunction, recap: Pick<WeeklyRecap, 'sessions' | 'best'>): string {
+  const parts = [t('week.summary', { count: recap.sessions })];
+  if (recap.best) parts.push(t('week.bestShort', { domain: domainLabel(t, recap.best.domain), gain: recap.best.gain }));
+  return parts.join(' · ');
 }

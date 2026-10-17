@@ -9,6 +9,7 @@ import { startPurchases } from '@/lib/purchases';
 import { currentUserId } from '@/lib/supabase';
 import { usePrivacy } from '@/state/privacy';
 import { useProgress } from '@/state/progress';
+import { refreshWeeklyRecap } from '@/features/weekly/schedule';
 import { syncNow } from './sync';
 
 const FOREGROUND_SYNC_MS = 30_000;
@@ -30,12 +31,18 @@ export function useAppLifecycle(): void {
     const sync = async () => {
       lastSync = Date.now();
       if (useProgress.getState().rollSeason()) track('season_started', { season: useProgress.getState().ratingsSeason });
+      void refreshWeeklyRecap().catch(() => undefined);
       await syncNow();
       // RevenueCat's app user id is the Supabase user id so the webhook can map purchases to accounts.
       const uid = (await currentUserId()) ?? useProgress.getState().userSeed;
       await startPurchases(uid);
     };
     void sync();
+
+    // Every finished session updates the logged activity: keep Sunday's recap text current.
+    const unsubActivity = useProgress.subscribe((s, prev) => {
+      if (s.activity !== prev.activity) void refreshWeeklyRecap().catch(() => undefined);
+    });
 
     const sub = AppState.addEventListener('change', (state) => {
       if (state === 'active' && Date.now() - lastSync > FOREGROUND_SYNC_MS) void sync();
@@ -53,6 +60,7 @@ export function useAppLifecycle(): void {
     }
     return () => {
       sub.remove();
+      unsubActivity();
       tapSub?.remove();
     };
   }, []);

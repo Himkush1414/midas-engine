@@ -7,7 +7,8 @@ import { Segmented, SettingsRow, SettingsSection } from '@/components/settings';
 import { Screen, Text } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { links } from '@/lib/links';
-import { cancelDailyReminder, scheduleDailyReminder } from '@/lib/notifications';
+import { cancelDailyReminder, ensurePermission, scheduleDailyReminder } from '@/lib/notifications';
+import { refreshWeeklyRecap } from '@/features/weekly/schedule';
 import { applyEntitlement, purchases } from '@/lib/purchases';
 import { LANGUAGES, LANGUAGE_NAMES, useT, type LanguagePreference, type TFunction } from '@/i18n';
 import { useAccount } from '@/state/account';
@@ -66,6 +67,18 @@ export default function Settings() {
     }
     s.setReminder(true);
     track('reminder_enabled', { hour: s.reminderHour });
+  };
+
+  const toggleWeeklyRecap = async (on: boolean) => {
+    if (on && !(await ensurePermission())) {
+      Alert.alert(t('settings.notifOffTitle'), t('settings.notifOffBody'), [
+        { text: t('settings.notNow'), style: 'cancel' },
+        { text: t('settings.openSettings'), onPress: () => void Linking.openSettings() },
+      ]);
+      return;
+    }
+    s.setWeeklyRecap(on);
+    await refreshWeeklyRecap();
   };
 
   const shiftReminder = async (deltaHours: number) => {
@@ -179,6 +192,13 @@ export default function Settings() {
               </Text>
             </View>
           </View>
+          <SettingsRow
+            icon="daily"
+            label={t('settings.weeklyRecap')}
+            detail={t('settings.weeklyRecapDetail')}
+            switchValue={s.weeklyRecap}
+            onSwitch={(v) => void toggleWeeklyRecap(v)}
+          />
         </SettingsSection>
 
         <SettingsSection title={t('settings.privacy')} footer={t('settings.privacyFooter')}>

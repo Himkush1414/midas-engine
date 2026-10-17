@@ -13,6 +13,7 @@ import { useAppLifecycle } from '@/features/sync/useAppLifecycle';
 import { useLanguage, useSyncDeviceLanguage } from '@/i18n';
 import { initCrashReporting, reportError } from '@/lib/crash';
 import { relocalizeNotifications } from '@/lib/notifications';
+import { refreshWeeklyRecap } from '@/features/weekly/schedule';
 import { installDevHooks } from '@/lib/devHooks';
 import { useProgress } from '@/state/progress';
 import { useSettings } from '@/state/settings';
@@ -45,6 +46,7 @@ function AppStack() {
   useEffect(() => {
     const { reminderEnabled, reminderHour, reminderMinute } = useSettings.getState();
     void relocalizeNotifications({ enabled: reminderEnabled, hour: reminderHour, minute: reminderMinute }).catch(() => undefined);
+    void refreshWeeklyRecap().catch(() => undefined);
   }, [language]);
 
   useEffect(() => {
