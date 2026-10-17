@@ -58,3 +58,5 @@ Thumbs.db
 # Web QA export used for screenshots
 .qa-web/
 .qa-web-e2e/
+.qa-web-play/
+apps/web/public/play/
