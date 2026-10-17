@@ -1,6 +1,6 @@
 # ROADMAP
 
-Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-16.
+Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-17.
 
 ## M0 — Foundations
 - ☑ npm-workspaces monorepo: `apps/mobile` (Expo SDK 57), `apps/web` (Next.js on Vercel), `packages/core` (pure TS engine), `supabase/` (migrations)
@@ -28,12 +28,13 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-16.
 - ☑ Onboarding → placement → tier reveal ceremony → paywall
 - ☑ Home: today's ranked session, Daily Challenge, duels, streak
 - ☑ All 13 games with tutorials, Zen mode, haptics, sound
-- ☑ Results screen with rating deltas, rank-up animation and sharing (text; image share cards post-launch)
+- ☑ Results screen with rating deltas, rank-up animation and sharing (text and image share card)
 - ☑ Profile / stats: radar, rating history (small multiples + table); Daily Challenge percentile
 - ☑ Duels: create, invite link, accept, result
 - ☑ Settings: theme, sounds, haptics, reminders, accessibility, manage subscription, restore, delete account, legal links
 - ☑ Offline outbox + background sync
-- ☑ Notifications: daily reminder, trial reminder (duel push notifications: post-launch)
+- ☑ Notifications: daily reminder, trial reminder, duel push notifications
+- ☑ Localization: English, Spanish, Portuguese (Brazil), German, French — UI, game content, notifications; follows the system/per-app language
 - ☑ RevenueCat paywall (with a mock provider until keys exist)
 
 ## M4 — Web (Vercel)
@@ -44,8 +45,8 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-16.
 - ☑ `assetlinks.json` / AASA for app links
 
 ## M5 — Store readiness
-- ☑ Icon (SVG master, adaptive icon, all PNG sizes), feature graphic, screenshots
-- ☑ Store listing copy, Data Safety answers, content-rating answers
+- ☑ Icon (SVG master, adaptive icon, all PNG sizes), feature graphic, screenshots — localized for es/pt/de/fr
+- ☑ Store listing copy in all five languages, Data Safety answers, content-rating answers
 - ☑ EAS build profiles (AAB, production), target API level current, 64-bit
 - ☑ iOS: privacy manifest, universal links; Sign in with Apple not required (no social login); no ATT (no tracking)
 - ☑ HANDOFF.md with exact manual steps
@@ -54,6 +55,6 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-16.
 - Seasons (monthly) with soft reset + season recap share
 - Live real-time duels (Supabase Realtime) once DAU supports matchmaking
 - Opt-in weekly leagues
-- Localization: DE, FR, ES, PT-BR, JA
+- More languages (JA, KO, IT…) and localized web pages
 - Word/language domain (per-locale dictionaries)
 - Web version of the Daily Challenge (top-of-funnel)

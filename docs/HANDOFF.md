@@ -68,6 +68,7 @@ Anonymous play works today. Saving progress to an email needs real email deliver
    ```
    Then upload it to **Internal testing** (download link from the EAS build page), or submit with `npx eas-cli@latest submit -p android` after step 4.9.
 5. Store presence → Main store listing: paste from `docs/STORE_LISTING.md`; upload `store/graphics/play-icon-512.png`, `store/graphics/feature-graphic.png` and `store/screenshots/phone/*.png`.
+   Then **Manage translations → Add your own translations** for es-419/es-ES, pt-BR, de-DE and fr-FR: paste each language's texts from the *Localized listings* section and upload `store/graphics/feature-graphic-<lang>.png` and `store/screenshots/phone/<lang>/*.png`.
 6. Policy → App content: fill in every declaration from `docs/PLAY_COMPLIANCE.md` (privacy policy URL, ads = No, app access = no login needed, content rating, target audience 13+, Data safety, account deletion URL).
 7. Monetize → Products → create the subscriptions and the one-time product exactly as in the table in `docs/STORE_LISTING.md` (IDs must match). Enable grace period and account hold.
 8. Payments profile → set up a merchant account (needed to sell).
