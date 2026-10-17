@@ -35,6 +35,6 @@ describe('landing copy', () => {
   it('links every language version to the others', () => {
     const alt = landingAlternates('de');
     expect(alt?.canonical).toBe('/de');
-    expect(alt?.languages).toMatchObject({ en: '/', es: '/es', pt: '/pt', de: '/de', fr: '/fr', 'x-default': '/' });
+    expect(alt?.languages).toMatchObject({ en: '/', es: '/es', pt: '/pt', de: '/de', fr: '/fr', it: '/it', 'x-default': '/' });
   });
 });

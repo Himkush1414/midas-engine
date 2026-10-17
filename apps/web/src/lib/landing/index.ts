@@ -4,10 +4,11 @@ import { de } from './de';
 import { en, type LandingCopy } from './en';
 import { es } from './es';
 import { fr } from './fr';
+import { it } from './it';
 import { pt } from './pt';
 
-/** Translated landing pages live at /es, /pt, /de and /fr; English is the root. */
-export const LANDING: Record<'es' | 'pt' | 'de' | 'fr', LandingCopy> = { es, pt, de, fr };
+/** Translated landing pages live at /es, /pt, /de, /fr and /it; English is the root. */
+export const LANDING: Record<'es' | 'pt' | 'de' | 'fr' | 'it', LandingCopy> = { es, pt, de, fr, it };
 export type LandingLang = keyof typeof LANDING;
 
 export function isLandingLang(value: string): value is LandingLang {

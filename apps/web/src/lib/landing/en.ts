@@ -7,7 +7,7 @@ interface Card {
 
 /** Everything the landing page says, in one language. Game names stay English brand names in every language. */
 export interface LandingCopy {
-  lang: 'en' | 'es' | 'pt' | 'de' | 'fr';
+  lang: 'en' | 'es' | 'pt' | 'de' | 'fr' | 'it';
   metaTitle: string;
   metaDescription: string;
   heroTitle: string;

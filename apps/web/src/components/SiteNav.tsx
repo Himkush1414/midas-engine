@@ -4,10 +4,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './SiteChrome.module.css';
 
-const LANGS = ['en', 'es', 'pt', 'de', 'fr'] as const;
+const LANGS = ['en', 'es', 'pt', 'de', 'fr', 'it'] as const;
 type Lang = (typeof LANGS)[number];
 
-const NAMES: Record<Lang, string> = { en: 'English', es: 'Español', pt: 'Português', de: 'Deutsch', fr: 'Français' };
+const NAMES: Record<Lang, string> = { en: 'English', es: 'Español', pt: 'Português', de: 'Deutsch', fr: 'Français', it: 'Italiano' };
 
 const LABELS: Record<Lang, { home: string; how: string; pricing: string; support: string; tagline: string; languages: string }> = {
   en: { home: 'Mindtier home', how: 'How it works', pricing: 'Pricing', support: 'Support', tagline: 'Ranked brain games. No ads, ever.', languages: 'Languages' },
@@ -15,6 +15,7 @@ const LABELS: Record<Lang, { home: string; how: string; pricing: string; support
   pt: { home: 'Início do Mindtier', how: 'Como funciona', pricing: 'Preços', support: 'Suporte', tagline: 'Jogos mentais ranqueados. Sem anúncios, nunca.', languages: 'Idiomas' },
   de: { home: 'Mindtier-Startseite', how: 'So funktioniert es', pricing: 'Preise', support: 'Support', tagline: 'Denkspiele mit Rang. Niemals Werbung.', languages: 'Sprachen' },
   fr: { home: 'Accueil Mindtier', how: 'Comment ça marche', pricing: 'Tarifs', support: 'Assistance', tagline: 'Jeux de réflexion classés. Jamais de pub.', languages: 'Langues' },
+  it: { home: 'Home di Mindtier', how: 'Come funziona', pricing: 'Prezzi', support: 'Assistenza', tagline: 'Giochi di logica a gradi. Mai pubblicità.', languages: 'Lingue' },
 };
 
 /** Language of the page being shown: a translated landing page, or English everywhere else. */
