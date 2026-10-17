@@ -50,5 +50,22 @@ These steps publish to production, so they need the owner to run them (or allow 
 ### Android build
 - Production build `7d2145b5` (versionCode 3) is finished. Its manifest checks out: target SDK 36, min SDK 24, only the 10 expected permissions (INTERNET, VIBRATE, ACCESS_NETWORK_STATE, MODIFY_AUDIO_SETTINGS, RECEIVE_BOOT_COMPLETED, POST_NOTIFICATIONS, WAKE_LOCK, C2DM RECEIVE, BILLING, and the dynamic-receiver permission). None of the blocked permissions are present, the locale config lists en/es/pt/de/fr, the duel app link has autoVerify set, and the bundle includes 64-bit native libraries.
 
+### Vercel cleanup
+- The stray project `midas-engine-pggb` (the one failing on GitHub) is unlinked from the repo. It had no env vars, no custom domain and no working build. Deleting it was blocked by Claude Code's permission check; the owner can delete it in the dashboard.
+- `midas-engine` is now the only project linked to the repo. Push-triggered deployments are off three ways: `vercel.json`, Settings → Git → *Create deployments* off, and *Skip unaffected projects* off. That last setting had been creating a canceled record for every mobile push; after the change, mobile pushes create nothing. Only `scripts/deploy-web.mjs` deploys.
+
+### Seasons
+- Calendar-month seasons in UTC. Season 1 is November 2026; before that it is the preseason.
+- At the start of each season, ratings get one soft reset: anything above 1300 moves 10% of the way back toward 1300, and the RD is raised to at least 80. That makes early games move ratings faster without marking anyone provisional.
+- The same core function runs on the device and on the server. The server applies the reset exactly once through `roll_season` (migration `0003_seasons.sql`).
+- In the app: a season card on Home and Profile, a new-season intro, and a season recap screen (peak tier, sessions, games, biggest climb, per-skill change, share text, past seasons).
+- **Order matters:** run `node scripts/db-migrate.mjs` before the next web deploy. `deploy-web.mjs` now refuses to deploy while migrations are pending.
+
+### Weekly recap
+- Covers the player's local Monday–Sunday week: sessions, games, days played, Daily Challenges, rating earned per skill (season resets excluded), and the biggest climb. You can switch between this week and last week.
+- A local notification goes out Sunday at 18:00, only after weeks with play. Its text is updated after every session. It never asks for permission, and it can be turned off in Settings.
+- The CI end-to-end flow now also checks season stats and both recap screens (21 checks).
+
 ### Next steps
-1. Roadmap features: seasons, weekly recap, leagues.
+1. Owner: run `node scripts/db-migrate.mjs`, then `node scripts/deploy-web.mjs`, then smoke-test.
+2. Roadmap features: seasons, weekly recap, leagues.
