@@ -301,6 +301,22 @@ const SCENES = [
       await settle(page, 800);
     },
   })),
+  // QA only: the season share image, pulled into view from its off-screen slot.
+  {
+    name: '22-season-share-card',
+    path: '/',
+    before: async (page) => {
+      await store(page, seedSeasons, { notice: false });
+      await store(page, () => globalThis.__mindtier.router.push('/season'));
+      await settle(page, 1200);
+      await page.evaluate(() => {
+        let slot = document.querySelector('[data-testid="season-share-card"]');
+        while (slot && getComputedStyle(slot).left !== '-10000px') slot = slot.parentElement;
+        if (slot) Object.assign(slot.style, { left: '26px', top: '120px', zIndex: '9999' });
+      });
+      await settle(page, 300);
+    },
+  },
   // QA only: the weekly recap and the profile entries to it.
   { name: '20-week', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/week')); await settle(page, 1200); } },
   { name: '21-profile-cards', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/profile')); await settle(page, 1200); } },
