@@ -3,6 +3,7 @@ import { de } from '../de';
 import { en } from '../en';
 import { es } from '../es';
 import { fr } from '../fr';
+import { it as italian } from '../it';
 import { pt } from '../pt';
 
 function leaves(dict: Dictionary, prefix = ''): Record<string, string> {
@@ -24,6 +25,7 @@ describe.each([
   ['pt', pt],
   ['de', de],
   ['fr', fr],
+  ['it', italian],
 ])('%s dictionary', (_lang, dict) => {
   const translated = leaves(dict);
 

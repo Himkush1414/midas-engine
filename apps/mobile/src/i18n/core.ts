@@ -64,7 +64,7 @@ export function translate(dict: Dictionary, fallback: Dictionary, locale: string
   return path;
 }
 
-export const LANGUAGES = ['en', 'es', 'pt', 'de', 'fr'] as const;
+export const LANGUAGES = ['en', 'es', 'pt', 'de', 'fr', 'it'] as const;
 export type Language = (typeof LANGUAGES)[number];
 export type LanguagePreference = 'system' | Language;
 
@@ -80,4 +80,5 @@ export const LANGUAGE_NAMES: Record<Language, string> = {
   pt: 'Português',
   de: 'Deutsch',
   fr: 'Français',
+  it: 'Italiano',
 };
