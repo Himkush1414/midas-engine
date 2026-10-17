@@ -111,7 +111,24 @@ const BOARD = {
   me: { place: 5, points: 2905, total: 4812, percentile: 100 },
 };
 
-async function stubNetwork(page, { fresh = false } = {}) {
+/** Sample league table: a Gold group mid-week, the demo player fourth. */
+function leagueView(optedIn) {
+  const monday = new Date(now);
+  monday.setUTCHours(0, 0, 0, 0);
+  monday.setUTCDate(monday.getUTCDate() - ((monday.getUTCDay() + 6) % 7));
+  const week = monday.toISOString().slice(0, 10);
+  const names = ['Nova', 'Kenji', 'Priya', 'Alex', 'Mateo', 'Lea', 'Omar', 'Sofia', 'Jun', 'Ines', 'Tariq', 'Mila'];
+  const members = names.map((name, i) => ({ place: i + 1, name, points: 5200 - i * 310 - (i % 3) * 40, days: Math.max(1, 5 - Math.floor(i / 3)), me: name === 'Alex' }));
+  return {
+    optedIn,
+    week,
+    endsAt: new Date(monday.getTime() + 7 * DAY).toISOString(),
+    group: optedIn ? { week, band: 4, size: members.length, members } : null,
+    lastWeek: optedIn ? { place: 6, size: 27, points: 4120 } : null,
+  };
+}
+
+async function stubNetwork(page, { fresh = false, league = 'in' } = {}) {
   await page.route(/supabase\.co|\/api\/v1\//, async (route) => {
     const url = route.request().url();
     if (url.includes('/auth/v1/signup')) {
@@ -131,6 +148,7 @@ async function stubNetwork(page, { fresh = false } = {}) {
     }
     if (url.includes('/api/v1/events')) return route.fulfill({ status: 202, json: { accepted: 0 } });
     if (url.includes('/api/v1/daily/')) return route.fulfill({ json: BOARD });
+    if (url.includes('/api/v1/league')) return route.fulfill({ json: leagueView(league === 'in') });
     if (url.includes('/api/v1/duels/')) {
       return route.fulfill({
         json: {
@@ -317,6 +335,9 @@ const SCENES = [
       await settle(page, 300);
     },
   },
+  // QA only: the weekly league, joined and not yet joined.
+  { name: '23-league', path: '/', before: async (page) => { await store(page, () => globalThis.__mindtier.router.push('/league')); await settle(page, 1500); } },
+  { name: '24-league-intro', path: '/', league: 'out', before: async (page) => { await store(page, () => globalThis.__mindtier.router.push('/league')); await settle(page, 1500); } },
   // QA only: the weekly recap and the profile entries to it.
   { name: '20-week', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/week')); await settle(page, 1200); } },
   { name: '21-profile-cards', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/profile')); await settle(page, 1200); } },
@@ -368,7 +389,7 @@ for (const scene of SCENES) {
   }, state);
   const page = await context.newPage();
   page.on('pageerror', (e) => console.error(`  [${scene.name}] page error: ${e.message}`));
-  await stubNetwork(page, { fresh: Boolean(scene.fresh) });
+  await stubNetwork(page, { fresh: Boolean(scene.fresh), league: scene.league });
   await page.goto(`${BASE}${scene.path}`, { waitUntil: 'networkidle' });
   await page.waitForFunction(() => Boolean(globalThis.__mindtier), null, { timeout: 60_000 });
   await settle(page, 1200);
