@@ -1,6 +1,7 @@
 import { canStartRanked, getGame, type SubmittedRun } from '@mindtier/core';
 import { z } from 'zod';
 import { HttpError, handler, json, parseBody, requireUser } from '@/server/http';
+import { recordLeagueSession } from '@/server/leagues';
 import { currentRatings, getRatings, isPro, requireProfile, usageToday } from '@/server/players';
 import { supabaseAdmin } from '@/server/supabase';
 import { duelResultMessage, sendPush } from '@/server/push';
@@ -92,6 +93,10 @@ export const POST = handler(async (req: Request) => {
     // Unique violations: a second placement, a reused ranked index, or a second daily/duel entry.
     if (error.code === '23505') throw new HttpError(409, 'session already recorded');
     throw error;
+  }
+
+  if (status === 'ok' && body.mode === 'ranked' && result.update) {
+    await recordLeagueSession(profile, { now, day: result.day, points: result.points, ratings: result.update.ratings });
   }
 
   if (status === 'ok' && body.mode === 'duel' && result.duelId) {

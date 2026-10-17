@@ -28,14 +28,14 @@ beforeEach(() => {
 
 describe('currentRatings', () => {
   it('leaves ratings from the current season alone', async () => {
-    const profile = { id: 'u', seed: 'seed-1234', display_name: null, rating_season: 1 };
+    const profile = { id: 'u', seed: 'seed-1234', display_name: null, rating_season: 1, league_opt_in: false };
     const r = await currentRatings(profile, NOV);
     expect(r.memory.rating).toBe(2000);
     expect(db.rpc).not.toHaveBeenCalled();
   });
 
   it('applies and stores the soft reset once a new season starts', async () => {
-    const profile = { id: 'u', seed: 'seed-1234', display_name: null, rating_season: 0 };
+    const profile = { id: 'u', seed: 'seed-1234', display_name: null, rating_season: 0, league_opt_in: false };
     const r = await currentRatings(profile, NOV);
     expect(r.memory.rating).toBeCloseTo(1930);
     expect(r.memory.rd).toBe(SEASON_RD);
@@ -49,7 +49,7 @@ describe('currentRatings', () => {
 
   it('re-reads stored ratings when another request rolled the season first', async () => {
     db.rollApplied = false;
-    const profile = { id: 'u', seed: 'seed-1234', display_name: null, rating_season: 0 };
+    const profile = { id: 'u', seed: 'seed-1234', display_name: null, rating_season: 0, league_opt_in: false };
     const r = await currentRatings(profile, NOV);
     expect(r.memory.rating).toBe(2000);
     db.rollApplied = true;

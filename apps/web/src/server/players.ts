@@ -9,9 +9,10 @@ export interface Profile {
   display_name: string | null;
   /** Season the stored ratings belong to (0 = preseason). */
   rating_season: number;
+  league_opt_in: boolean;
 }
 
-export const PROFILE_COLUMNS = 'id, seed, display_name, rating_season';
+export const PROFILE_COLUMNS = 'id, seed, display_name, rating_season, league_opt_in';
 
 export async function getProfile(userId: string): Promise<Profile | null> {
   const { data, error } = await supabaseAdmin().from('profiles').select(PROFILE_COLUMNS).eq('id', userId).maybeSingle();
