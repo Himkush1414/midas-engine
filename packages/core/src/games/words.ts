@@ -6,26 +6,27 @@
  *
  * Every concept belongs to exactly one category, and concepts were chosen to
  * stay unambiguous in every supported language: no words that also name
- * something in another category (palm, kiwi, bass, orange, mango…).
+ * something in another category in any of them (palm, kiwi, bass, orange;
+ * Spanish mono, German Strauß and Käfer, Italian vespa and cedro, Brazilian tênis…).
  */
 export const WORD_CATEGORIES = {
-  mammals: ['dog', 'cat', 'horse', 'cow', 'lion', 'tiger', 'elephant', 'rabbit', 'bear', 'wolf', 'monkey', 'giraffe', 'zebra', 'sheep'],
-  birds: ['eagle', 'owl', 'parrot', 'pigeon', 'swan', 'duck', 'sparrow', 'crow', 'penguin', 'flamingo', 'ostrich', 'peacock'],
+  mammals: ['dog', 'cat', 'horse', 'cow', 'lion', 'tiger', 'elephant', 'rabbit', 'bear', 'wolf', 'gorilla', 'giraffe', 'zebra', 'sheep'],
+  birds: ['eagle', 'owl', 'parrot', 'pigeon', 'swan', 'duck', 'sparrow', 'crow', 'penguin', 'flamingo', 'stork', 'peacock'],
   fish: ['shark', 'salmon', 'trout', 'tuna', 'cod', 'carp', 'herring', 'sardine', 'pike', 'goldfish'],
-  insects: ['bee', 'ant', 'butterfly', 'mosquito', 'beetle', 'wasp', 'grasshopper', 'ladybug', 'dragonfly', 'moth'],
-  fruit: ['apple', 'banana', 'pear', 'cherry', 'grape', 'strawberry', 'lemon', 'peach', 'plum', 'pineapple', 'watermelon', 'apricot'],
+  insects: ['bee', 'ant', 'butterfly', 'mosquito', 'cockroach', 'flea', 'grasshopper', 'ladybug', 'dragonfly', 'moth'],
+  fruit: ['apple', 'banana', 'pear', 'cherry', 'grape', 'strawberry', 'lemon', 'peach', 'plum', 'pineapple', 'watermelon'],
   vegetables: ['carrot', 'potato', 'onion', 'cabbage', 'lettuce', 'cucumber', 'spinach', 'broccoli', 'leek', 'cauliflower', 'radish'],
-  drinks: ['coffee', 'tea', 'milk', 'juice', 'water', 'lemonade', 'cocoa', 'milkshake'],
+  drinks: ['coffee', 'tea', 'milk', 'juice', 'water', 'lemonade', 'hot-chocolate', 'milkshake'],
   furniture: ['chair', 'table', 'sofa', 'bed', 'wardrobe', 'bookshelf', 'desk', 'armchair', 'stool'],
   kitchenware: ['spoon', 'fork', 'plate', 'cup', 'bowl', 'frying-pan', 'saucepan', 'kettle', 'ladle'],
   tools: ['hammer', 'saw', 'screwdriver', 'drill', 'wrench', 'pliers', 'shovel', 'axe', 'rake'],
   clothing: ['shirt', 'trousers', 'skirt', 'dress', 'jacket', 'coat', 'sock', 'scarf', 'glove', 'sweater'],
   weather: ['rain', 'snow', 'wind', 'fog', 'storm', 'hail', 'thunder', 'frost'],
-  flowers: ['rose', 'tulip', 'daisy', 'sunflower', 'lily', 'orchid', 'poppy', 'dandelion'],
-  trees: ['oak', 'birch', 'maple', 'willow', 'beech', 'fir', 'cedar', 'poplar'],
-  sports: ['football', 'tennis', 'basketball', 'golf', 'hockey', 'volleyball', 'boxing', 'skiing', 'rugby', 'judo'],
+  flowers: ['rose', 'tulip', 'hyacinth', 'sunflower', 'lily', 'orchid', 'poppy', 'dandelion'],
+  trees: ['oak', 'birch', 'maple', 'willow', 'beech', 'fir', 'elm', 'poplar'],
+  sports: ['football', 'handball', 'basketball', 'swimming', 'hockey', 'volleyball', 'boxing', 'skiing', 'rugby', 'judo'],
   instruments: ['piano', 'guitar', 'violin', 'drum', 'flute', 'trumpet', 'harp', 'cello', 'saxophone', 'clarinet'],
-  vehicles: ['car', 'bus', 'train', 'bicycle', 'truck', 'motorcycle', 'tram', 'tractor', 'helicopter', 'airplane', 'scooter'],
+  vehicles: ['car', 'bus', 'train', 'bicycle', 'truck', 'motorcycle', 'tram', 'tractor', 'helicopter', 'airplane'],
   body: ['arm', 'leg', 'hand', 'foot', 'head', 'nose', 'ear', 'eye', 'knee', 'elbow', 'shoulder', 'finger'],
 } as const;
 
