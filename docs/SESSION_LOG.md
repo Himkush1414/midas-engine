@@ -66,6 +66,12 @@ These steps publish to production, so they need the owner to run them (or allow 
 - A local notification goes out Sunday at 18:00, only after weeks with play. Its text is updated after every session. It never asks for permission, and it can be turned off in Settings.
 - The CI end-to-end flow now also checks season stats and both recap screens (21 checks).
 
+### Later on 2026-10-17
+- **Slower early climb:** a ranked game now moves a domain rating by at most 75 points, and the RD stays put while that limit applies. A perfect bot finishes placement plus one session in Master (overall 1944) instead of Grandmaster, and keeps climbing by about 45 per session. Core tests and the CI end-to-end flow both check this.
+- **Database checks:** `scripts/db-check.sh` applies every migration to a throwaway Postgres 17 in Docker (with minimal Supabase stand-ins) and runs `supabase/tests/*.test.sql`. CI runs it as the `db` job.
+- **Weekly leagues** (migration `0004_leagues.sql`): players opt in and are grouped with up to 30 others at their tier for a UTC Monday–Sunday week. Only the first ranked session of each UTC day scores, so Pro gives no advantage. There is a Home card, a league table and last week's finish. Group filling is serialized with an advisory lock; tested with 40 players joining at once, which produced groups of 30 and 10.
+- **Website:** the landing page now covers seasons, leagues and the weekly recap, and is served in es/pt/de/fr at `/es`, `/pt`, `/de` and `/fr`, with hreflang links, a localized header and footer, and a language switcher.
+
 ### Next steps
-1. Owner: run `node scripts/db-migrate.mjs`, then `node scripts/deploy-web.mjs`, then smoke-test.
+1. Owner: run `node scripts/db-migrate.mjs` (applies 0003 and 0004), then `node scripts/deploy-web.mjs`, then smoke-test, including `API_SMOKE_URL=… npx vitest run src/server/api.smoke.test.ts` in apps/web, which now covers leagues.
 2. Roadmap features: seasons, weekly recap, leagues.

@@ -47,6 +47,7 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-17.
 - ☑ Duel invite landing page with deep links
 - ☑ Open Graph preview images for the site and duel links
 - ☑ `assetlinks.json` / AASA for app links
+- ☑ Landing page in English, Spanish, Portuguese, German and French (`/`, `/es`, `/pt`, `/de`, `/fr`) with hreflang alternates, localized header/footer and a language switcher; legal pages stay English
 
 ## M5 — Store readiness
 - ☑ Icon (SVG master, adaptive icon, all PNG sizes), feature graphic, screenshots — localized for es/pt/de/fr
@@ -57,6 +58,6 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-17.
 
 ## Post-launch
 - Live real-time duels (Supabase Realtime) once DAU supports matchmaking
-- More languages (JA, KO, IT…) and localized web pages
+- More languages (JA, KO, IT…); translated legal pages (have them reviewed first)
 - Word/language domain (per-locale dictionaries)
 - Web version of the Daily Challenge (top-of-funnel)
