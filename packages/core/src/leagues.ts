@@ -1,3 +1,4 @@
+import type { RunSummary } from './games/runner';
 import { addDays } from './streak';
 import { TIERS, overallRating, tierOf, type DomainRatings } from './tiers';
 
@@ -24,4 +25,16 @@ export function leagueWeekEnd(week: string): Date {
 /** Players are grouped with others of the same overall tier (0 = Iron … 7 = Grandmaster). */
 export function leagueBand(ratings: DomainRatings): number {
   return TIERS.indexOf(tierOf(overallRating(ratings).rating));
+}
+
+/**
+ * League points for a ranked session. Adaptive games have no fixed-puzzle
+ * points, so each rated block scores its difficulty times how well it went:
+ * harder puzzles solved well score more. Groups share a tier band, so
+ * players face similar difficulties.
+ */
+export function leaguePoints(runs: ReadonlyArray<Pick<RunSummary, 'blocks'>>): number {
+  let total = 0;
+  for (const run of runs) for (const b of run.blocks) total += (Math.max(0, b.score) * b.itemRating) / 10;
+  return Math.round(total);
 }

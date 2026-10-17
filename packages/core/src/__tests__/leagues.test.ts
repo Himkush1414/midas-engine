@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DOMAINS } from '../domains';
 import { newRating } from '../glicko2';
-import { leagueBand, leagueWeek, leagueWeekEnd } from '../leagues';
+import { leagueBand, leaguePoints, leagueWeek, leagueWeekEnd } from '../leagues';
 import type { DomainRatings } from '../tiers';
 
 const uniform = (rating: number): DomainRatings => Object.fromEntries(DOMAINS.map((d) => [d, newRating(rating, 60)])) as DomainRatings;
@@ -25,5 +25,20 @@ describe('league bands', () => {
     expect(leagueBand(uniform(800))).toBe(0);
     expect(leagueBand(uniform(1350))).toBe(3);
     expect(leagueBand(uniform(2200))).toBe(7);
+  });
+});
+
+describe('league points', () => {
+  const run = (...blocks: Array<[number, number]>) => ({ blocks: blocks.map(([itemRating, score]) => ({ itemRating, score })) });
+
+  it('reward difficulty and accuracy together', () => {
+    expect(leaguePoints([run([1500, 1], [1500, 1], [1500, 1])])).toBe(450);
+    expect(leaguePoints([run([1500, 0.5])])).toBe(75);
+    expect(leaguePoints([run([1800, 0.5])])).toBeGreaterThan(leaguePoints([run([1500, 0.5])]));
+  });
+
+  it('add up a whole session and never go negative', () => {
+    expect(leaguePoints([run([1000, 1]), run([1000, 1]), run([1000, -0.4])])).toBe(200);
+    expect(leaguePoints([])).toBe(0);
   });
 });
