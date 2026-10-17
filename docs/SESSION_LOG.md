@@ -75,6 +75,10 @@ These steps publish to production, so they need the owner to run them (or allow 
 - **Italian:** a full app dictionary, game content included, plus the `/it` landing page, the Play listing text, store screenshots and a feature graphic. Every language's store assets were refreshed with a mid-season date (`--now`), so none of them show the preseason, and the profile shot now frames the skill radar.
 - **Weekly recap fix:** weeks with no logged sessions no longer show rating changes. Players updating mid-week would otherwise have seen "0 sessions · Speed +117".
 
+### Live
+- Migrations 0003 (seasons) and 0004 (leagues) are applied to production, and the web app is deployed (`2548e6f`).
+- All six landing pages, the legal pages, `assetlinks.json` and the OG image load correctly.
+- All 7 live API smoke tests pass. The first run caught a real bug: league sessions scored 0, because ranked games are adaptive and carry no puzzle points. Leagues now score rated blocks (difficulty × chance-corrected accuracy ÷ 10). The test user was deleted afterwards; one empty league group remains, which is harmless.
+
 ### Next steps
-1. Owner: run `node scripts/db-migrate.mjs` (applies 0003 and 0004), then `node scripts/deploy-web.mjs`, then smoke-test, including `API_SMOKE_URL=… npx vitest run src/server/api.smoke.test.ts` in apps/web, which now covers leagues.
-2. Roadmap features: seasons, weekly recap, leagues.
+1. Roadmap features: seasons, weekly recap, leagues.
