@@ -1,5 +1,6 @@
+import { seasonOf } from '@mindtier/core';
 import { z } from 'zod';
-import { getRatings, isPro, usageToday } from '@/server/players';
+import { PROFILE_COLUMNS, currentRatings, isPro, usageToday, type Profile } from '@/server/players';
 import { handler, json, parseBody, requireUser } from '@/server/http';
 import { supabaseAdmin } from '@/server/supabase';
 
@@ -14,19 +15,25 @@ export const POST = handler(async (req: Request) => {
   const { seed } = await parseBody(req, Body);
   const db = supabaseAdmin();
 
-  const { data: existing, error: readErr } = await db.from('profiles').select('id, seed, display_name').eq('id', user.id).maybeSingle();
+  const now = new Date();
+  const { data: existing, error: readErr } = await db.from('profiles').select(PROFILE_COLUMNS).eq('id', user.id).maybeSingle<Profile>();
   if (readErr) throw readErr;
-  let profile = existing;
+  let profile: Profile | null = existing;
   if (!profile) {
-    const { data, error } = await db.from('profiles').insert({ id: user.id, seed }).select('id, seed, display_name').single();
+    // New players start in the current season: there is nothing to reset.
+    const { data, error } = await db
+      .from('profiles')
+      .insert({ id: user.id, seed, rating_season: seasonOf(now) })
+      .select(PROFILE_COLUMNS)
+      .single<Profile>();
     if (error) throw error;
     profile = data;
   }
 
   const [ratings, pro, usage, last] = await Promise.all([
-    getRatings(user.id),
-    isPro(user.id),
-    usageToday(user.id),
+    currentRatings(profile, now),
+    isPro(user.id, now),
+    usageToday(user.id, now),
     db
       .from('sessions')
       .select('session_index')
@@ -51,5 +58,6 @@ export const POST = handler(async (req: Request) => {
     // Lets a second device continue the ranked sequence without reusing an index.
     nextSessionIndex: (last.data?.session_index ?? -1) + 1,
     placementDone: (placements ?? 0) > 0,
+    season: profile.rating_season,
   });
 });

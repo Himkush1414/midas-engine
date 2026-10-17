@@ -1,7 +1,7 @@
 import { canStartRanked, getGame, type SubmittedRun } from '@mindtier/core';
 import { z } from 'zod';
 import { HttpError, handler, json, parseBody, requireUser } from '@/server/http';
-import { getRatings, isPro, requireProfile, usageToday } from '@/server/players';
+import { currentRatings, getRatings, isPro, requireProfile, usageToday } from '@/server/players';
 import { supabaseAdmin } from '@/server/supabase';
 import { duelResultMessage, sendPush } from '@/server/push';
 import { UPLOAD_MODES, validateSession } from '@/server/validate-session';
@@ -48,7 +48,7 @@ export const POST = handler(async (req: Request) => {
     if (data) duel = { id: data.id, expiresAt: new Date(data.expires_at) };
   }
 
-  const ratings = await getRatings(user.id);
+  const ratings = await currentRatings(profile, now);
   const result = validateSession(
     { ...body, runs: body.runs as SubmittedRun[] },
     { profileSeed: profile.seed, now, ratings, duel },
