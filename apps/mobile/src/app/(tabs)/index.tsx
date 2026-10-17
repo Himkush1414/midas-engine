@@ -5,6 +5,7 @@ import { Icon } from '@/components/icons/Icon';
 import { Button, Card, PressableScale, Screen, Text } from '@/components/ui';
 import { DomainList } from '@/features/home/DomainList';
 import { RankHero } from '@/features/home/RankHero';
+import { SeasonCard } from '@/features/seasons/SeasonCard';
 import { startDaily, startFocus, startRanked } from '@/features/session/start';
 import { useT } from '@/i18n';
 import { useEntitlements } from '@/state/entitlements';
@@ -59,6 +60,7 @@ export default function Home() {
 
       <View style={styles.stack}>
         <RankHero ratings={ratings} />
+        <SeasonCard />
 
         <Card raised style={styles.play}>
           <View style={styles.playText}>
