@@ -29,6 +29,7 @@ export function useAppLifecycle(): void {
 
     const sync = async () => {
       lastSync = Date.now();
+      useProgress.getState().rollSeason();
       await syncNow();
       // RevenueCat's app user id is the Supabase user id so the webhook can map purchases to accounts.
       const uid = (await currentUserId()) ?? useProgress.getState().userSeed;

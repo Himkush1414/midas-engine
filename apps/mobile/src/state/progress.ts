@@ -4,12 +4,16 @@ import {
   currentStreak,
   initialRatings,
   recordActivity,
+  recordSeasonSession,
+  rollSeason,
+  seasonOf,
   toSubmission,
   utcDayKey,
   type Domain,
   type DomainRatings,
   type RunSummary,
   type SessionPlan,
+  type SeasonStats,
   type SessionUpdate,
   type StreakState,
   type SubmittedRun,
@@ -58,13 +62,24 @@ export interface ProgressState {
   daily: Record<string, DailyRecord>;
   gamesPlayed: number;
   outbox: OutboxItem[];
+  /** Season the local ratings belong to (0 = preseason). */
+  ratingsSeason: number;
+  /** Stats for the season in progress; null until the first session of the season. */
+  seasonStats: SeasonStats | null;
+  /** Finished seasons, newest first. */
+  pastSeasons: SeasonStats[];
+  /** A season that started since the player last looked: Home shows its intro until dismissed. */
+  seasonNotice: number | null;
 
   /** Record a finished session locally (offline-first). Returns the rating changes. */
   completeSession(plan: SessionPlan, runs: RunSummary[], now?: Date): SessionUpdate;
   usageToday(now?: Date): UsageToday;
   noteDuelCreated(now?: Date): void;
   /** Replace local ratings with the authoritative server copy. */
-  adoptServerRatings(ratings: DomainRatings): void;
+  adoptServerRatings(ratings: DomainRatings, season?: number): void;
+  /** Apply the soft reset once when a new season has started. Returns true when it did. */
+  rollSeason(now?: Date): boolean;
+  dismissSeasonNotice(): void;
   /** Align local identity with the server profile (e.g. after signing in on a second device). */
   adoptServerProfile(input: { seed: string; nextSessionIndex: number; placementDone: boolean }): void;
   dropOutboxItem(id: string): void;
@@ -74,6 +89,7 @@ export interface ProgressState {
 }
 
 const HISTORY_CAP = 2000;
+const PAST_SEASONS_CAP = 24;
 const emptyUsage: UsageToday = { rankedSessions: 0, duelsCreated: 0 };
 
 function fresh() {
@@ -89,6 +105,10 @@ function fresh() {
     daily: {} as Record<string, DailyRecord>,
     gamesPlayed: 0,
     outbox: [] as OutboxItem[],
+    ratingsSeason: seasonOf(new Date()),
+    seasonStats: null as SeasonStats | null,
+    pastSeasons: [] as SeasonStats[],
+    seasonNotice: null as number | null,
   };
 }
 
@@ -98,6 +118,7 @@ export const useProgress = create<ProgressState>()(
       ...fresh(),
 
       completeSession(plan, runs, now = new Date()) {
+        get().rollSeason(now);
         const state = get();
         const day = utcDayKey(now);
         const result = applySession(state.ratings, runs);
@@ -140,6 +161,10 @@ export const useProgress = create<ProgressState>()(
           daily,
           gamesPlayed: state.gamesPlayed + runs.length,
           outbox: outboxItem ? [...state.outbox, outboxItem] : state.outbox,
+          seasonStats:
+            plan.mode === 'zen'
+              ? state.seasonStats
+              : recordSeasonSession(state.seasonStats, state.ratingsSeason, state.ratings, result.ratings, runs.length),
         });
         return result;
       },
@@ -155,8 +180,35 @@ export const useProgress = create<ProgressState>()(
         set({ usageDay: day, usage: { ...usage, duelsCreated: usage.duelsCreated + 1 } });
       },
 
-      adoptServerRatings(ratings) {
-        set({ ratings });
+      adoptServerRatings(ratings, season) {
+        set((s) => ({ ratings, ratingsSeason: Math.max(s.ratingsSeason, season ?? s.ratingsSeason) }));
+      },
+
+      rollSeason(now = new Date()) {
+        const state = get();
+        const rolled = rollSeason(state.ratings, state.ratingsSeason, seasonOf(now));
+        if (!rolled.reset) return false;
+        const at = now.getTime();
+        const points: RatingPoint[] = [];
+        for (const [domain, r] of Object.entries(rolled.ratings) as [Domain, DomainRatings[Domain]][]) {
+          const before = state.ratings[domain];
+          if (r.rating !== before.rating || r.rd !== before.rd) points.push({ at, domain, rating: r.rating, rd: r.rd });
+        }
+        const finished = state.seasonStats && state.seasonStats.season < rolled.season ? state.seasonStats : null;
+        set({
+          ratings: rolled.ratings,
+          ratingsSeason: rolled.season,
+          history: [...state.history, ...points].slice(-HISTORY_CAP),
+          seasonStats: finished ? null : state.seasonStats,
+          pastSeasons: finished ? [finished, ...state.pastSeasons].slice(0, PAST_SEASONS_CAP) : state.pastSeasons,
+          // Only players with a tier have something to hear about.
+          seasonNotice: state.placementDone ? rolled.season : state.seasonNotice,
+        });
+        return true;
+      },
+
+      dismissSeasonNotice() {
+        set({ seasonNotice: null });
       },
 
       adoptServerProfile({ seed, nextSessionIndex, placementDone }) {

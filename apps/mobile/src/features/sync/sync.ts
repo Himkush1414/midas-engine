@@ -48,7 +48,7 @@ async function run(): Promise<SyncResult> {
 
   const pending = useProgress.getState().outbox.length;
   // Only adopt the server's ratings once nothing local is waiting, so offline progress is never overwritten.
-  if (pending === 0) useProgress.getState().adoptServerRatings(latest);
+  if (pending === 0) useProgress.getState().adoptServerRatings(latest, boot.season);
 
   // The store is the source of truth on-device; the server copy (from the RevenueCat webhook) only adds Pro.
   if (boot.isPro && !useEntitlements.getState().isPro) useEntitlements.getState().set({ isPro: true });

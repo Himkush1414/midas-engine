@@ -1,4 +1,4 @@
-import { GAMES, GameRun, dailyPlan, placementPlan, rankedPlan, zenPlan, type SessionPlan } from '@mindtier/core';
+import { GAMES, GameRun, SEASON_RD, dailyPlan, newRating, placementPlan, rankedPlan, zenPlan, type DomainRatings, type SessionPlan } from '@mindtier/core';
 import { useProgress } from '../progress';
 
 function playPlan(plan: SessionPlan, rating = 1300) {
@@ -64,5 +64,66 @@ describe('progress store', () => {
     expect(useProgress.getState().outbox[0]!.attempts).toBe(1);
     useProgress.getState().dropOutboxItem(id);
     expect(useProgress.getState().outbox).toHaveLength(0);
+  });
+});
+
+describe('seasons', () => {
+  const OCT = new Date('2026-10-20T12:00:00Z'); // preseason
+  const NOV = new Date('2026-11-02T12:00:00Z'); // season 1
+  const strong = (): DomainRatings => ({
+    memory: newRating(2000, 50),
+    focus: newRating(1800, 50),
+    speed: newRating(1600, 50),
+    logic: newRating(1400, 50),
+    math: newRating(1200, 50),
+  });
+
+  beforeEach(() => useProgress.setState({ ratingsSeason: 0, placementDone: true, ratings: strong() }));
+
+  it('soft-resets once when a new season starts and announces it', () => {
+    expect(useProgress.getState().rollSeason(OCT)).toBe(false);
+    expect(useProgress.getState().rollSeason(NOV)).toBe(true);
+    const s = useProgress.getState();
+    expect(s.ratingsSeason).toBe(1);
+    expect(s.ratings.memory.rating).toBeCloseTo(1930);
+    expect(s.ratings.math).toEqual({ ...strong().math, rd: SEASON_RD });
+    expect(s.history).toHaveLength(5);
+    expect(s.seasonNotice).toBe(1);
+    expect(s.rollSeason(NOV)).toBe(false);
+    s.dismissSeasonNotice();
+    expect(useProgress.getState().seasonNotice).toBeNull();
+  });
+
+  it('does not announce seasons to players without a tier', () => {
+    useProgress.setState({ placementDone: false });
+    useProgress.getState().rollSeason(NOV);
+    expect(useProgress.getState().seasonNotice).toBeNull();
+  });
+
+  it('tracks the season in progress and archives it when the next one starts', () => {
+    const s0 = useProgress.getState();
+    const plan = rankedPlan(s0.userSeed, 0, s0.ratings);
+    s0.completeSession(plan, playPlan(plan, 1600), OCT);
+    const stats = useProgress.getState().seasonStats;
+    expect(stats).toMatchObject({ season: 0, sessions: 1, games: plan.games.length });
+
+    const daily = dailyPlan('2026-11-02');
+    useProgress.getState().completeSession(daily, playPlan(daily), NOV);
+    const s = useProgress.getState();
+    expect(s.pastSeasons).toEqual([stats]);
+    expect(s.seasonStats).toMatchObject({ season: 1, sessions: 1 });
+  });
+
+  it('leaves zen practice out of season stats', () => {
+    const plan = zenPlan('echo', 'z');
+    useProgress.getState().completeSession(plan, playPlan(plan), OCT);
+    expect(useProgress.getState().seasonStats).toBeNull();
+  });
+
+  it('adopts the server season along with its ratings', () => {
+    useProgress.getState().adoptServerRatings(strong(), 3);
+    expect(useProgress.getState().ratingsSeason).toBe(3);
+    useProgress.getState().adoptServerRatings(strong());
+    expect(useProgress.getState().ratingsSeason).toBe(3);
   });
 });

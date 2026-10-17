@@ -46,6 +46,8 @@ export interface BootstrapResponse {
   usage: { rankedSessions: number; duelsCreated: number };
   nextSessionIndex: number;
   placementDone: boolean;
+  /** Season the returned ratings belong to. Missing from servers older than seasons. */
+  season?: number;
 }
 
 export interface SessionResponse {
