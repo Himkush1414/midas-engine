@@ -4,10 +4,10 @@ export const it: LandingCopy = {
   lang: 'it',
   metaTitle: 'Mindtier — Giochi di logica a gradi',
   metaDescription:
-    'Scopri il tuo grado mentale in cinque partite rapide di piazzamento, poi scala da Ferro a Gran Maestro. Rompicapi che si adattano a te, sfida del giorno, duelli, stagioni mensili e leghe settimanali. Mai pubblicità.',
+    'Scopri il tuo grado mentale in sei partite rapide di piazzamento, poi scala da Ferro a Gran Maestro. Rompicapi che si adattano a te, sfida del giorno, duelli, stagioni mensili e leghe settimanali. Mai pubblicità.',
   heroTitle: 'A che grado è la tua mente?',
   heroLead:
-    'Giochi di logica a gradi. Scopri il tuo grado, da Ferro a Gran Maestro, in cinque partite rapide di piazzamento, poi scala con rompicapi che si adattano a te, una sfida del giorno e duelli con gli amici.',
+    'Giochi di logica a gradi. Scopri il tuo grado, da Ferro a Gran Maestro, in sei partite rapide di piazzamento, poi scala con rompicapi che si adattano a te, una sfida del giorno e duelli con gli amici.',
   ctaPlay: 'Disponibile su Google Play',
   ctaWeb: 'Gioca la sfida di oggi',
   heroFacts: 'Gratis · Mai pubblicità · iOS in arrivo',
@@ -26,7 +26,7 @@ export const it: LandingCopy = {
   steps: [
     {
       title: 'Piazzati',
-      body: 'Gioca cinque partite rapide di piazzamento, una per Memoria, Attenzione, Velocità, Logica e Calcolo. Circa quattro minuti, senza registrazione.',
+      body: 'Gioca sei partite rapide di piazzamento, una per Memoria, Attenzione, Velocità, Logica, Calcolo e Linguaggio. Circa cinque minuti, senza registrazione.',
     },
     {
       title: 'Scala',
@@ -52,8 +52,8 @@ export const it: LandingCopy = {
       body: 'La domenica sera, un riepilogo delle settimane in cui hai giocato: sessioni, giorni giocati e come si è mosso il tuo punteggio. Nessuna notifica nelle settimane senza gioco.',
     },
   ],
-  gamesTitle: '13 giochi, 5 abilità',
-  domains: { memory: 'Memoria', focus: 'Attenzione', speed: 'Velocità', logic: 'Logica', math: 'Calcolo' },
+  gamesTitle: '15 giochi, 6 abilità',
+  domains: { memory: 'Memoria', focus: 'Attenzione', speed: 'Velocità', logic: 'Logica', math: 'Calcolo', language: 'Linguaggio' },
   showRules: false,
   promisesTitle: 'Quattro promesse',
   promises: [
@@ -79,14 +79,14 @@ export const it: LandingCopy = {
     'Sfida del giorno e classifica',
     'Stagioni e leghe settimanali',
     'Duelli con gli amici',
-    'Pratica zen in 5 giochi',
+    'Pratica zen in 6 giochi',
   ],
   proPrice:
     'Da 3,33 $/mese con il piano annuale (39,99 $) e 7 giorni di prova gratuita, 7,99 $ al mese o 79,99 $ una tantum. I prezzi variano in base al paese.',
   proItems: [
     'Sessioni classificate illimitate',
     'Allenamento per area',
-    'Tutti i 13 giochi in modalità zen',
+    'Tutti i 15 giochi in modalità zen',
     'Storico completo, percentili e tendenze',
     'Duelli illimitati',
   ],
@@ -102,7 +102,7 @@ export const it: LandingCopy = {
     },
     {
       q: 'Cosa è gratis?',
-      a: 'Il piazzamento e tutti i tuoi risultati, una sessione classificata al giorno, la sfida del giorno, le stagioni, le leghe settimanali, i duelli con gli amici e la pratica zen in cinque giochi. Nessuna pubblicità, da nessuna parte.',
+      a: 'Il piazzamento e tutti i tuoi risultati, una sessione classificata al giorno, la sfida del giorno, le stagioni, le leghe settimanali, i duelli con gli amici e la pratica zen in sei giochi. Nessuna pubblicità, da nessuna parte.',
     },
     {
       q: 'Pro aiuta nelle leghe?',

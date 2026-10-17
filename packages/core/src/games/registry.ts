@@ -6,11 +6,13 @@ import { estimate } from './estimate';
 import { flank } from './flank';
 import { gridRecall } from './grid-recall';
 import { match } from './match';
+import { misfit } from './misfit';
 import { pathTrace } from './path-trace';
 import { pattern } from './pattern';
 import { quickSum } from './quick-sum';
 import { route } from './route';
 import { snap } from './snap';
+import { sort } from './sort';
 import { spot } from './spot';
 import { GAME_IDS, type AnyGameDefinition, type GameId } from './types';
 
@@ -28,6 +30,8 @@ export const GAMES: Record<GameId, AnyGameDefinition> = {
   route,
   'quick-sum': quickSum,
   estimate,
+  sort,
+  misfit,
 };
 
 export function getGame(id: GameId): AnyGameDefinition {
@@ -49,6 +53,7 @@ export const PLACEMENT_GAMES: Record<Domain, GameId> = {
   speed: 'snap',
   logic: 'pattern',
   math: 'quick-sum',
+  language: 'sort',
 };
 
 /** Games available in Zen mode without Pro (one per domain). */

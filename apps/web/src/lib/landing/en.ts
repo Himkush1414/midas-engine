@@ -41,10 +41,10 @@ export const en: LandingCopy = {
   lang: 'en',
   metaTitle: 'Mindtier — Ranked brain games',
   metaDescription:
-    'Find your brain rank in five quick placement games, then climb from Iron to Grandmaster. Adaptive puzzles, daily challenges, friend duels, monthly seasons and weekly leagues. No ads, ever.',
+    'Find your brain rank in six quick placement games, then climb from Iron to Grandmaster. Adaptive puzzles, daily challenges, friend duels, monthly seasons and weekly leagues. No ads, ever.',
   heroTitle: 'What tier is your mind?',
   heroLead:
-    'Ranked brain games. Find your rank from Iron to Grandmaster in five quick placement games — then climb with adaptive puzzles, a Daily Challenge and duels with friends.',
+    'Ranked brain games. Find your rank from Iron to Grandmaster in six quick placement games — then climb with adaptive puzzles, a Daily Challenge and duels with friends.',
   ctaPlay: 'Get it on Google Play',
   ctaWeb: 'Play today’s challenge',
   heroFacts: 'Free to play · No ads, ever · iOS coming soon',
@@ -63,7 +63,7 @@ export const en: LandingCopy = {
   steps: [
     {
       title: 'Place',
-      body: 'Play five quick placement games — one each for Memory, Focus, Speed, Logic and Math. About four minutes, no sign-up.',
+      body: 'Play six quick placement games — one each for Memory, Focus, Speed, Logic, Math and Language. About five minutes, no sign-up.',
     },
     {
       title: 'Climb',
@@ -89,8 +89,8 @@ export const en: LandingCopy = {
       body: 'A Sunday-evening recap of the weeks you played: sessions, days played and where your rating moved. Quiet weeks get no notification.',
     },
   ],
-  gamesTitle: '13 games across 5 skills',
-  domains: { memory: 'Memory', focus: 'Focus', speed: 'Speed', logic: 'Logic', math: 'Math' },
+  gamesTitle: '15 games across 6 skills',
+  domains: { memory: 'Memory', focus: 'Focus', speed: 'Speed', logic: 'Logic', math: 'Math', language: 'Language' },
   showRules: true,
   promisesTitle: 'Built on four promises',
   promises: [
@@ -113,13 +113,13 @@ export const en: LandingCopy = {
     'Daily Challenge and leaderboard',
     'Seasons and weekly leagues',
     'Duels with friends',
-    'Zen practice in 5 games',
+    'Zen practice in 6 games',
   ],
   proPrice: 'From $3.33/month billed yearly ($39.99) with a 7-day free trial, $7.99 monthly, or $79.99 once. Prices vary by country.',
   proItems: [
     'Unlimited ranked sessions',
     'Focus training for any domain',
-    'All 13 games in Zen',
+    'All 15 games in Zen',
     'Full history, percentiles and trends',
     'Unlimited duel challenges',
   ],
@@ -135,7 +135,7 @@ export const en: LandingCopy = {
     },
     {
       q: 'What is free?',
-      a: 'Placement and your full results, one ranked session every day, the Daily Challenge, seasons, weekly leagues, duels with friends and Zen practice for five games. No ads anywhere.',
+      a: 'Placement and your full results, one ranked session every day, the Daily Challenge, seasons, weekly leagues, duels with friends and Zen practice for six games. No ads anywhere.',
     },
     {
       q: 'Does Pro help in leagues?',

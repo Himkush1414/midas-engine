@@ -86,6 +86,8 @@ export const domainColorsLight: Record<Domain, string> = {
   speed: '#B45309',
   logic: '#047857',
   math: '#BE185D',
+  // Orange keeps both floors against the other five (normal ΔE ≥ 15, deutan ≥ 10); blue sat too close to Memory.
+  language: '#7C2D12',
 };
 
 /** Dark-theme domain hues (≥3:1 on the dark surfaces). */
@@ -95,6 +97,7 @@ export const domainColors: Record<Domain, string> = {
   speed: '#FBBF24',
   logic: '#34D399',
   math: '#F472B6',
+  language: '#F97316',
 };
 
 export const spacing = {

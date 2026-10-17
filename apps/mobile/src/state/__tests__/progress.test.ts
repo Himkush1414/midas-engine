@@ -1,5 +1,5 @@
-import { GAMES, GameRun, SEASON_RD, dailyPlan, newRating, placementPlan, rankedPlan, zenPlan, type DomainRatings, type SessionPlan } from '@mindtier/core';
-import { localDayKey, useProgress } from '../progress';
+import { DOMAINS, GAMES, GameRun, SEASON_RD, dailyPlan, newRating, placementPlan, rankedPlan, zenPlan, type DomainRatings, type SessionPlan } from '@mindtier/core';
+import { localDayKey, mergePersistedProgress, useProgress } from '../progress';
 
 function playPlan(plan: SessionPlan, rating = 1300) {
   return plan.games.map((id, i) => {
@@ -21,7 +21,7 @@ describe('progress store', () => {
     const result = useProgress.getState().completeSession(plan, playPlan(plan), day);
     const s = useProgress.getState();
     expect(s.placementDone).toBe(true);
-    expect(result.updates).toHaveLength(5);
+    expect(result.updates).toHaveLength(DOMAINS.length);
     for (const u of result.updates) expect(s.ratings[u.domain].rating).toBeGreaterThan(before[u.domain].rating);
     expect(s.outbox).toHaveLength(1);
     expect(s.streak.current).toBe(1);
@@ -87,6 +87,7 @@ describe('seasons', () => {
     speed: newRating(1600, 50),
     logic: newRating(1400, 50),
     math: newRating(1200, 50),
+    language: newRating(1250, 50),
   });
 
   beforeEach(() => useProgress.setState({ ratingsSeason: 0, placementDone: true, ratings: strong() }));
@@ -98,7 +99,7 @@ describe('seasons', () => {
     expect(s.ratingsSeason).toBe(1);
     expect(s.ratings.memory.rating).toBeCloseTo(1930);
     expect(s.ratings.math).toEqual({ ...strong().math, rd: SEASON_RD });
-    expect(s.history).toHaveLength(5);
+    expect(s.history).toHaveLength(6); // every domain's deviation widens, so each gets a point
     expect(s.history.every((p) => p.reason === 'season')).toBe(true);
     expect(s.seasonNotice).toBe(1);
     expect(s.rollSeason(NOV)).toBe(false);
@@ -137,5 +138,22 @@ describe('seasons', () => {
     expect(useProgress.getState().ratingsSeason).toBe(3);
     useProgress.getState().adoptServerRatings(strong());
     expect(useProgress.getState().ratingsSeason).toBe(3);
+  });
+});
+
+describe('upgrades', () => {
+  const fiveSkills = { memory: newRating(1600, 60), focus: newRating(1500, 60), speed: newRating(1400, 60), logic: newRating(1700, 60), math: newRating(1550, 60) };
+
+  it('adds skills that did not exist when the progress was saved', () => {
+    const merged = mergePersistedProgress({ placementDone: true, ratings: fiveSkills }, useProgress.getState());
+    expect(merged.placementDone).toBe(true);
+    expect(merged.ratings.memory.rating).toBe(1600);
+    expect(merged.ratings.language).toEqual(newRating(1300));
+  });
+
+  it('completes ratings from an older server too', () => {
+    useProgress.getState().adoptServerRatings(fiveSkills as unknown as DomainRatings);
+    expect(useProgress.getState().ratings.language).toEqual(newRating(1300));
+    expect(useProgress.getState().ratings.logic.rating).toBe(1700);
   });
 });

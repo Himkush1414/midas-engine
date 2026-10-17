@@ -1,4 +1,5 @@
 import {
+  DOMAINS,
   GAMES,
   GameRun,
   dailyPlan,
@@ -44,7 +45,7 @@ describe('validateSession', () => {
   it('accepts an honest placement and raises ratings', () => {
     const r = validateSession(upload(placementPlan(SEED)), ctx);
     expect(r.ok).toBe(true);
-    if (r.ok) expect(r.update!.updates).toHaveLength(5);
+    if (r.ok) expect(r.update!.updates).toHaveLength(DOMAINS.length);
   });
 
   it('rejects a placement built from someone else’s seed', () => {

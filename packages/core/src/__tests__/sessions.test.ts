@@ -20,8 +20,8 @@ const ratings = (overrides: Partial<Record<(typeof DOMAINS)[number], number>> = 
   Object.fromEntries(DOMAINS.map((d) => [d, newRating(1300, overrides[d] ?? 80)])) as DomainRatings;
 
 describe('registry', () => {
-  it('registers all 13 games under their own ids', () => {
-    expect(Object.keys(GAMES)).toHaveLength(13);
+  it('registers every game under its own id', () => {
+    expect(Object.keys(GAMES)).toHaveLength(GAME_IDS.length);
     for (const id of GAME_IDS) expect(getGame(id).id).toBe(id);
   });
 

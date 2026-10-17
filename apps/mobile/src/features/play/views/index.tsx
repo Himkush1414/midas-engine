@@ -7,11 +7,13 @@ import { EstimateView } from './EstimateView';
 import { FlankView } from './FlankView';
 import { GridRecallView } from './GridRecallView';
 import { MatchView } from './MatchView';
+import { MisfitView } from './MisfitView';
 import { PathTraceView } from './PathTraceView';
 import { PatternView } from './PatternView';
 import { QuickSumView } from './QuickSumView';
 import { RouteView } from './RouteView';
 import { SnapView } from './SnapView';
+import { SortView } from './SortView';
 import { SpotView } from './SpotView';
 
 /** Renders the view for a game. A static switch keeps component identity stable. */
@@ -43,5 +45,9 @@ export function GameStage({ gameId, ...props }: GameViewProps & { gameId: GameId
       return <QuickSumView {...props} />;
     case 'estimate':
       return <EstimateView {...props} />;
+    case 'sort':
+      return <SortView {...props} />;
+    case 'misfit':
+      return <MisfitView {...props} />;
   }
 }

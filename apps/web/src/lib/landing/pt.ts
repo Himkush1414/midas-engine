@@ -4,10 +4,10 @@ export const pt: LandingCopy = {
   lang: 'pt',
   metaTitle: 'Mindtier — Jogos mentais ranqueados',
   metaDescription:
-    'Descubra seu nível mental em cinco partidas rápidas de classificação e suba do Ferro ao Grão-Mestre. Quebra-cabeças que se adaptam a você, desafio diário, duelos, temporadas mensais e ligas semanais. Sem anúncios, nunca.',
+    'Descubra seu nível mental em seis partidas rápidas de classificação e suba do Ferro ao Grão-Mestre. Quebra-cabeças que se adaptam a você, desafio diário, duelos, temporadas mensais e ligas semanais. Sem anúncios, nunca.',
   heroTitle: 'Em que nível está sua mente?',
   heroLead:
-    'Jogos mentais ranqueados. Descubra seu nível, do Ferro ao Grão-Mestre, em cinco partidas rápidas de classificação e depois suba com quebra-cabeças que se adaptam a você, um desafio diário e duelos com amigos.',
+    'Jogos mentais ranqueados. Descubra seu nível, do Ferro ao Grão-Mestre, em seis partidas rápidas de classificação e depois suba com quebra-cabeças que se adaptam a você, um desafio diário e duelos com amigos.',
   ctaPlay: 'Disponível no Google Play',
   ctaWeb: 'Jogue o desafio de hoje',
   heroFacts: 'Grátis · Sem anúncios, nunca · iOS em breve',
@@ -26,7 +26,7 @@ export const pt: LandingCopy = {
   steps: [
     {
       title: 'Classifique-se',
-      body: 'Jogue cinco partidas rápidas de classificação, uma para Memória, Foco, Velocidade, Lógica e Cálculo. Cerca de quatro minutos, sem cadastro.',
+      body: 'Jogue seis partidas rápidas de classificação, uma para Memória, Foco, Velocidade, Lógica, Cálculo e Linguagem. Cerca de cinco minutos, sem cadastro.',
     },
     {
       title: 'Suba',
@@ -52,8 +52,8 @@ export const pt: LandingCopy = {
       body: 'Um resumo no domingo à noite das semanas em que você jogou: sessões, dias jogados e como sua pontuação mudou. Semanas sem jogo não geram aviso.',
     },
   ],
-  gamesTitle: '13 jogos, 5 habilidades',
-  domains: { memory: 'Memória', focus: 'Foco', speed: 'Velocidade', logic: 'Lógica', math: 'Cálculo' },
+  gamesTitle: '15 jogos, 6 habilidades',
+  domains: { memory: 'Memória', focus: 'Foco', speed: 'Velocidade', logic: 'Lógica', math: 'Cálculo', language: 'Linguagem' },
   showRules: false,
   promisesTitle: 'Quatro promessas',
   promises: [
@@ -79,14 +79,14 @@ export const pt: LandingCopy = {
     'Desafio diário e ranking',
     'Temporadas e ligas semanais',
     'Duelos com amigos',
-    'Treino zen em 5 jogos',
+    'Treino zen em 6 jogos',
   ],
   proPrice:
     'A partir de US$ 3,33/mês no plano anual (US$ 39,99) com 7 dias de teste grátis, US$ 7,99 por mês ou US$ 79,99 vitalício. Os preços variam por país.',
   proItems: [
     'Sessões ranqueadas ilimitadas',
     'Treino por área',
-    'Os 13 jogos no modo zen',
+    'Os 15 jogos no modo zen',
     'Histórico completo, percentis e tendências',
     'Duelos ilimitados',
   ],
@@ -102,7 +102,7 @@ export const pt: LandingCopy = {
     },
     {
       q: 'O que é grátis?',
-      a: 'A classificação e todos os seus resultados, uma sessão ranqueada por dia, o desafio diário, as temporadas, as ligas semanais, os duelos com amigos e o treino zen em cinco jogos. Sem anúncios em lugar nenhum.',
+      a: 'A classificação e todos os seus resultados, uma sessão ranqueada por dia, o desafio diário, as temporadas, as ligas semanais, os duelos com amigos e o treino zen em seis jogos. Sem anúncios em lugar nenhum.',
     },
     {
       q: 'O Pro ajuda nas ligas?',

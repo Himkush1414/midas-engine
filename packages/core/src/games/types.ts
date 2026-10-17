@@ -15,6 +15,8 @@ export const GAME_IDS = [
   'route',
   'quick-sum',
   'estimate',
+  'sort',
+  'misfit',
 ] as const;
 export type GameId = (typeof GAME_IDS)[number];
 

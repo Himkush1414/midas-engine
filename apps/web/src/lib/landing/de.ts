@@ -4,10 +4,10 @@ export const de: LandingCopy = {
   lang: 'de',
   metaTitle: 'Mindtier — Denkspiele mit Rang',
   metaDescription:
-    'Finde deinen Rang in fünf kurzen Einstufungsspielen und steig von Eisen bis Großmeister auf. Rätsel, die sich dir anpassen, Tagesrätsel, Duelle, monatliche Saisons und Wochenligen. Niemals Werbung.',
+    'Finde deinen Rang in sechs kurzen Einstufungsspielen und steig von Eisen bis Großmeister auf. Rätsel, die sich dir anpassen, Tagesrätsel, Duelle, monatliche Saisons und Wochenligen. Niemals Werbung.',
   heroTitle: 'Auf welchem Rang ist dein Kopf?',
   heroLead:
-    'Denkspiele mit Rang. Finde deinen Rang von Eisen bis Großmeister in fünf kurzen Einstufungsspielen – und steig dann mit Rätseln auf, die sich dir anpassen, mit einem Tagesrätsel und Duellen gegen Freunde.',
+    'Denkspiele mit Rang. Finde deinen Rang von Eisen bis Großmeister in sechs kurzen Einstufungsspielen – und steig dann mit Rätseln auf, die sich dir anpassen, mit einem Tagesrätsel und Duellen gegen Freunde.',
   ctaPlay: 'Jetzt bei Google Play',
   ctaWeb: 'Heutiges Rätsel spielen',
   heroFacts: 'Kostenlos · Niemals Werbung · iOS folgt bald',
@@ -26,7 +26,7 @@ export const de: LandingCopy = {
   steps: [
     {
       title: 'Einstufen',
-      body: 'Spiel fünf kurze Einstufungsspiele – je eins für Gedächtnis, Fokus, Tempo, Logik und Rechnen. Etwa vier Minuten, ohne Anmeldung.',
+      body: 'Spiel sechs kurze Einstufungsspiele – je eins für Gedächtnis, Fokus, Tempo, Logik, Rechnen und Sprache. Etwa fünf Minuten, ohne Anmeldung.',
     },
     {
       title: 'Aufsteigen',
@@ -52,8 +52,8 @@ export const de: LandingCopy = {
       body: 'Sonntagabends ein Rückblick auf die Wochen, in denen du gespielt hast: Sitzungen, Spieltage und wie sich deine Wertung bewegt hat. Ruhige Wochen bleiben ohne Benachrichtigung.',
     },
   ],
-  gamesTitle: '13 Spiele, 5 Fähigkeiten',
-  domains: { memory: 'Gedächtnis', focus: 'Fokus', speed: 'Tempo', logic: 'Logik', math: 'Rechnen' },
+  gamesTitle: '15 Spiele, 6 Fähigkeiten',
+  domains: { memory: 'Gedächtnis', focus: 'Fokus', speed: 'Tempo', logic: 'Logik', math: 'Rechnen', language: 'Sprache' },
   showRules: false,
   promisesTitle: 'Vier Versprechen',
   promises: [
@@ -79,14 +79,14 @@ export const de: LandingCopy = {
     'Tagesrätsel mit Bestenliste',
     'Saisons und Wochenligen',
     'Duelle mit Freunden',
-    'Zen-Übung in 5 Spielen',
+    'Zen-Übung in 6 Spielen',
   ],
   proPrice:
     'Ab 3,33 $/Monat im Jahresabo (39,99 $) mit 7 Tagen gratis, 7,99 $ monatlich oder 79,99 $ einmalig. Die Preise unterscheiden sich je nach Land.',
   proItems: [
     'Unbegrenzt gewertete Sitzungen',
     'Bereichstraining',
-    'Alle 13 Spiele im Zen-Modus',
+    'Alle 15 Spiele im Zen-Modus',
     'Kompletter Verlauf, Perzentile und Trends',
     'Unbegrenzt Duelle',
   ],
@@ -102,7 +102,7 @@ export const de: LandingCopy = {
     },
     {
       q: 'Was ist gratis?',
-      a: 'Einstufung und alle Ergebnisse, eine gewertete Sitzung pro Tag, das Tagesrätsel, Saisons, Wochenligen, Duelle mit Freunden und Zen-Übung in fünf Spielen. Nirgends Werbung.',
+      a: 'Einstufung und alle Ergebnisse, eine gewertete Sitzung pro Tag, das Tagesrätsel, Saisons, Wochenligen, Duelle mit Freunden und Zen-Übung in sechs Spielen. Nirgends Werbung.',
     },
     {
       q: 'Hilft Pro in den Ligen?',

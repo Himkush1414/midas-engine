@@ -99,6 +99,20 @@ export interface ProgressState {
 }
 
 const HISTORY_CAP = 2000;
+
+/** Ratings saved (or served) before a skill existed lack it: the new skill starts unplayed. */
+export function withAllDomains(ratings: Partial<DomainRatings>): DomainRatings {
+  return { ...initialRatings(), ...ratings };
+}
+
+/**
+ * Persist merges saved state over the defaults one level deep, so a saved
+ * ratings object would replace the defaults whole and drop any newer skill.
+ */
+export function mergePersistedProgress(persisted: unknown, current: ProgressState): ProgressState {
+  const saved = (persisted ?? {}) as Partial<ProgressState>;
+  return { ...current, ...saved, ratings: withAllDomains(saved.ratings ?? current.ratings) };
+}
 const PAST_SEASONS_CAP = 24;
 const ACTIVITY_DAYS = 70;
 
@@ -208,7 +222,7 @@ export const useProgress = create<ProgressState>()(
       },
 
       adoptServerRatings(ratings, season) {
-        set((s) => ({ ratings, ratingsSeason: Math.max(s.ratingsSeason, season ?? s.ratingsSeason) }));
+        set((s) => ({ ratings: withAllDomains(ratings), ratingsSeason: Math.max(s.ratingsSeason, season ?? s.ratingsSeason) }));
       },
 
       rollSeason(now = new Date()) {
@@ -262,6 +276,6 @@ export const useProgress = create<ProgressState>()(
         set(fresh());
       },
     }),
-    { name: 'mindtier.progress.v1', storage: persistStorage, version: 1 },
+    { name: 'mindtier.progress.v1', storage: persistStorage, version: 1, merge: mergePersistedProgress },
   ),
 );

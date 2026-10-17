@@ -4,10 +4,10 @@ export const fr: LandingCopy = {
   lang: 'fr',
   metaTitle: 'Mindtier — Jeux de réflexion classés',
   metaDescription:
-    'Découvre ton rang mental en cinq parties de placement rapides, puis grimpe de Fer à Grand Maître. Des énigmes qui s’adaptent à toi, un défi du jour, des duels, des saisons mensuelles et des ligues hebdomadaires. Jamais de pub.',
+    'Découvre ton rang mental en six parties de placement rapides, puis grimpe de Fer à Grand Maître. Des énigmes qui s’adaptent à toi, un défi du jour, des duels, des saisons mensuelles et des ligues hebdomadaires. Jamais de pub.',
   heroTitle: 'À quel rang est ton esprit ?',
   heroLead:
-    'Des jeux de réflexion classés. Découvre ton rang, de Fer à Grand Maître, en cinq parties de placement rapides — puis grimpe avec des énigmes qui s’adaptent à toi, un défi du jour et des duels entre amis.',
+    'Des jeux de réflexion classés. Découvre ton rang, de Fer à Grand Maître, en six parties de placement rapides — puis grimpe avec des énigmes qui s’adaptent à toi, un défi du jour et des duels entre amis.',
   ctaPlay: 'Disponible sur Google Play',
   ctaWeb: 'Joue le défi du jour',
   heroFacts: 'Gratuit · Jamais de pub · iOS bientôt',
@@ -26,7 +26,7 @@ export const fr: LandingCopy = {
   steps: [
     {
       title: 'Place-toi',
-      body: 'Joue cinq parties de placement rapides — une pour la Mémoire, l’Attention, la Vitesse, la Logique et le Calcul. Environ quatre minutes, sans inscription.',
+      body: 'Joue six parties de placement rapides — une pour la Mémoire, l’Attention, la Vitesse, la Logique, le Calcul et le Langage. Environ cinq minutes, sans inscription.',
     },
     {
       title: 'Grimpe',
@@ -52,8 +52,8 @@ export const fr: LandingCopy = {
       body: 'Le dimanche soir, un bilan des semaines où tu as joué : sessions, jours joués et évolution de ton score. Aucune notification les semaines sans jeu.',
     },
   ],
-  gamesTitle: '13 jeux, 5 compétences',
-  domains: { memory: 'Mémoire', focus: 'Attention', speed: 'Vitesse', logic: 'Logique', math: 'Calcul' },
+  gamesTitle: '15 jeux, 6 compétences',
+  domains: { memory: 'Mémoire', focus: 'Attention', speed: 'Vitesse', logic: 'Logique', math: 'Calcul', language: 'Langage' },
   showRules: false,
   promisesTitle: 'Quatre promesses',
   promises: [
@@ -79,14 +79,14 @@ export const fr: LandingCopy = {
     'Défi du jour et classement',
     'Saisons et ligues hebdomadaires',
     'Duels entre amis',
-    'Entraînement zen sur 5 jeux',
+    'Entraînement zen sur 6 jeux',
   ],
   proPrice:
     'À partir de 3,33 $/mois avec l’abonnement annuel (39,99 $) et 7 jours d’essai gratuit, 7,99 $ par mois ou 79,99 $ à vie. Les prix varient selon le pays.',
   proItems: [
     'Sessions classées illimitées',
     'Entraînement par domaine',
-    'Les 13 jeux en mode zen',
+    'Les 15 jeux en mode zen',
     'Historique complet, percentiles et tendances',
     'Duels illimités',
   ],
@@ -102,7 +102,7 @@ export const fr: LandingCopy = {
     },
     {
       q: 'Qu’est-ce qui est gratuit ?',
-      a: 'Le placement et tous tes résultats, une session classée par jour, le défi du jour, les saisons, les ligues hebdomadaires, les duels entre amis et l’entraînement zen sur cinq jeux. Aucune pub nulle part.',
+      a: 'Le placement et tous tes résultats, une session classée par jour, le défi du jour, les saisons, les ligues hebdomadaires, les duels entre amis et l’entraînement zen sur six jeux. Aucune pub nulle part.',
     },
     {
       q: 'Pro aide-t-il dans les ligues ?',

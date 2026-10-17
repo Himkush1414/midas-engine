@@ -78,8 +78,9 @@ describe('season stats', () => {
     let s = recordSeasonSession(null, 2, a, b, 3);
     s = recordSeasonSession(s, 2, b, c, 3);
     expect(s).toMatchObject({ season: 2, sessions: 2, games: 6, startRating: 1400 });
-    expect(s.peakRating).toBeCloseTo(1420);
-    expect(s.endRating).toBeCloseTo(1414);
+    // Six domains: one at 1500 lifts the mean to 1416.67; then 1450 + 1420 give 1411.67.
+    expect(s.peakRating).toBeCloseTo(1416.67);
+    expect(s.endRating).toBeCloseTo(1411.67);
     expect(s.gains).toEqual({ memory: 50, logic: 20 });
     expect(bestSeasonDomain(s)).toEqual({ domain: 'memory', gain: 50 });
   });

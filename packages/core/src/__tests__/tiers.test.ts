@@ -90,7 +90,7 @@ describe('overallRating', () => {
       DOMAINS.map((d, i) => [d, { rating: 1300 + i * 100, rd: 60, volatility: 0.06 }]),
     ) as DomainRatings;
     const o = overallRating(ratings);
-    expect(o.rating).toBe(1500);
+    expect(o.rating).toBe(1300 + ((DOMAINS.length - 1) * 100) / 2);
     expect(o.rd).toBeLessThan(60);
   });
 

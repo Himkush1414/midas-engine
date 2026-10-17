@@ -22,6 +22,8 @@ export * from './games/route';
 export * from './games/quick-sum';
 export * from './games/estimate';
 export * from './games/words';
+export * from './games/sort';
+export * from './games/misfit';
 export * from './verify';
 export * from './streak';
 export * from './seasons';

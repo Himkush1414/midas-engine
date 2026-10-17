@@ -16,7 +16,7 @@ export const en = {
     level: 'Level {level}',
   },
   tabs: { climb: 'Climb', daily: 'Daily', duels: 'Duels', you: 'You' },
-  domains: { memory: 'Memory', focus: 'Focus', speed: 'Speed', logic: 'Logic', math: 'Math' },
+  domains: { memory: 'Memory', focus: 'Focus', speed: 'Speed', logic: 'Logic', math: 'Math', language: 'Language' },
   tiers: {
     iron: 'Iron',
     bronze: 'Bronze',
@@ -44,6 +44,8 @@ export const en = {
     route: 'Start on the glowing tile and follow the arrows for the number of steps shown. Where do you end up?',
     'quick-sum': 'Solve each sum in your head and type the answer. Multiplication and division come first.',
     estimate: 'Two amounts appear. Tap the larger one — trust your gut, there is no time to count.',
+    sort: 'A group and a word appear. Does the word belong to the group? Answer before time runs out.',
+    misfit: 'All the words but one belong together. Tap the one that doesn’t.',
   },
   play: {
     memorise: 'Memorise the lit tiles',
@@ -76,6 +78,8 @@ export const en = {
     routeAsk_one: 'From the glowing tile, follow {count} arrow. Where do you land?',
     routeAsk_other: 'From the glowing tile, follow {count} arrows. Where do you land?',
     larger: 'Tap the larger amount',
+    sortAsk: 'Does the word belong to this group?',
+    misfitAsk: 'Tap the word that doesn’t belong',
     delete: 'Delete',
     submit: 'Submit',
     round: 'Round {index} of {total}',
@@ -109,6 +113,7 @@ export const en = {
     dirLeft: 'left',
     dirRight: 'right',
     plus: 'plus',
+    sortTrial: '{group}: {word}',
   },
   /** Game content: Clash words (shown upper-case) and shape names. */
   words: {
@@ -163,8 +168,8 @@ export const en = {
   },
   welcome: {
     title: 'What tier is your mind?',
-    body: 'Play 5 quick placement games — Memory, Focus, Speed, Logic and Math — to get your starting rank. Then climb all the way to Grandmaster.',
-    factTime: 'About 4 minutes',
+    body: 'Play 6 quick placement games — Memory, Focus, Speed, Logic, Math and Language — to get your starting rank. Then climb all the way to Grandmaster.',
+    factTime: 'About 5 minutes',
     factSignup: 'No sign-up needed',
     factAds: 'No ads, ever',
     cta: 'Find my tier',
@@ -313,7 +318,7 @@ export const en = {
     tagline: 'Climb without limits.',
     benefitRanked: 'Unlimited ranked sessions — climb as fast as you like',
     benefitFocus: 'Focus training: pick any domain and drill it',
-    benefitZen: 'All 13 games in untimed Zen mode',
+    benefitZen: 'All 15 games in untimed Zen mode',
     benefitHistory: 'Full rating history, percentiles and trends',
     benefitDuels: 'Unlimited duel challenges',
     alwaysFree: 'Always free: a daily ranked session, the Daily Challenge, duels with friends — and no ads, ever.',
@@ -553,7 +558,7 @@ export const en = {
     title: 'Today’s Daily Challenge',
     subtitle: 'Three puzzles, the same for everyone today. About two minutes, no sign-up.',
     appTitle: 'Find your tier',
-    appBody: 'The Mindtier app places you from Iron to Grandmaster in five quick games. Then climb with ranked sessions, monthly seasons and weekly leagues. No ads, ever.',
+    appBody: 'The Mindtier app places you from Iron to Grandmaster in six quick games. Then climb with ranked sessions, monthly seasons and weekly leagues. No ads, ever.',
     getApp: 'Get it on Google Play',
     iosSoon: 'iOS coming soon',
     privacy: 'Privacy',
