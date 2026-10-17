@@ -1,4 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "git": { "deploymentEnabled": false }
+  "git": { "deploymentEnabled": false },
+  "buildCommand": "node ../../scripts/build-play.mjs && npm run build"
 }
