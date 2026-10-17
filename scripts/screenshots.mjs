@@ -283,7 +283,39 @@ const SCENES = [
       await settle(page, 800);
     },
   })),
+  // QA only: a season that just started (Home intro) and a season recap.
+  { name: '17-season-notice', path: '/', before: async (page) => { await store(page, seedSeasons, { notice: true }); await settle(page, 1200); } },
+  ...[
+    ['18-season-recap', 0],
+    ['19-season-recap-end', 10_000],
+  ].map(([name, scroll]) => ({
+    name,
+    path: '/',
+    before: async (page) => {
+      await store(page, seedSeasons, { notice: false });
+      await store(page, () => globalThis.__mindtier.router.push('/season'));
+      await settle(page, 1200);
+      if (!scroll) return;
+      await page.mouse.move(VIEWPORT.width / 2, VIEWPORT.height / 2);
+      await page.mouse.wheel(0, scroll);
+      await settle(page, 800);
+    },
+  })),
 ];
+
+/** Runs in the page: three seasons of sample stats on top of the demo player. */
+function seedSeasons({ notice }) {
+  const stats = (season, sessions, start, peak, end, gains) => ({ season, sessions, games: sessions * 3, startRating: start, peakRating: peak, endRating: end, gains });
+  globalThis.__mindtier.stores.useProgress.setState({
+    ratingsSeason: 3,
+    seasonStats: notice ? null : stats(3, 14, 1560, 1641, 1610, { memory: 48, focus: -6, speed: 71, logic: 12, math: 25 }),
+    pastSeasons: [
+      stats(2, 31, 1488, 1622, 1608, { memory: 92, focus: 40, speed: 110, logic: 35, math: 58 }),
+      stats(1, 12, 1300, 1495, 1488, { memory: 210, focus: 160, speed: 250, logic: 140, math: 190 }),
+    ],
+    seasonNotice: notice ? 3 : null,
+  });
+}
 
 let server = null;
 if (DIST) {
