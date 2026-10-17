@@ -52,6 +52,15 @@ jobs:
         run: npx expo export --platform web --output-dir ../../.qa-web
       - name: Play the core loop end to end
         run: node scripts/e2e-flow.mjs --dist .qa-web
+      - name: Export the web Daily Challenge (web-play mode, QA hooks on)
+        working-directory: apps/mobile
+        env:
+          EXPO_PUBLIC_QA_HOOKS: '1'
+          EXPO_PUBLIC_WEB_PLAY: '1'
+        # --clear: Metro caches inlined EXPO_PUBLIC_* values from the previous export.
+        run: npx expo export --platform web --output-dir ../../.qa-web-play --clear
+      - name: Play the web Daily Challenge end to end
+        run: node scripts/e2e-flow.mjs --dist .qa-web-play --web-play
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
