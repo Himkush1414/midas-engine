@@ -25,7 +25,8 @@ The Hobby plan allows 100 deployments per 24 h. Early in the build both git-link
 
 ```bash
 set -a; . ./.env.local; set +a
-node scripts/deploy-web.mjs      # deploys HEAD of main to production and waits for READY
+node scripts/db-migrate.mjs      # applies pending supabase/migrations (e.g. 0003_seasons.sql) — always before deploying
+node scripts/deploy-web.mjs      # deploys HEAD of main to production and waits for READY (refuses while migrations are pending)
 curl https://midas-engine.vercel.app/api/health
 ```
 

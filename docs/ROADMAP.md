@@ -36,6 +36,7 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-17.
 - ☑ Notifications: daily reminder, trial reminder, duel push notifications
 - ☑ Localization: English, Spanish, Portuguese (Brazil), German, French — UI, game content, notifications; follows the system/per-app language
 - ☑ RevenueCat paywall (with a mock provider until keys exist)
+- ☑ Monthly seasons (UTC calendar months, Season 1 = November 2026): one soft reset per season on device and server, season card, new-season intro, season recap with share
 
 ## M4 — Web (Vercel)
 - ☑ Landing page
@@ -52,7 +53,6 @@ Status legend: ☐ planned · ◐ in progress · ☑ done. Updated 2026-10-17.
 - ☑ HANDOFF.md with exact manual steps
 
 ## Post-launch
-- Seasons (monthly) with soft reset + season recap share
 - Live real-time duels (Supabase Realtime) once DAU supports matchmaking
 - Opt-in weekly leagues
 - More languages (JA, KO, IT…) and localized web pages
