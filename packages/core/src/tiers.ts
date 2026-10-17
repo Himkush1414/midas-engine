@@ -1,5 +1,5 @@
 import { DOMAINS, type Domain } from './domains';
-import type { Rating } from './glicko2';
+import { DEFAULT_GLICKO2_OPTIONS, type Rating } from './glicko2';
 
 export const TIERS = ['iron', 'bronze', 'silver', 'gold', 'platinum', 'diamond', 'master', 'grandmaster'] as const;
 export type TierId = (typeof TIERS)[number];
@@ -109,12 +109,21 @@ export function tierChange(before: Pick<Rating, 'rating' | 'rd'>, after: Pick<Ra
 
 export type DomainRatings = Record<Domain, Rating>;
 
+/** A domain counts once it has been played: unplayed ratings keep the maximum starting deviation. */
+export function isPlayed(r: Pick<Rating, 'rd'>): boolean {
+  return r.rd < DEFAULT_GLICKO2_OPTIONS.maxRd;
+}
+
 /**
- * Overall "Mind rating": the mean of the domain ratings. The overall RD
- * combines the domain deviations as the standard error of that mean.
+ * Overall "Mind rating": the mean of the played domain ratings (of all of
+ * them until any is played), so a newly added skill never drags a settled
+ * rating down. The overall RD combines the domain deviations as the
+ * standard error of that mean.
  */
 export function overallRating(ratings: DomainRatings): Pick<Rating, 'rating' | 'rd'> {
-  const values = DOMAINS.map((d) => ratings[d]);
+  const all = DOMAINS.map((d) => ratings[d]);
+  const played = all.filter(isPlayed);
+  const values = played.length > 0 ? played : all;
   const rating = values.reduce((s, r) => s + r.rating, 0) / values.length;
   const rd = Math.sqrt(values.reduce((s, r) => s + r.rd * r.rd, 0)) / values.length;
   // Overall is provisional while any single domain still is.

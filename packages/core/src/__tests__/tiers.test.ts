@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DOMAINS } from '../domains';
 import { newRating } from '../glicko2';
-import { ladderStep, overallRating, tierChange, tierInfo, tierOf, type DomainRatings } from '../tiers';
+import { isPlayed, ladderStep, overallRating, tierChange, tierInfo, tierOf, type DomainRatings } from '../tiers';
 
 const settled = (rating: number) => ({ rating, rd: 60 });
 
@@ -94,9 +94,25 @@ describe('overallRating', () => {
     expect(o.rd).toBeLessThan(60);
   });
 
-  it('stays provisional while any domain is provisional', () => {
+  it('stays provisional while any played domain is provisional', () => {
     const ratings = Object.fromEntries(DOMAINS.map((d) => [d, { rating: 1500, rd: 60, volatility: 0.06 }])) as DomainRatings;
-    ratings.math = newRating(1500);
+    ratings.math = { rating: 1500, rd: 200, volatility: 0.06 };
     expect(tierInfo(overallRating(ratings)).provisional).toBe(true);
+  });
+
+  it('leaves unplayed domains out, so a new skill never drags a settled rating down', () => {
+    const ratings = Object.fromEntries(DOMAINS.map((d) => [d, { rating: 1700, rd: 60, volatility: 0.06 }])) as DomainRatings;
+    ratings.math = newRating(1300);
+    const o = overallRating(ratings);
+    expect(o.rating).toBe(1700);
+    expect(tierInfo(o).provisional).toBe(false);
+    expect(isPlayed(ratings.math)).toBe(false);
+    expect(isPlayed(ratings.memory)).toBe(true);
+  });
+
+  it('uses every domain before any is played', () => {
+    const fresh = Object.fromEntries(DOMAINS.map((d) => [d, newRating(1300)])) as DomainRatings;
+    expect(overallRating(fresh).rating).toBe(1300);
+    expect(tierInfo(overallRating(fresh)).provisional).toBe(true);
   });
 });
