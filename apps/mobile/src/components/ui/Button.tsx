@@ -1,6 +1,7 @@
 import { ActivityIndicator, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
-import { HIT_TARGET, radii, spacing, useTheme } from '@/theme';
+import { lips, radii, spacing, useTheme } from '@/theme';
 import { Icon, type IconName } from '../icons/Icon';
+import { LipPressable } from './LipPressable';
 import { PressableScale } from './PressableScale';
 import { Text } from './Text';
 
@@ -21,6 +22,10 @@ export interface ButtonProps {
   testID?: string;
 }
 
+/**
+ * Buttons speak in the display voice and stand on a lip (docs/DESIGN_DIRECTION.md §4).
+ * Primary is the one volt "go" action on a screen; secondary is a raised plate; ghost is text only.
+ */
 export function Button({
   label,
   onPress,
@@ -37,56 +42,65 @@ export function Button({
 }: ButtonProps) {
   const { colors } = useTheme();
   const palette = {
-    primary: { bg: colors.primary, fg: colors.onPrimary, border: colors.primary },
-    secondary: { bg: colors.surfaceRaised, fg: colors.text, border: colors.borderStrong },
-    ghost: { bg: 'transparent', fg: colors.primaryText, border: 'transparent' },
-    danger: { bg: 'transparent', fg: colors.danger, border: colors.danger },
+    primary: { face: colors.primary, lip: colors.primaryLip, fg: colors.onPrimary },
+    secondary: { face: colors.surfaceRaised, lip: colors.lip, fg: colors.text },
+    ghost: { face: 'transparent', lip: 'transparent', fg: colors.primaryText },
+    danger: { face: colors.surfaceRaised, lip: colors.lip, fg: colors.danger },
   }[variant];
   const inactive = disabled || loading;
-  const height = size === 'lg' ? 56 : HIT_TARGET;
+  const large = size === 'lg';
+  const content = loading ? (
+    <ActivityIndicator color={palette.fg} />
+  ) : (
+    <View style={styles.row}>
+      {icon ? <Icon name={icon} size={large ? 22 : 20} color={palette.fg} /> : null}
+      <Text
+        variant={large ? 'heading' : 'subheading'}
+        display
+        weight="semibold"
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        style={[styles.label, { color: palette.fg, fontSize: large ? 26 : 21, lineHeight: large ? 30 : 24 }]}
+      >
+        {label}
+      </Text>
+      {iconRight ? <Icon name={iconRight} size={large ? 22 : 20} color={palette.fg} /> : null}
+    </View>
+  );
+  const a11y = {
+    testID,
+    accessibilityLabel: label,
+    accessibilityHint,
+    accessibilityState: { disabled: !!inactive, busy: !!loading },
+  };
+  const layout = [{ alignSelf: fullWidth ? ('stretch' as const) : ('auto' as const), opacity: disabled ? 0.45 : 1 }, style];
 
+  if (variant === 'ghost') {
+    return (
+      <PressableScale {...a11y} onPress={onPress} disabled={inactive} style={[styles.face, { minHeight: large ? 56 : 48 }, layout]}>
+        {content}
+      </PressableScale>
+    );
+  }
   return (
-    <PressableScale
-      testID={testID}
+    <LipPressable
+      {...a11y}
       onPress={onPress}
       disabled={inactive}
-      accessibilityLabel={label}
-      accessibilityHint={accessibilityHint}
-      accessibilityState={{ disabled: !!inactive, busy: !!loading }}
-      style={[
-        styles.base,
-        {
-          minHeight: height,
-          backgroundColor: palette.bg,
-          borderColor: palette.border,
-          opacity: disabled ? 0.45 : 1,
-          alignSelf: fullWidth ? 'stretch' : 'auto',
-        },
-        style,
-      ]}
+      face={palette.face}
+      lipColor={palette.lip}
+      lip={large ? lips.lg : lips.md}
+      radius={radii.sm}
+      style={layout}
+      faceStyle={[styles.face, { minHeight: large ? 60 : 50 }]}
     >
-      {loading ? (
-        <ActivityIndicator color={palette.fg} />
-      ) : (
-        <View style={styles.row}>
-          {icon ? <Icon name={icon} size={20} color={palette.fg} /> : null}
-          <Text variant={size === 'lg' ? 'subheading' : 'body'} weight="semibold" style={{ color: palette.fg }}>
-            {label}
-          </Text>
-          {iconRight ? <Icon name={iconRight} size={20} color={palette.fg} /> : null}
-        </View>
-      )}
-    </PressableScale>
+      {content}
+    </LipPressable>
   );
 }
 
 const styles = StyleSheet.create({
-  base: {
-    borderRadius: radii.lg,
-    borderWidth: 1.5,
-    paddingHorizontal: spacing.xl,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  face: { paddingHorizontal: spacing.xl, alignItems: 'center', justifyContent: 'center' },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, flexShrink: 1 },
+  label: { letterSpacing: 0.6, flexShrink: 1 },
 });
