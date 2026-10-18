@@ -5,14 +5,13 @@ import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import { BackHeader } from '@/components/BackHeader';
 import { Icon } from '@/components/icons/Icon';
-import { DomainBadge } from '@/components/tier';
 import { Card, Screen, Text } from '@/components/ui';
 import { startZen } from '@/features/session/start';
 import { useEntitlements } from '@/state/entitlements';
-import { spacing, useTheme } from '@/theme';
+import { SLANT_DEG, spacing, useTheme } from '@/theme';
 
 export default function Zen() {
-  const { colors } = useTheme();
+  const { colors, domain: dc } = useTheme();
   const t = useT();
   const isPro = useEntitlements((s) => s.isPro);
   return (
@@ -25,8 +24,8 @@ export default function Zen() {
         {DOMAINS.map((d) => (
           <View key={d} style={styles.group}>
             <View style={styles.groupHeader}>
-              <DomainBadge domain={d} size={28} />
-              <Text variant="subheading" weight="semibold">
+              <Icon name={d} size={22} color={dc[d]} />
+              <Text variant="heading" style={{ color: dc[d] }}>
                 {domainLabel(t, d)}
               </Text>
             </View>
@@ -39,10 +38,12 @@ export default function Zen() {
                   onPress={() => (locked ? router.push({ pathname: '/paywall', params: { from: 'zen' } }) : startZen(g))}
                   accessibilityLabel={`${GAMES[g].name}${locked ? t('zen.pro') : ''}`}
                   accessibilityHint={locked ? t('zen.proHint') : t('zen.playHint')}
+                  style={styles.card}
                 >
+                  <View style={[styles.tab, { backgroundColor: dc[d] }]} />
                   <View style={styles.row}>
                     <View style={styles.flex}>
-                      <Text weight="semibold">{GAMES[g].name}</Text>
+                      <Text variant="heading">{GAMES[g].name}</Text>
                       <Text variant="caption" tone="muted">
                         {gameRules(t, g)}
                       </Text>
@@ -66,4 +67,6 @@ const styles = StyleSheet.create({
   group: { gap: spacing.sm },
   groupHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  card: { paddingLeft: spacing.xl },
+  tab: { position: 'absolute', left: -4, top: 0, bottom: 0, width: 10, transform: [{ skewX: `${SLANT_DEG}deg` }] },
 });
