@@ -8,6 +8,6 @@ export default function Image() {
   return ogCard({
     eyebrow: 'Ranked brain games',
     title: 'What tier is your mind?',
-    subtitle: 'Five placement games. Iron to Grandmaster. Then climb.',
+    subtitle: 'Six placement games. Iron to Grandmaster. Then climb.',
   });
 }

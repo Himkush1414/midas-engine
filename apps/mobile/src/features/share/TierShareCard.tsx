@@ -2,12 +2,12 @@ import { DOMAINS, overallRating, tierInfo, type DomainRatings } from '@mindtier/
 import { forwardRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
-import { DomainBadge, TierBadge } from '@/components/tier';
+import { TierBadge } from '@/components/tier';
 import { Text } from '@/components/ui';
 import { useT } from '@/i18n';
 import { domainLabel, tierLabel } from '@/i18n/labels';
 import { WEB_URL } from '@/lib/links';
-import { ThemeProvider } from '@/theme';
+import { darkPalette, domainColors, SLANT_DEG, ThemeProvider, tierColors, VOLT } from '@/theme';
 
 export const CARD_WIDTH = 360;
 export const CARD_HEIGHT = 450; // 4:5, the format social feeds crop to least
@@ -19,28 +19,30 @@ export const CARD_HEIGHT = 450; // 4:5, the format social feeds crop to least
 export const TierShareCard = forwardRef<View, { ratings: DomainRatings }>(function TierShareCard({ ratings }, ref) {
   const t = useT();
   const overall = tierInfo(overallRating(ratings));
+  const glow = tierColors[overall.tier].base;
   const host = WEB_URL.replace(/^https?:\/\//, '');
   return (
     <ThemeProvider preference="dark">
       <View ref={ref} collapsable={false} style={styles.card} testID="share-card">
         <Svg style={StyleSheet.absoluteFill} width={CARD_WIDTH} height={CARD_HEIGHT}>
           <Defs>
-            <RadialGradient id="bg" cx="50%" cy="0%" r="95%">
-              <Stop offset="0" stopColor="#2A2470" />
-              <Stop offset="0.6" stopColor="#121734" />
-              <Stop offset="1" stopColor="#0A0D1A" />
+            <RadialGradient id="bg" cx="50%" cy="30%" r="55%">
+              <Stop offset="0" stopColor={glow} stopOpacity={0.35} />
+              <Stop offset="1" stopColor={glow} stopOpacity={0} />
             </RadialGradient>
           </Defs>
+          <Rect width={CARD_WIDTH} height={CARD_HEIGHT} fill={darkPalette.background} />
           <Rect width={CARD_WIDTH} height={CARD_HEIGHT} fill="url(#bg)" />
         </Svg>
-        <Text variant="caption" weight="semibold" style={styles.eyebrow}>
+        <View style={[styles.stripe, { backgroundColor: VOLT }]} />
+        <Text variant="micro" weight="bold" style={styles.eyebrow}>
           {t('share.cardTitle')}
         </Text>
         {/* Wrapped so it stacks above the absolutely positioned background on every platform. */}
         <View>
           <TierBadge info={overall} size={120} showProvisional={false} />
         </View>
-        <Text variant="title" align="center">
+        <Text variant="title" align="center" style={{ color: glow }}>
           {tierLabel(t, overall)}
         </Text>
         <View style={styles.rows}>
@@ -48,18 +50,18 @@ export const TierShareCard = forwardRef<View, { ratings: DomainRatings }>(functi
             const info = tierInfo(ratings[d]);
             return (
               <View key={d} style={styles.row}>
-                <DomainBadge domain={d} size={26} />
-                <Text variant="label" style={styles.flex}>
+                <View style={[styles.tab, { backgroundColor: domainColors[d] }]} />
+                <Text variant="label" display weight="semibold" style={[styles.flex, styles.domain]}>
                   {domainLabel(t, d)}
                 </Text>
-                <Text variant="label" tone="muted">
+                <Text variant="micro" tone="muted">
                   {tierLabel(t, info)}
                 </Text>
               </View>
             );
           })}
         </View>
-        <Text variant="caption" tone="muted" align="center">
+        <Text variant="micro" tone="muted" align="center">
           {t('share.cardFooter', { host })}
         </Text>
       </View>
@@ -68,9 +70,12 @@ export const TierShareCard = forwardRef<View, { ratings: DomainRatings }>(functi
 });
 
 const styles = StyleSheet.create({
-  card: { width: CARD_WIDTH, height: CARD_HEIGHT, alignItems: 'center', justifyContent: 'space-between', paddingVertical: 22, paddingHorizontal: 26, overflow: 'hidden', backgroundColor: '#0A0D1A' },
-  eyebrow: { color: '#A996FF', letterSpacing: 2 },
+  card: { width: CARD_WIDTH, height: CARD_HEIGHT, alignItems: 'center', justifyContent: 'space-between', paddingVertical: 22, paddingHorizontal: 26, overflow: 'hidden', backgroundColor: darkPalette.background },
+  stripe: { position: 'absolute', top: 0, left: -10, width: 150, height: 8, transform: [{ skewX: `${SLANT_DEG}deg` }] },
+  eyebrow: { color: VOLT },
   rows: { alignSelf: 'stretch', gap: 6 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  tab: { width: 14, height: 7, borderRadius: 1, transform: [{ skewX: `${SLANT_DEG}deg` }] },
+  domain: { fontSize: 16, lineHeight: 18 },
   flex: { flex: 1 },
 });

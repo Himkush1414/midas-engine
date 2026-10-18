@@ -4,7 +4,7 @@ const IS_DEV = process.env.APP_VARIANT === 'development';
 const IS_PREVIEW = process.env.APP_VARIANT === 'preview';
 
 const EAS_PROJECT_ID = 'd5f3f04d-c19f-4980-a108-d9db5774a0de';
-const BRAND_INK = '#0A0D1A';
+const BRAND_INK = '#0F0D0B';
 /** Must match LANGUAGES in src/i18n/core.ts (the config loader can't import app code; a test keeps them in sync). */
 export const SUPPORTED_LOCALES = ['en', 'es', 'pt', 'de', 'fr', 'it'];
 const WEB_HOST = new URL(process.env.EXPO_PUBLIC_WEB_URL ?? 'https://midas-engine.vercel.app').host;
@@ -104,7 +104,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'expo-notifications',
       {
         icon: './assets/images/notification-icon.png',
-        color: '#6D4CF5',
+        color: '#8FAE12',
       },
     ],
     [
