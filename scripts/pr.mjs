@@ -3,9 +3,10 @@
 //   node scripts/pr.mjs open <branch> "<type(scope): title>" "<body>" [pathspec...]
 //     commits the staged paths (or everything) on a new branch from HEAD, pushes it and opens a PR into main.
 //     Stays on the new branch, so the next change can build on it.
-//   node scripts/pr.mjs merge <number>
+//   node scripts/pr.mjs merge <number> [--after <number>]
 //     waits for every CI check on the PR head to finish, merges it (merge commit) if all passed,
-//     and deletes the branch. Exits non-zero if a check fails.
+//     and deletes the branch. Exits non-zero if a check fails. With --after, first waits until that
+//     PR is merged, so stacked PRs land in order.
 // Reads GITHUB_TOKEN from .env.local through the environment; the token is never printed or written.
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -65,8 +66,15 @@ async function open(branch, title, body, paths) {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-async function merge(number) {
+async function merge(number, after) {
   const deadline = Date.now() + 60 * 60_000;
+  while (after) {
+    const before = await api(`/pulls/${after}`);
+    if (before.merged) break;
+    if (before.state === 'closed') throw new Error(`#${after} was closed without merging`);
+    if (Date.now() > deadline) throw new Error(`#${after} still not merged after 60 minutes`);
+    await sleep(20_000);
+  }
   let pr = await api(`/pulls/${number}`);
   for (;;) {
     pr = await api(`/pulls/${number}`);
@@ -92,7 +100,7 @@ async function merge(number) {
 
 const [cmd, ...args] = process.argv.slice(2);
 if (cmd === 'open') await open(args[0], args[1], args[2] ?? '', args.slice(3));
-else if (cmd === 'merge') await merge(Number(args[0]));
+else if (cmd === 'merge') await merge(Number(args[0]), args[1] === '--after' ? Number(args[2]) : 0);
 else {
   console.error('usage: pr.mjs open|merge …');
   process.exit(2);
