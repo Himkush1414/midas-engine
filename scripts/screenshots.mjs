@@ -3,6 +3,7 @@
 // Build once:  cd apps/mobile && EXPO_PUBLIC_QA_HOOKS=1 npx expo export --platform web --output-dir ../../.qa-web
 // Then:        node scripts/screenshots.mjs [--dist .qa-web] [--scheme dark|light] [--lang en|es|pt|de|fr|it] [--only name] [--out dir] [--now ISO]
 // --now pins the page clock (e.g. mid-season for store assets, so they never show the preseason).
+// --width/--height change the viewport for QA at other device sizes (e.g. 360×640, or a tall 412×1600 to see a whole scroll).
 // (or point --base at a running `expo start --web` dev server)
 // Writes raw captures to store/screenshots/raw/<scheme>[-<lang>]/ (1080×1920, 9:16 for Google Play),
 // or to --out for QA-only captures that should stay out of git.
@@ -43,7 +44,7 @@ const LANG = arg('lang', 'en');
 const OUT = arg('out', null) ?? join(root, 'store/screenshots/raw', LANG === 'en' ? SCHEME : `${SCHEME}-${LANG}`);
 
 // 412×732 CSS px at 2.625× ≈ 1080×1920.
-const VIEWPORT = { width: 412, height: 732 };
+const VIEWPORT = { width: Number(arg('width', 412)), height: Number(arg('height', 732)) };
 const DPR = 1080 / 412;
 
 const DAY = 86_400_000;

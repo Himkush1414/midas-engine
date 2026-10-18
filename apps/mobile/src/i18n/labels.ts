@@ -16,3 +16,8 @@ export function domainLabel(t: TFunction, domain: Domain): string {
 export function gameRules(t: TFunction, game: GameId): string {
   return t(`games.${game}`);
 }
+
+/** The tier name and its division numeral, set apart in display layouts ("PLATINUM" + "II"). */
+export function tierParts(t: TFunction, info: Pick<TierInfo, 'tier' | 'division'>): { name: string; division: string } {
+  return { name: t(`tiers.${info.tier}`), division: info.division ? ROMAN[info.division] : '' };
+}

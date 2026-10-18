@@ -2,7 +2,7 @@ import { canStartRanked, currentStreak, rankedRemaining, utcDayKey } from '@mind
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
-import { Button, Card, PressableScale, Screen, Text } from '@/components/ui';
+import { Button, Card, Enter, PressableScale, RollingNumber, Screen, Text, Ticket, TICKET_GAP } from '@/components/ui';
 import { DomainList } from '@/features/home/DomainList';
 import { RankHero } from '@/features/home/RankHero';
 import { LeagueCard } from '@/features/leagues/LeagueCard';
@@ -11,7 +11,7 @@ import { startDaily, startFocus, startRanked } from '@/features/session/start';
 import { useT } from '@/i18n';
 import { useEntitlements } from '@/state/entitlements';
 import { useProgress } from '@/state/progress';
-import { spacing, useTheme } from '@/theme';
+import { radii, spacing, useTheme } from '@/theme';
 
 export default function Home() {
   const { colors } = useTheme();
@@ -33,21 +33,19 @@ export default function Home() {
   return (
     <Screen scroll>
       <View style={styles.header}>
-        <Text variant="title">{t('tabs.climb')}</Text>
+        <Text variant="heading">{t('tabs.climb')}</Text>
         <View style={styles.headerRight}>
           <View
-            style={[styles.chip, { backgroundColor: colors.surface, borderColor: colors.border }]}
+            style={[styles.streak, { backgroundColor: colors.surfaceRaised }]}
             accessible
             accessibilityLabel={t('home.streakA11y', { days: streak.current, shields: streak.shields })}
           >
-            <Icon name="flame" size={18} color={streak.current > 0 ? colors.warning : colors.textFaint} />
-            <Text weight="semibold" tabular>
-              {streak.current}
-            </Text>
+            <Icon name="flame" size={20} color={streak.current > 0 ? colors.danger : colors.textFaint} />
+            <RollingNumber value={String(streak.current)} variant="subheading" display style={styles.streakCount} />
             {streak.shields > 0 ? (
               <>
                 <Icon name="shield" size={16} color={colors.accent} />
-                <Text variant="caption" tone="muted" tabular>
+                <Text variant="micro" tone="muted" tabular>
                   {streak.shields}
                 </Text>
               </>
@@ -63,51 +61,50 @@ export default function Home() {
         <RankHero ratings={ratings} />
         <SeasonCard announce />
 
-        <Card raised style={styles.play}>
-          <View style={styles.playText}>
-            <Text variant="heading">{t('home.rankedTitle')}</Text>
-            <Text tone="muted">{t('home.rankedBody')}</Text>
-          </View>
-          {canRank ? (
-            <>
-              <Button label={t('home.playRanked')} icon="play" size="lg" fullWidth onPress={startRanked} testID="home-ranked" />
-              {remaining !== null ? (
-                <Text variant="caption" tone="faint" align="center">
-                  {t('home.freeLeft', { count: remaining })}
-                </Text>
-              ) : null}
-            </>
-          ) : (
-            <>
-              <Text tone="muted">{t('home.limitReached')}</Text>
-              <Button label={t('home.keepClimbing')} variant="secondary" icon="sparkle" fullWidth onPress={() => router.push('/paywall')} />
-            </>
-          )}
-        </Card>
-
-        <Card onPress={dailyDone ? () => router.push('/daily') : startDaily} accessibilityLabel={t('home.dailyTitle')}>
-          <View style={styles.rowCard}>
-            <View style={[styles.cardIcon, { backgroundColor: colors.surfaceRaised }]}>
-              <Icon name="daily" size={24} color={colors.spark} />
-            </View>
-            <View style={styles.flex}>
-              <Text weight="semibold">{t('home.dailyTitle')}</Text>
-              <Text variant="caption" tone="muted">
-                {dailyDone ? t('home.dailyDone') : t('home.dailyTodo')}
+        <Enter index={3}>
+          <Card raised style={styles.play}>
+            <View style={styles.playText}>
+              <Text variant="micro" tone="primary">
+                {t('home.rankedTitle')}
               </Text>
+              <Text tone="muted">{t('home.rankedBody')}</Text>
             </View>
-            <Icon name="chevronRight" size={20} color={colors.textFaint} />
-          </View>
-        </Card>
+            {canRank ? (
+              <>
+                <Button label={t('home.playRanked')} icon="play" size="lg" fullWidth onPress={startRanked} testID="home-ranked" />
+                {remaining !== null ? (
+                  <Text variant="caption" tone="faint" align="center">
+                    {t('home.freeLeft', { count: remaining })}
+                  </Text>
+                ) : null}
+              </>
+            ) : (
+              <>
+                <Text tone="muted">{t('home.limitReached')}</Text>
+                <Button label={t('home.keepClimbing')} variant="secondary" icon="sparkle" fullWidth onPress={() => router.push('/paywall')} />
+              </>
+            )}
+          </Card>
+        </Enter>
 
-        <LeagueCard />
+        <Enter index={4} style={styles.tickets}>
+          <Ticket
+            kicker={today}
+            title={t('home.dailyTitle')}
+            detail={dailyDone ? t('home.dailyDone') : t('home.dailyTodo')}
+            color={colors.spark}
+            icon="daily"
+            onPress={dailyDone ? () => router.push('/daily') : startDaily}
+            columns={2}
+            style={styles.ticket}
+          />
+          <LeagueCard style={styles.ticket} columns={2} />
+        </Enter>
 
         <View style={styles.sectionHeader}>
-          <Text variant="subheading" weight="semibold">
-            {t('home.domainsTitle')}
-          </Text>
+          <Text variant="heading">{t('home.domainsTitle')}</Text>
           {!isPro ? (
-            <Text variant="caption" tone="faint">
+            <Text variant="micro" tone="faint">
               {t('home.focusIsPro')}
             </Text>
           ) : null}
@@ -121,15 +118,15 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: spacing.md },
-  headerRight: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  chip: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, paddingHorizontal: spacing.md, height: 36, borderRadius: 18, borderWidth: 1 },
-  iconButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  stack: { gap: spacing.lg },
-  play: { gap: spacing.md },
-  playText: { gap: 2 },
-  rowCard: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  cardIcon: { width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
-  sectionHeader: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginTop: spacing.sm },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: spacing.md },
+  headerRight: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  streak: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, paddingHorizontal: spacing.md, height: 40, borderRadius: radii.sm },
+  streakCount: { fontSize: 24, lineHeight: 26 },
+  iconButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
+  stack: { gap: spacing.xl },
+  play: { gap: spacing.md, padding: spacing.lg },
+  playText: { gap: spacing.xs },
+  tickets: { flexDirection: 'row', gap: TICKET_GAP, alignItems: 'stretch' },
+  ticket: { flex: 1 },
+  sectionHeader: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: spacing.sm, marginBottom: -spacing.sm },
 });

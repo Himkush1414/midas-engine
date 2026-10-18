@@ -1,15 +1,14 @@
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Icon } from '@/components/icons/Icon';
-import { Card, Text } from '@/components/ui';
+import type { StyleProp, ViewStyle } from 'react-native';
+import { Ticket } from '@/components/ui';
 import { useT } from '@/i18n';
 import { backendConfigured } from '@/lib/config';
-import { spacing, useTheme } from '@/theme';
+import { useTheme } from '@/theme';
 import { leagueDaysLeft, myRow, useLeague } from './league';
 
 /** Home entry to the weekly league: an invitation, or where the player stands this week. */
-export function LeagueCard() {
+export function LeagueCard({ style, columns }: { style?: StyleProp<ViewStyle>; columns?: number }) {
   const { colors } = useTheme();
   const t = useT();
   const view = useLeague((s) => s.view);
@@ -32,25 +31,17 @@ export function LeagueCard() {
       : t('league.waiting');
 
   return (
-    <Card onPress={() => router.push('/league')} accessibilityLabel={`${title}. ${detail}`} testID="league-card">
-      <View style={styles.row}>
-        <View style={[styles.icon, { backgroundColor: colors.surfaceRaised }]}>
-          <Icon name="trophy" size={24} color={colors.accent} />
-        </View>
-        <View style={styles.flex}>
-          <Text weight="semibold">{title}</Text>
-          <Text variant="caption" tone="muted">
-            {detail}
-          </Text>
-        </View>
-        <Icon name="chevronRight" size={20} color={colors.textFaint} />
-      </View>
-    </Card>
+    <Ticket
+      kicker={t('league.title')}
+      title={view.optedIn && me ? `#${me.place}` : title}
+      detail={detail}
+      color={colors.accent}
+      icon="trophy"
+      onPress={() => router.push('/league')}
+      accessibilityLabel={`${title}. ${detail}`}
+      testID="league-card"
+      style={style}
+      columns={columns}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  flex: { flex: 1 },
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  icon: { width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
-});

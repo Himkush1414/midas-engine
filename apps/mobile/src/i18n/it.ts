@@ -183,6 +183,7 @@ export const it: Translations = {
   home: {
     mindTier: 'GRADO MENTALE',
     rating: 'Punteggio {rating}',
+    ratingLabel: 'Punteggio',
     settling: ' · in assestamento',
     toNext_one: '{count} punto alla prossima divisione',
     toNext_other: '{count} punti alla prossima divisione',

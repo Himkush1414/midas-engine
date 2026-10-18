@@ -2,7 +2,7 @@ import { overallRating, seasonDaysLeft, seasonOf } from '@mindtier/core';
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
-import { Button, Card, Text } from '@/components/ui';
+import { Button, Card, Text, Ticket } from '@/components/ui';
 import { useT } from '@/i18n';
 import { tierLabel } from '@/i18n/labels';
 import { useProgress } from '@/state/progress';
@@ -28,10 +28,10 @@ export function SeasonCard({ announce = false }: { announce?: boolean }) {
   if (announce && notice !== null) {
     const name = seasonName(t, notice);
     return (
-      <Card raised style={[styles.notice, { borderColor: colors.accent }]} testID="season-notice">
+      <Card raised style={[styles.notice, { borderLeftColor: colors.spark }]} testID="season-notice">
         <View style={styles.row}>
           <Icon name="trophy" size={28} color={colors.spark} />
-          <Text variant="heading" style={styles.flex}>
+          <Text variant="title" style={styles.flex}>
             {t('season.newTitle', { season: name })}
           </Text>
         </View>
@@ -57,26 +57,21 @@ export function SeasonCard({ announce = false }: { announce?: boolean }) {
   const days = seasonDaysLeft(now);
   const timing = seasonOf(now) === 0 ? t('season.startsIn', { count: days }) : t('season.daysLeft', { count: days });
   return (
-    <Card onPress={() => openRecap(season)} accessibilityLabel={t('season.open')} testID="season-card">
-      <View style={styles.row}>
-        <View style={[styles.icon, { backgroundColor: colors.surfaceRaised }]}>
-          <Icon name="trophy" size={24} color={colors.spark} />
-        </View>
-        <View style={styles.flex}>
-          <Text weight="semibold">{seasonName(t, season)}</Text>
-          <Text variant="caption" tone="muted">
-            {timing} · {t('season.peak', { label: tierLabel(t, peak) })}
-          </Text>
-        </View>
-        <Icon name="chevronRight" size={20} color={colors.textFaint} />
-      </View>
-    </Card>
+    <Ticket
+      kicker={timing}
+      title={seasonName(t, season)}
+      detail={t('season.peak', { label: tierLabel(t, peak) })}
+      color={colors.spark}
+      icon="trophy"
+      onPress={() => openRecap(season)}
+      accessibilityLabel={t('season.open')}
+      testID="season-card"
+    />
   );
 }
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  notice: { gap: spacing.md, borderWidth: 1.5 },
+  notice: { gap: spacing.md, borderLeftWidth: 6 },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  icon: { width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
 });
