@@ -367,6 +367,24 @@ const SCENES = [
   // QA only: the weekly recap and the profile entries to it.
   { name: '20-week', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/week')); await settle(page, 1200); } },
   { name: '21-profile-cards', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/profile')); await settle(page, 1200); } },
+  // QA only: the placement suspense before the reveal.
+  {
+    name: '32-reveal-suspense',
+    path: '/',
+    before: async (page) => {
+      await store(page, () => {
+        const { useSession, useProgress } = globalThis.__mindtier.stores;
+        const ratings = useProgress.getState().ratings;
+        const before = Object.fromEntries(Object.entries(ratings).map(([d, r]) => [d, { ...r, rating: 1300, rd: 350 }]));
+        useSession.setState({
+          finished: { plan: { mode: 'placement', seed: 'x', games: [] }, runs: [], ratingsBefore: before, result: { ratings, updates: [] } },
+        });
+        globalThis.__mindtier.router.push('/reveal');
+      });
+      // Reduced motion shortens the suspense to 400 ms; catch it mid-way.
+      await page.waitForTimeout(150);
+    },
+  },
   // QA only: a promotion ceremony and the Daily Challenge result.
   {
     name: '30-results-tierup',
