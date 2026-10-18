@@ -1,10 +1,8 @@
 import { router } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
-import { Icon } from '@/components/icons/Icon';
-import { Card, Text } from '@/components/ui';
+import { Ticket } from '@/components/ui';
 import { useT } from '@/i18n';
 import { useProgress } from '@/state/progress';
-import { spacing, useTheme } from '@/theme';
+import { useTheme } from '@/theme';
 import { weekRange, weekSummary, weeklyRecap } from './weekly';
 
 /** Profile entry to the weekly recap. */
@@ -17,25 +15,15 @@ export function WeekCard() {
   const recap = weeklyRecap({ activity, history, daily }, weekRange(new Date()));
 
   return (
-    <Card onPress={() => router.push('/week')} accessibilityLabel={t('week.open')} testID="week-card">
-      <View style={styles.row}>
-        <View style={[styles.icon, { backgroundColor: colors.surfaceRaised }]}>
-          <Icon name="chart" size={24} color={colors.primary} />
-        </View>
-        <View style={styles.flex}>
-          <Text weight="semibold">{t('week.thisWeek')}</Text>
-          <Text variant="caption" tone="muted">
-            {weekSummary(t, recap)}
-          </Text>
-        </View>
-        <Icon name="chevronRight" size={20} color={colors.textFaint} />
-      </View>
-    </Card>
+    <Ticket
+      kicker={t('week.title')}
+      title={t('week.thisWeek')}
+      detail={weekSummary(t, recap)}
+      color={colors.primaryText}
+      icon="chart"
+      onPress={() => router.push('/week')}
+      accessibilityLabel={t('week.open')}
+      testID="week-card"
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  flex: { flex: 1 },
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  icon: { width: 44, height: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
-});
