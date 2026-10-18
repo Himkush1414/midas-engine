@@ -1,7 +1,9 @@
-import { ActivityIndicator, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { ActivityIndicator, StyleSheet, View, useWindowDimensions, type StyleProp, type ViewStyle } from 'react-native';
 import { lips, radii, spacing, useTheme } from '@/theme';
 import { Icon, type IconName } from '../icons/Icon';
+import { fitDisplaySize } from './fit';
 import { LipPressable } from './LipPressable';
+import { MAX_CONTENT_WIDTH } from './Screen';
 import { PressableScale } from './PressableScale';
 import { Text } from './Text';
 
@@ -47,8 +49,15 @@ export function Button({
     ghost: { face: 'transparent', lip: 'transparent', fg: colors.primaryText },
     danger: { face: colors.surfaceRaised, lip: colors.lip, fg: colors.danger },
   }[variant];
+  const { width } = useWindowDimensions();
   const inactive = disabled || loading;
   const large = size === 'lg';
+  const base = large ? 26 : 21;
+  // Full-width labels shrink to fit their known width (long translations such as French trial
+  // buttons); web ignores adjustsFontSizeToFit, so the size is computed, not measured.
+  const iconRoom = (icon ? 30 : 0) + (iconRight ? 30 : 0);
+  const room = Math.min(width, MAX_CONTENT_WIDTH) - spacing.gutter * 2 - spacing.xl * 2 - iconRoom;
+  const labelSize = fullWidth ? fitDisplaySize(label.toLocaleUpperCase(), room, base, 15, 0.5) : base;
   const content = loading ? (
     <ActivityIndicator color={palette.fg} />
   ) : (
@@ -60,7 +69,7 @@ export function Button({
         weight="semibold"
         numberOfLines={1}
         adjustsFontSizeToFit
-        style={[styles.label, { color: palette.fg, fontSize: large ? 26 : 21, lineHeight: large ? 30 : 24 }]}
+        style={[styles.label, { color: palette.fg, fontSize: labelSize, lineHeight: Math.round(labelSize * 1.15) }]}
       >
         {label}
       </Text>
