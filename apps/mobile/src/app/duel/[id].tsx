@@ -1,20 +1,20 @@
 import { duelPlan, getGame } from '@mindtier/core';
-import { useT } from '@/i18n';
+import { useLanguage, useT } from '@/i18n';
 import { domainLabel } from '@/i18n/labels';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
-import { DomainBadge } from '@/components/tier';
-import { Button, Card, PressableScale, Screen, Text } from '@/components/ui';
+import { Button, PressableScale, Screen, Text } from '@/components/ui';
 import { playDuel, shareDuel } from '@/features/duels/actions';
 import { api, type DuelInfo } from '@/lib/api';
 import { normaliseDuelCode, useDuels } from '@/state/duels';
 import { useProgress } from '@/state/progress';
-import { spacing, useTheme } from '@/theme';
+import { onColor, radii, SLANT_DEG, spacing, useTheme } from '@/theme';
 
 export default function DuelScreen() {
-  const { colors } = useTheme();
+  const { colors, domain } = useTheme();
+  const locale = useLanguage();
   const t = useT();
   const params = useLocalSearchParams<{ id: string }>();
   const id = normaliseDuelCode(params.id ?? '');
@@ -84,26 +84,24 @@ export default function DuelScreen() {
       </View>
 
       <View style={styles.stack}>
-        <Text variant="title" align="center">
+        <Text variant="title">
           {info ? (local?.role === 'creator' || info.entries.find((e) => e.isMe && e.isCreator) ? t('duels.yourChallenge') : t('duels.challengedYou', { name: info.creatorName })) : t('duels.title')}
         </Text>
 
-        <Card style={styles.gap}>
+        <View style={styles.games}>
           {plan.games.map((g) => {
             const def = getGame(g);
+            const hue = domain[def.domain];
             return (
-              <View key={g} style={styles.row}>
-                <DomainBadge domain={def.domain} size={36} />
-                <View style={styles.flex}>
-                  <Text weight="semibold">{def.name}</Text>
-                  <Text variant="caption" tone="muted">
-                    {domainLabel(t, def.domain)}
-                  </Text>
-                </View>
+              <View key={g} style={[styles.game, { backgroundColor: hue }]} accessible accessibilityLabel={`${def.name}, ${domainLabel(t, def.domain)}`}>
+                <Icon name={def.domain} size={22} color={onColor(hue)} strokeWidth={2} />
+                <Text variant="subheading" display weight="semibold" numberOfLines={2} style={{ color: onColor(hue) }}>
+                  {def.name}
+                </Text>
               </View>
             );
           })}
-        </Card>
+        </View>
 
         {state === 'loading' ? <ActivityIndicator color={colors.primaryText} /> : null}
         {state === 'offline' ? (
@@ -113,25 +111,26 @@ export default function DuelScreen() {
         ) : null}
 
         {info && (me || other) ? (
-          <Card style={styles.scores}>
-            <View style={styles.score}>
-              <Text variant="caption" tone="faint">
-                {t('duels.you')}
-              </Text>
-              <Text variant="title" tabular>
-                {me ? me.points.toLocaleString() : '—'}
+          <View style={[styles.scores, { backgroundColor: colors.surface }]}>
+            {[
+              { label: t('duels.you'), points: me?.points, win: Boolean(me && other && me.points > other.points) },
+              { label: (other?.name ?? t('duels.friend')).toUpperCase(), points: other?.points, win: Boolean(me && other && other.points > me.points) },
+            ].map((side, i) => (
+              <View key={i} style={[styles.score, i === 1 && styles.scoreRight]}>
+                <Text variant="micro" tone="muted" numberOfLines={1}>
+                  {side.label}
+                </Text>
+                <Text variant="title" tabular style={side.win ? { color: colors.success } : undefined}>
+                  {side.points !== undefined ? side.points.toLocaleString(locale) : '—'}
+                </Text>
+              </View>
+            ))}
+            <View style={[styles.vs, { backgroundColor: colors.surfaceRaised }]}>
+              <Text variant="subheading" display weight="semibold" style={styles.unskew}>
+                {t('duels.vs')}
               </Text>
             </View>
-            <Text tone="faint">{t('duels.vs')}</Text>
-            <View style={styles.score}>
-              <Text variant="caption" tone="faint" numberOfLines={1}>
-                {(other?.name ?? t('duels.friend')).toUpperCase()}
-              </Text>
-              <Text variant="title" tabular>
-                {other ? other.points.toLocaleString() : '—'}
-              </Text>
-            </View>
-          </Card>
+          </View>
         ) : null}
 
         {!placementDone ? (
@@ -153,13 +152,15 @@ export default function DuelScreen() {
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.md },
   top: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 48 },
   back: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
   stack: { gap: spacing.lg, paddingTop: spacing.md },
-  gap: { gap: spacing.md },
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  scores: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' },
-  score: { alignItems: 'center', flex: 1 },
+  games: { flexDirection: 'row', gap: spacing.sm },
+  game: { flex: 1, borderRadius: radii.md, padding: spacing.md, minHeight: 104, justifyContent: 'space-between' },
+  scores: { flexDirection: 'row', alignItems: 'center', borderRadius: radii.md, padding: spacing.lg },
+  score: { flex: 1, gap: 2 },
+  scoreRight: { alignItems: 'flex-end' },
+  vs: { position: 'absolute', left: '50%', marginLeft: -26, width: 52, height: 40, borderRadius: radii.xs, alignItems: 'center', justifyContent: 'center', transform: [{ skewX: `${SLANT_DEG}deg` }] },
+  unskew: { transform: [{ skewX: `${-SLANT_DEG}deg` }] },
 });

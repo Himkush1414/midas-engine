@@ -2,11 +2,11 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
-import { Button, Card, Screen, Text } from '@/components/ui';
+import { Button, Enter, LipPressable, Screen, Text } from '@/components/ui';
 import { createAndPlayDuel } from '@/features/duels/actions';
-import { useT, type TFunction } from '@/i18n';
+import { useLanguage, useT, type TFunction } from '@/i18n';
 import { normaliseDuelCode, useDuels, type LocalDuel } from '@/state/duels';
-import { fonts, radii, spacing, useTheme } from '@/theme';
+import { fonts, lips, radii, SLANT_DEG, spacing, useTheme } from '@/theme';
 
 function status(t: TFunction, d: LocalDuel): { label: string; tone: 'success' | 'danger' | 'muted' | 'accent' } {
   if (d.myPoints === null) return { label: t('duels.yourTurn'), tone: 'accent' };
@@ -20,6 +20,7 @@ function status(t: TFunction, d: LocalDuel): { label: string; tone: 'success' | 
 export default function Duels() {
   const { colors } = useTheme();
   const t = useT();
+  const locale = useLanguage();
   const duels = useDuels((s) => s.duels);
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
@@ -39,67 +40,80 @@ export default function Duels() {
       </View>
 
       <View style={styles.stack}>
-        <Card raised style={styles.gap}>
-          <View style={styles.row}>
-            <View style={[styles.icon, { backgroundColor: colors.surfaceSunken }]}>
-              <Icon name="duel" size={26} color={colors.primaryText} />
-            </View>
-            <View style={styles.flex}>
-              <Text variant="subheading" weight="semibold">
-                {t('duels.challengeTitle')}
-              </Text>
-              <Text variant="caption" tone="muted">
-                {t('duels.challengeBody')}
+        <Enter index={0}>
+          <View style={[styles.challenge, { backgroundColor: colors.surfaceRaised }]}>
+            {/* Two sides of a match, split along the slant. */}
+            <View style={[styles.side, styles.sideLeft, { backgroundColor: colors.accent }]} />
+            <View style={[styles.side, styles.sideRight, { backgroundColor: colors.danger }]} />
+            <View style={styles.versus}>
+              <Text variant="hero" style={{ color: colors.text }}>
+                {t('duels.vs')}
               </Text>
             </View>
+            <View style={styles.challengeText}>
+              <Text variant="heading">{t('duels.challengeTitle')}</Text>
+              <Text tone="muted">{t('duels.challengeBody')}</Text>
+            </View>
+            <Button label={t('duels.newDuel')} icon="userPlus" size="lg" fullWidth loading={busy} onPress={create} testID="duel-new" />
           </View>
-          <Button label={t('duels.newDuel')} icon="userPlus" size="lg" fullWidth loading={busy} onPress={create} testID="duel-new" />
-        </Card>
+        </Enter>
 
-        <Card style={styles.gap}>
-          <Text weight="semibold">{t('duels.gotCode')}</Text>
-          <View style={styles.row}>
-            <TextInput
-              value={code}
-              onChangeText={setCode}
-              placeholder={t('duels.codePlaceholder')}
-              placeholderTextColor={colors.textFaint}
-              autoCapitalize="characters"
-              autoCorrect={false}
-              maxLength={80}
-              accessibilityLabel={t('duels.codeA11y')}
-              style={[styles.input, { color: colors.text, borderColor: colors.borderStrong, backgroundColor: colors.surfaceSunken, fontFamily: fonts.bodySemibold }]}
-            />
-            <Button label={t('common.open')} disabled={!parsed} onPress={() => parsed && router.push(`/duel/${parsed}`)} />
+        <Enter index={1}>
+          <View style={[styles.plate, { backgroundColor: colors.surface }]}>
+            <Text variant="micro" tone="muted">
+              {t('duels.gotCode')}
+            </Text>
+            <View style={styles.row}>
+              <TextInput
+                value={code}
+                onChangeText={setCode}
+                placeholder={t('duels.codePlaceholder')}
+                placeholderTextColor={colors.textFaint}
+                autoCapitalize="characters"
+                autoCorrect={false}
+                maxLength={80}
+                accessibilityLabel={t('duels.codeA11y')}
+                style={[styles.input, { color: colors.text, borderColor: parsed ? colors.primaryText : colors.borderStrong, backgroundColor: colors.surfaceSunken, fontFamily: fonts.displayBold }]}
+              />
+              <Button label={t('common.open')} variant="secondary" disabled={!parsed} onPress={() => parsed && router.push(`/duel/${parsed}`)} />
+            </View>
           </View>
-        </Card>
+        </Enter>
 
         {duels.length > 0 ? (
-          <View style={styles.gap}>
-            <Text variant="subheading" weight="semibold">
-              {t('duels.yours')}
-            </Text>
-            {duels.map((d) => {
-              const s = status(t, d);
+          <View style={styles.list}>
+            <Text variant="heading">{t('duels.yours')}</Text>
+            {duels.map((d, i) => {
+              const st = status(t, d);
+              const chip = st.tone === 'success' ? colors.success : st.tone === 'danger' ? colors.danger : st.tone === 'accent' ? colors.accent : colors.surfaceSunken;
               return (
-                <Card key={d.id} onPress={() => router.push(`/duel/${d.id}`)} accessibilityLabel={`Duel ${d.id}, ${s.label}`}>
-                  <View style={styles.row}>
+                <Enter key={d.id} index={2 + i}>
+                  <LipPressable
+                    onPress={() => router.push(`/duel/${d.id}`)}
+                    accessibilityLabel={`Duel ${d.id}, ${st.label}`}
+                    face={colors.surface}
+                    lipColor={colors.lip}
+                    lip={lips.sm}
+                    radius={radii.md}
+                    faceStyle={styles.duel}
+                  >
+                    <View style={[styles.chip, { backgroundColor: chip }]} />
                     <View style={styles.flex}>
-                      <Text weight="semibold" tabular>
+                      <Text variant="subheading" display weight="semibold" tabular style={styles.code}>
                         {d.id.toUpperCase()}
                       </Text>
-                      <Text variant="caption" tone={s.tone}>
-                        {s.label}
+                      <Text variant="caption" tone={st.tone}>
+                        {st.label}
                       </Text>
                     </View>
                     {d.myPoints !== null ? (
-                      <Text tabular weight="semibold">
-                        {d.myPoints.toLocaleString()}
+                      <Text variant="heading" tabular>
+                        {d.myPoints.toLocaleString(locale)}
                       </Text>
                     ) : null}
                     <Icon name="chevronRight" size={18} color={colors.textFaint} />
-                  </View>
-                </Card>
+                  </LipPressable>
+                </Enter>
               );
             })}
           </View>
@@ -115,10 +129,19 @@ export default function Duels() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  header: { paddingVertical: spacing.md, gap: 2 },
+  header: { paddingTop: spacing.md, paddingBottom: spacing.lg, gap: spacing.xs },
   stack: { gap: spacing.lg },
-  gap: { gap: spacing.md },
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  icon: { width: 48, height: 48, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
-  input: { flex: 1, minHeight: 48, borderWidth: 1.5, borderRadius: radii.md, paddingHorizontal: spacing.md, fontSize: 16, letterSpacing: 1 },
+  challenge: { borderRadius: radii.md, padding: spacing.lg, paddingTop: 112, gap: spacing.lg, overflow: 'hidden' },
+  side: { position: 'absolute', top: 0, height: 96, width: '60%', transform: [{ skewX: `${SLANT_DEG}deg` }], opacity: 0.9 },
+  sideLeft: { left: '-12%' },
+  sideRight: { right: '-12%' },
+  versus: { position: 'absolute', top: 18, left: 0, right: 0, alignItems: 'center' },
+  challengeText: { gap: spacing.xs },
+  plate: { borderRadius: radii.md, padding: spacing.lg, gap: spacing.sm },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  input: { flex: 1, minHeight: 52, borderWidth: 2, borderRadius: radii.sm, paddingHorizontal: spacing.md, fontSize: 22, letterSpacing: 3 },
+  list: { gap: spacing.sm },
+  duel: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.lg, overflow: 'hidden' },
+  chip: { width: 8, alignSelf: 'stretch', borderRadius: 1, transform: [{ skewX: `${SLANT_DEG}deg` }] },
+  code: { letterSpacing: 2 },
 });
