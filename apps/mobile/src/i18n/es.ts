@@ -184,6 +184,7 @@ export const es: Translations = {
   home: {
     mindTier: 'RANGO MENTAL',
     rating: 'Puntuación {rating}',
+    ratingLabel: 'Puntuación',
     settling: ' · ajustándose',
     toNext_one: '{count} punto para la siguiente división',
     toNext_other: '{count} puntos para la siguiente división',

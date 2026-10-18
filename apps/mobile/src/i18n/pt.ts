@@ -184,6 +184,7 @@ export const pt: Translations = {
   home: {
     mindTier: 'NÍVEL MENTAL',
     rating: 'Pontuação {rating}',
+    ratingLabel: 'Pontuação',
     settling: ' · ajustando',
     toNext_one: '{count} ponto para a próxima divisão',
     toNext_other: '{count} pontos para a próxima divisão',

@@ -184,6 +184,7 @@ export const de: Translations = {
   home: {
     mindTier: 'DEIN RANG',
     rating: 'Wertung {rating}',
+    ratingLabel: 'Wertung',
     settling: ' · pendelt sich ein',
     toNext_one: 'Noch {count} Punkt bis zur nächsten Division',
     toNext_other: 'Noch {count} Punkte bis zur nächsten Division',

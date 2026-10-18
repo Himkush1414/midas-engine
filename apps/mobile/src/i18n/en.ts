@@ -182,6 +182,7 @@ export const en = {
   home: {
     mindTier: 'MIND TIER',
     rating: 'Rating {rating}',
+    ratingLabel: 'Rating',
     settling: ' · settling in',
     toNext_one: '{count} point to the next division',
     toNext_other: '{count} points to the next division',
