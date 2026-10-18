@@ -367,6 +367,8 @@ const SCENES = [
   // QA only: the weekly recap and the profile entries to it.
   { name: '20-week', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/week')); await settle(page, 1200); } },
   { name: '21-profile-cards', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/profile')); await settle(page, 1200); } },
+  // QA only: a finished duel, head to head.
+  { name: '33-duel', path: '/', before: async (page) => { await store(page, () => globalThis.__mindtier.router.push('/duel/k7px2mqa')); await settle(page, 1500); } },
   // QA only: the placement suspense before the reveal.
   {
     name: '32-reveal-suspense',
