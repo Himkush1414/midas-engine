@@ -78,7 +78,11 @@ async function merge(number, after) {
   let pr = await api(`/pulls/${number}`);
   for (;;) {
     pr = await api(`/pulls/${number}`);
-    const { check_runs: runs } = await api(`/commits/${pr.head.sha}/check-runs?per_page=100`);
+    const { check_runs: all } = await api(`/commits/${pr.head.sha}/check-runs?per_page=100`);
+    // A re-run (e.g. after closing and reopening the PR) adds runs to the same commit: judge by the latest per check.
+    const latest = new Map();
+    for (const r of all) if (!latest.has(r.name) || r.id > latest.get(r.name).id) latest.set(r.name, r);
+    const runs = [...latest.values()];
     const pending = runs.filter((r) => r.status !== 'completed');
     const failed = runs.filter((r) => r.status === 'completed' && !['success', 'skipped', 'neutral'].includes(r.conclusion));
     if (failed.length) {
