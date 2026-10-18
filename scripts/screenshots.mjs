@@ -367,6 +367,50 @@ const SCENES = [
   // QA only: the weekly recap and the profile entries to it.
   { name: '20-week', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/week')); await settle(page, 1200); } },
   { name: '21-profile-cards', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/profile')); await settle(page, 1200); } },
+  // QA only: a promotion ceremony and the Daily Challenge result.
+  {
+    name: '30-results-tierup',
+    path: '/',
+    before: async (page) => {
+      await store(page, () => {
+        const { useSession, useProgress } = globalThis.__mindtier.stores;
+        const after = useProgress.getState().ratings;
+        const before = Object.fromEntries(Object.entries(after).map(([d, r]) => [d, { ...r, rating: r.rating - 70 }]));
+        const upd = (domain, gameId) => ({ domain, gameId, before: before[domain], after: after[domain], delta: 70, change: 'promoted' });
+        useSession.setState({
+          finished: {
+            plan: { mode: 'ranked', seed: 'x', games: ['grid-recall', 'snap', 'misfit'] },
+            runs: [],
+            ratingsBefore: before,
+            result: { ratings: after, updates: [upd('memory', 'grid-recall'), upd('speed', 'snap'), upd('language', 'misfit')] },
+          },
+        });
+        globalThis.__mindtier.router.push('/results');
+      });
+      await settle(page, 1500);
+    },
+  },
+  {
+    name: '31-results-daily',
+    path: '/',
+    before: async (page) => {
+      await store(page, () => {
+        const { useSession, useProgress } = globalThis.__mindtier.stores;
+        const ratings = useProgress.getState().ratings;
+        const run = (gameId, points, accuracy, peakLevel) => ({ gameId, mode: 'daily', points, accuracy, peakLevel, blocks: [] });
+        useSession.setState({
+          finished: {
+            plan: { mode: 'daily', seed: 'x', games: ['clash', 'misfit', 'pattern'] },
+            runs: [run('clash', 1084, 0.92, 14), run('misfit', 990, 0.85, 11), run('pattern', 831, 0.8, 10)],
+            ratingsBefore: ratings,
+            result: { ratings, updates: [] },
+          },
+        });
+        globalThis.__mindtier.router.push('/results');
+      });
+      await settle(page, 1500);
+    },
+  },
   // QA only: the walk-out before a game, the countdown, and the score between games.
   {
     name: '27-game-intro',
