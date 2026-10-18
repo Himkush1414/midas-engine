@@ -5,7 +5,7 @@ import { Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
 import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
-import { OptionGrid } from './controls';
+import { OptionGrid, Prompt } from './controls';
 
 export function PatternView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<PatternTrial, number>) {
   const { colors } = useTheme();
@@ -19,23 +19,23 @@ export function PatternView({ trial, onInputOpen, onAnswer, locked, demo }: Game
 
   return (
     <View style={styles.root}>
-      <Text variant="label" tone="muted" align="center">
+      <Prompt>
         {t('play.whatNext')}
-      </Text>
+      </Prompt>
       <View
         style={styles.sequence}
         accessible
         accessibilityLabel={t('a11y.sequence', { terms: trial.sequence.join(', ') })}
       >
         {trial.sequence.map((n, i) => (
-          <View key={i} style={[styles.term, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-            <Text variant={variant} tabular align="center">
+          <View key={i} style={[styles.term, { backgroundColor: colors.surface, borderColor: colors.surface }]}>
+            <Text variant={variant} display tabular align="center">
               {n}
             </Text>
           </View>
         ))}
         <View style={[styles.term, { borderColor: colors.primaryText, borderStyle: 'dashed', backgroundColor: colors.surfaceSunken }]}>
-          <Text variant={variant} tone="primary" align="center">
+          <Text variant={variant} display tone="primary" align="center">
             ?
           </Text>
         </View>
@@ -59,6 +59,6 @@ export function PatternView({ trial, onInputOpen, onAnswer, locked, demo }: Game
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.xl, paddingTop: spacing.xl },
   sequence: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: spacing.sm },
-  term: { minWidth: 52, height: 60, paddingHorizontal: spacing.sm, borderRadius: radii.md, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' },
+  term: { minWidth: 52, height: 64, paddingHorizontal: spacing.sm, borderRadius: radii.sm, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
   actions: { marginTop: 'auto', marginBottom: spacing.lg },
 });

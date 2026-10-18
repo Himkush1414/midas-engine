@@ -23,7 +23,7 @@ function Terms({ terms }: { terms: BalanceTerm[] }) {
     <View style={styles.terms}>
       {terms.map((t, i) => (
         <View key={i} style={styles.term}>
-          <Text variant="subheading" tabular weight="semibold">
+          <Text variant="heading" tabular>
             {t.count}
           </Text>
           <Shape id={t.shape} size={26} color={shapeColors[t.shape] ?? '#FFFFFF'} />
@@ -46,7 +46,7 @@ function Scale({ eq }: { eq: BalanceEquation }) {
   const t = useT();
   return (
     <View
-      style={[styles.scale, { backgroundColor: colors.surface, borderColor: colors.border }]}
+      style={[styles.scale, { backgroundColor: colors.surface }]}
       accessible
       accessibilityLabel={t('a11y.balances', { left: describe(t, eq.left), right: describe(t, eq.right) })}
     >
@@ -104,7 +104,7 @@ export function BalanceView({ trial, onInputOpen, onAnswer, locked, demo }: Game
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.lg, paddingTop: spacing.md },
   scales: { gap: spacing.sm },
-  scale: { flexDirection: 'row', alignItems: 'center', borderRadius: radii.lg, borderWidth: 1, paddingVertical: spacing.md, paddingHorizontal: spacing.sm },
+  scale: { flexDirection: 'row', alignItems: 'center', borderRadius: radii.md, paddingVertical: spacing.md, paddingHorizontal: spacing.sm },
   pan: { flex: 1, alignItems: 'center' },
   terms: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, flexWrap: 'wrap', justifyContent: 'center' },
   term: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },

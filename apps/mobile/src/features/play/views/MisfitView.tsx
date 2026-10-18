@@ -6,7 +6,7 @@ import { useLanguage, useT } from '@/i18n';
 import { spacing } from '@/theme';
 import type { GameViewProps } from '../types';
 import { wordLabel } from '../words';
-import { AnswerButton } from './controls';
+import { AnswerButton, Prompt } from './controls';
 
 export function MisfitView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<MisfitTrial, number>) {
   const t = useT();
@@ -17,9 +17,9 @@ export function MisfitView({ trial, onInputOpen, onAnswer, locked, demo }: GameV
 
   return (
     <View style={styles.root}>
-      <Text variant="label" tone="muted" align="center">
+      <Prompt>
         {t('play.misfitAsk')}
-      </Text>
+      </Prompt>
       <View style={styles.grid}>
         {trial.words.map((id, i) => {
           const label = wordLabel(language, id);
@@ -33,7 +33,7 @@ export function MisfitView({ trial, onInputOpen, onAnswer, locked, demo }: GameV
                 height={76}
                 testID={`misfit-${i}`}
               >
-                <Text variant="subheading" weight="semibold" align="center" numberOfLines={2} adjustsFontSizeToFit>
+                <Text variant="heading" align="center" numberOfLines={2} adjustsFontSizeToFit>
                   {label}
                 </Text>
               </AnswerButton>

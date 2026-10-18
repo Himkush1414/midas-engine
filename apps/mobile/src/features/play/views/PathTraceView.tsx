@@ -6,6 +6,7 @@ import { haptic } from '@/lib/feedback';
 import { radii, spacing, useTheme } from '@/theme';
 import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
+import { Prompt } from './controls';
 
 const GAP_MS = 180;
 
@@ -54,14 +55,9 @@ export function PathTraceView({ trial, onInputOpen, onAnswer, locked, demo }: Ga
 
   return (
     <View style={styles.root}>
-      <Text
-        variant="label"
-        tone={trial.reverse && phase === 'repeat' ? 'warning' : 'muted'}
-        align="center"
-        accessibilityLiveRegion="polite"
-      >
+      <Prompt tone={trial.reverse && phase === 'repeat' ? 'warning' : 'default'} accessibilityLiveRegion="polite">
         {instruction}
-      </Text>
+      </Prompt>
       <View style={{ width: boardSize, gap }}>
         {Array.from({ length: trial.size }, (_, r) => (
           <View key={r} style={[styles.row, { gap }]}>

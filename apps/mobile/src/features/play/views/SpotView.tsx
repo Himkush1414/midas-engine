@@ -2,10 +2,11 @@ import type { SpotTrial } from '@mindtier/core';
 import { useEffect } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { PressableScale, Text } from '@/components/ui';
+import { PressableScale } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
 import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
+import { Prompt } from './controls';
 
 /** Landolt C: a ring with a gap; orientation in 45° steps, 0 = gap at the top, clockwise. */
 export function ringPath(gapDegrees = 40): string {
@@ -42,9 +43,9 @@ export function SpotView({ trial, onInputOpen, onAnswer, locked, demo }: GameVie
 
   return (
     <View style={styles.root}>
-      <Text variant="label" tone="muted" align="center">
+      <Prompt>
         {t('play.spotAsk')}
-      </Text>
+      </Prompt>
       <View style={{ width: board, gap }}>
         {Array.from({ length: trial.rows }, (_, r) => (
           <View key={r} style={[styles.row, { gap }]}>

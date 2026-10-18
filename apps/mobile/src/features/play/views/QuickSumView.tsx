@@ -22,7 +22,7 @@ export function QuickSumView({ trial, onInputOpen, onAnswer, locked, demo }: Gam
 
   return (
     <View style={styles.root}>
-      <View style={[styles.display, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+      <View style={[styles.display, { backgroundColor: colors.surface }]}>
         <Text variant="title" tabular align="center" accessibilityLabel={`${expression.replace('−', 'minus').replace('×', 'times').replace('÷', 'divided by')} equals`}>
           {expression}
         </Text>
@@ -41,7 +41,7 @@ export function QuickSumView({ trial, onInputOpen, onAnswer, locked, demo }: Gam
 
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.lg, paddingTop: spacing.md },
-  display: { borderRadius: radii.xl, borderWidth: 1, padding: spacing.lg, gap: spacing.md, alignItems: 'center' },
+  display: { borderRadius: radii.md, padding: spacing.lg, gap: spacing.md, alignItems: 'center' },
   entry: { minWidth: 140, borderBottomWidth: 2, paddingHorizontal: spacing.md },
   pad: { marginTop: 'auto', marginBottom: spacing.md },
 });

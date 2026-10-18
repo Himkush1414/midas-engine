@@ -2,10 +2,9 @@ import type { EchoTrial } from '@mindtier/core';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { Text } from '@/components/ui';
 import { haptic } from '@/lib/feedback';
-import { spacing, useTheme } from '@/theme';
-import { AnswerButton } from './controls';
+import { radii, spacing, useTheme } from '@/theme';
+import { AnswerButton, Prompt } from './controls';
 import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 import { Shape } from './shapes';
@@ -51,10 +50,10 @@ export function EchoView({ trial, onInputOpen, onAnswer, locked, reduceMotion, d
 
   return (
     <View style={styles.root}>
-      <Text variant="label" tone="muted" align="center">
+      <Prompt>
         {t('play.echoHint', { count: trial.n })}
-      </Text>
-      <View style={[styles.stage, { borderColor: colors.border, backgroundColor: colors.surface }]}>
+      </Prompt>
+      <View style={[styles.stage, { backgroundColor: colors.surface }]}>
         {visible && symbol !== undefined ? (
           <Animated.View key={index} entering={reduceMotion ? undefined : FadeIn.duration(120)}>
             <Shape id={symbol} size={132} color={color} />
@@ -91,7 +90,7 @@ export function EchoView({ trial, onInputOpen, onAnswer, locked, reduceMotion, d
 
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.xl, paddingTop: spacing.lg },
-  stage: { height: 220, borderRadius: 32, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  stage: { height: 220, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center' },
   dot: { width: 8, height: 8, borderRadius: 4 },
   progress: { flexDirection: 'row', justifyContent: 'center', gap: 4, flexWrap: 'wrap' },
   pip: { width: 10, height: 4, borderRadius: 2 },

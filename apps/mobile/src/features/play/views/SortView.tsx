@@ -7,7 +7,7 @@ import { useLanguage, useT } from '@/i18n';
 import { radii, spacing, useTheme } from '@/theme';
 import type { GameViewProps } from '../types';
 import { categoryLabel, wordLabel } from '../words';
-import { BinaryChoice } from './controls';
+import { BinaryChoice, Prompt } from './controls';
 
 export function SortView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<SortTrial, boolean>) {
   const { colors, domain: dc } = useTheme();
@@ -22,9 +22,9 @@ export function SortView({ trial, onInputOpen, onAnswer, locked, demo }: GameVie
 
   return (
     <View style={styles.root}>
-      <Text variant="label" tone="muted" align="center">
+      <Prompt>
         {t('play.sortAsk')}
-      </Text>
+      </Prompt>
       <View style={[styles.group, { borderColor: dc.language, backgroundColor: colors.surface }]} accessible accessibilityLabel={t('a11y.sortTrial', { group, word })}>
         <Text variant="caption" tone="muted" weight="semibold" align="center">
           {group.toLocaleUpperCase(language)}

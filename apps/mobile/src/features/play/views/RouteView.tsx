@@ -6,6 +6,7 @@ import { PressableScale, Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
 import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
+import { Prompt } from './controls';
 
 const LABELS = ['A', 'B', 'C', 'D'] as const;
 const ROTATION = [0, 90, 180, 270] as const;
@@ -33,9 +34,9 @@ export function RouteView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
 
   return (
     <View style={styles.root}>
-      <Text variant="label" tone="muted" align="center">
+      <Prompt>
         {t('play.routeAsk', { count: trial.steps })}
-      </Text>
+      </Prompt>
       <View style={{ width: board, gap }}>
         {Array.from({ length: trial.size }, (_, r) => (
           <View key={r} style={[styles.row, { gap }]}>

@@ -2,7 +2,7 @@ import { clashAnswer, type ClashTrial } from '@mindtier/core';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from '@/components/ui';
-import { radii, spacing, useTheme } from '@/theme';
+import { radii, spacing, useTheme, darkPalette, onColor } from '@/theme';
 import { useLanguage, useT } from '@/i18n';
 import type { GameViewProps } from '../types';
 import { BinaryChoice } from './controls';
@@ -32,14 +32,14 @@ export function ClashView({ trial, onInputOpen, onAnswer, locked, shapeMode, dem
 
   return (
     <View style={styles.root}>
-      <View style={[styles.cue, { backgroundColor: trial.ask === 'ink' ? colors.surfaceRaised : colors.warning }]}>
-        <Text variant="label" style={{ color: trial.ask === 'ink' ? colors.text : colors.textInverse }}>
+      <View style={[styles.cue, { backgroundColor: trial.ask === 'ink' ? colors.surfaceRaised : colors.spark }]}>
+        <Text variant="label" weight="bold" style={{ color: trial.ask === 'ink' ? colors.text : onColor(colors.spark) }}>
           {t('play.clashAsk', { property: askLabel })}
         </Text>
       </View>
       <View
         // Ink colours need a dark stage to stay legible and recognisable in both themes.
-        style={[styles.card, { backgroundColor: shapeMode ? colors.surface : '#121734', borderColor: colors.border }]}
+        style={[styles.card, { backgroundColor: shapeMode ? colors.surface : darkPalette.surface }]}
         accessible
         accessibilityLabel={
           shapeMode
@@ -64,7 +64,7 @@ export function ClashView({ trial, onInputOpen, onAnswer, locked, shapeMode, dem
           </Text>
         )}
       </View>
-      <View style={[styles.card, styles.probe, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+      <View style={[styles.card, styles.probe, { backgroundColor: colors.surface }]}>
         <Text variant="title" align="center" accessibilityLabel={t('a11y.bottomWord', { word: word(trial.probe) })}>
           {word(trial.probe)}
         </Text>
@@ -83,8 +83,8 @@ export function ClashView({ trial, onInputOpen, onAnswer, locked, shapeMode, dem
 
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.lg, paddingTop: spacing.md },
-  cue: { alignSelf: 'center', paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, borderRadius: radii.pill },
-  card: { height: 170, borderRadius: radii.xl, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  cue: { alignSelf: 'center', paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, borderRadius: radii.xs },
+  card: { height: 170, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center' },
   probe: { height: 100 },
   word: { paddingHorizontal: spacing.md },
   shapeWrap: { width: 220, height: 160, alignItems: 'center', justifyContent: 'center' },
