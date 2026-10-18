@@ -1,11 +1,11 @@
-import { overallRating, tierChange, tierInfo } from '@mindtier/core';
+import { getGame, overallRating, tierChange, tierInfo } from '@mindtier/core';
 import { Redirect, router } from 'expo-router';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { ZoomIn } from 'react-native-reanimated';
 import { Celebration } from '@/components/Celebration';
 import { TierBadge } from '@/components/tier';
-import { Button, Card, Screen, Text } from '@/components/ui';
+import { Button, Enter, ProgressBar, RollingNumber, Screen, Text, Ticket } from '@/components/ui';
 import { shareDuel } from '@/features/duels/actions';
 import { DeltaRow } from '@/features/results/DeltaRow';
 import { webPlay } from '@/lib/config';
@@ -13,16 +13,21 @@ import { haptic } from '@/lib/feedback';
 import { useReduceMotion } from '@/lib/motion';
 import { maybeAskForReview } from '@/lib/review';
 import { play } from '@/lib/sound';
-import { useT, type TKey } from '@/i18n';
+import { useLanguage, useT, type TKey } from '@/i18n';
 import { tierLabel } from '@/i18n/labels';
 import { useEntitlements } from '@/state/entitlements';
 import { useSession } from '@/state/session';
-import { spacing, tierColors } from '@/theme';
+import { onColor, radii, SLANT_DEG, spacing, springs, tierColors, useTheme } from '@/theme';
 
 function isPromotion(f: { plan: { mode: string }; ratingsBefore: Parameters<typeof overallRating>[0]; result: { ratings: Parameters<typeof overallRating>[0] } }): boolean {
   if (f.plan.mode !== 'ranked' && f.plan.mode !== 'placement') return false;
   const change = tierChange(overallRating(f.ratingsBefore), overallRating(f.result.ratings));
   return change === 'tier-up' || change === 'promoted';
+}
+
+function gainedRating(f: { plan: { mode: string }; ratingsBefore: Parameters<typeof overallRating>[0]; result: { ratings: Parameters<typeof overallRating>[0] } }): boolean {
+  if (f.plan.mode !== 'ranked' && f.plan.mode !== 'placement') return false;
+  return Math.round(overallRating(f.result.ratings).rating) > Math.round(overallRating(f.ratingsBefore).rating);
 }
 
 const PROMOTION_COPY: Record<string, TKey | null> = {
@@ -36,16 +41,33 @@ const PROMOTION_COPY: Record<string, TKey | null> = {
 export default function Results() {
   const reduce = useReduceMotion();
   const t = useT();
+  const locale = useLanguage();
+  const { colors, domain: domainColor } = useTheme();
   const finished = useSession((s) => s.finished);
   const isPro = useEntitlements((s) => s.isPro);
   const promoted = finished ? isPromotion(finished) : false;
+  const gained = finished ? gainedRating(finished) : false;
+  useEffect(() => {
+    // A plain rating gain lands with the roll: one bright note and a success tap.
+    if (!promoted && gained) {
+      const timer = setTimeout(() => {
+        play('correct');
+        haptic.success();
+      }, 700);
+      return () => clearTimeout(timer);
+    }
+  }, [promoted, gained]);
   useEffect(() => {
     if (promoted) {
-      haptic.success();
+      haptic.heavy();
       play('rankup');
+      const settle = setTimeout(() => haptic.success(), 450);
       // Give the celebration a moment before the system review sheet may appear.
       const timer = setTimeout(() => void maybeAskForReview(), 2500);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(settle);
+        clearTimeout(timer);
+      };
     }
   }, [promoted]);
   if (!finished) return <Redirect href="/" />;
@@ -92,32 +114,70 @@ export default function Results() {
       }
     >
       <View style={styles.hero}>
-        <Animated.View entering={reduce ? undefined : ZoomIn.springify().damping(12)}>
-          <TierBadge info={info} size={132} showProvisional={false} />
-        </Animated.View>
-        {celebrate ? <Celebration colors={[c.highlight, c.base, '#FFFFFF']} reduceMotion={reduce} top={40} /> : null}
+        {celebrate ? <Celebration colors={[c.highlight, c.base, '#FFFFFF']} reduceMotion={reduce} top={60} /> : null}
         {rated ? (
           <>
             {PROMOTION_COPY[change] ? (
-              <Text variant="label" tone={celebrate ? 'spark' : 'muted'} align="center">
-                {t(PROMOTION_COPY[change]!)}
-              </Text>
+              <Animated.View
+                entering={reduce ? undefined : ZoomIn.springify().damping(springs.slam.damping).stiffness(springs.slam.stiffness)}
+                style={[styles.stamp, { backgroundColor: celebrate ? colors.spark : colors.surfaceRaised }]}
+              >
+                <Text variant="heading" style={[styles.unskew, { color: celebrate ? onColor(colors.spark) : colors.textMuted }]}>
+                  {t(PROMOTION_COPY[change]!)}
+                </Text>
+              </Animated.View>
             ) : null}
-            <Text variant="title" align="center">
+            <View style={styles.scoreRow}>
+              <Animated.View
+                entering={reduce ? undefined : ZoomIn.springify().damping(springs.slam.damping).stiffness(springs.slam.stiffness)}
+                style={styles.badge}
+              >
+                <View style={[styles.glow, { boxShadow: `0 0 56px 10px ${c.base}66` }]} />
+                <TierBadge info={info} size={124} showProvisional={false} shine={celebrate} />
+              </Animated.View>
+              <View style={styles.scoreText}>
+                <Text variant="micro" tone="muted">
+                  {t('home.ratingLabel')}
+                </Text>
+                <RollingNumber
+                  value={`${overallDelta >= 0 ? '+' : '−'}${Math.abs(overallDelta)}`}
+                  variant="mega"
+                  style={[styles.delta, { color: overallDelta > 0 ? colors.success : overallDelta < 0 ? colors.danger : colors.textMuted }]}
+                  accessibilityLabel={t('results.mindRating', {
+                    rating: Math.round(after.rating),
+                    delta: `${overallDelta >= 0 ? '+' : '−'}${Math.abs(overallDelta)}`,
+                  })}
+                />
+                <Text variant="micro" tone="muted" tabular>
+                  {Math.round(after.rating)}
+                </Text>
+              </View>
+            </View>
+            <Text variant="title" style={{ color: c.base }}>
               {tierLabel(t, info)}
             </Text>
-            <Text tone="muted" align="center" tabular>
-              {t('results.mindRating', { rating: Math.round(after.rating), delta: `${overallDelta >= 0 ? '+' : '−'}${Math.abs(overallDelta)}` })}
-            </Text>
+            <ProgressBar value={info.progress} color={c.base} segments={10} height={12} accessibilityLabel={t('home.progressA11y')} />
           </>
         ) : (
           <>
-            <Text variant="title" align="center" tabular>
-              {plan.mode === 'zen' ? t('results.accuracy', { percent: Math.round((runs[0]?.accuracy ?? 0) * 100) }) : t('common.points', { points })}
-            </Text>
-            <Text tone="muted" align="center">
+            <Text variant="micro" tone="muted">
               {plan.mode === 'daily' ? t('results.dailyDone') : plan.mode === 'duel' ? t('results.duelDone') : t('results.zenDone')}
             </Text>
+            {plan.mode === 'zen' ? (
+              <View style={styles.pointsRow}>
+                <RollingNumber value={String(Math.round((runs[0]?.accuracy ?? 0) * 100))} variant="mega" style={styles.points} />
+                <Text variant="hero" tone="muted">
+                  %
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.pointsRow}>
+                <RollingNumber value={points.toLocaleString(locale)} variant="mega" style={styles.points} />
+                <Text variant="heading" tone="muted" style={styles.unit}>
+                  {t('common.points', { points: '' }).trim()}
+                </Text>
+              </View>
+            )}
           </>
         )}
       </View>
@@ -125,37 +185,66 @@ export default function Results() {
       {rated ? (
         <View style={styles.list}>
           {result.updates.map((u, i) => (
-            <DeltaRow key={`${u.gameId}-${i}`} update={u} index={i} reduceMotion={reduce} />
+            <DeltaRow key={`${u.gameId}-${i}`} update={u} index={i} />
           ))}
         </View>
       ) : (
         <View style={styles.list}>
-          {runs.map((r, i) => (
-            <Card key={`${r.gameId}-${i}`}>
-              <Text weight="semibold">{t('results.accuracy', { percent: Math.round(r.accuracy * 100) })}</Text>
-              <Text variant="caption" tone="muted" tabular>
-                {plan.mode === 'zen' ? t('results.reached', { level: Math.max(1, r.peakLevel) }) : t('results.pointsPeak', { points: r.points, level: r.peakLevel })}
-              </Text>
-            </Card>
-          ))}
+          {runs.map((r, i) => {
+            const game = getGame(r.gameId);
+            return (
+              <Enter key={`${r.gameId}-${i}`} index={i + 2}>
+                <View style={[styles.run, { backgroundColor: colors.surface }]}>
+                  <View style={[styles.tab, { backgroundColor: domainColor[game.domain] }]} />
+                  <View style={styles.runText}>
+                    <Text variant="heading" numberOfLines={1}>
+                      {game.name}
+                    </Text>
+                    <Text variant="micro" tone="muted" tabular>
+                      {plan.mode === 'zen' ? t('results.reached', { level: Math.max(1, r.peakLevel) }) : t('results.pointsPeak', { points: r.points, level: r.peakLevel })}
+                    </Text>
+                  </View>
+                  <Text variant="heading" tabular>
+                    {Math.round(r.accuracy * 100)}%
+                  </Text>
+                </View>
+              </Enter>
+            );
+          })}
         </View>
       )}
 
       {plan.mode === 'ranked' && !isPro ? (
-        <Card style={styles.upsell} onPress={() => router.push('/paywall')} accessibilityLabel={t('paywall.title')}>
-          <Text weight="semibold">{t('results.upsellTitle')}</Text>
-          <Text variant="caption" tone="muted">
-            {t('results.upsellBody')}
-          </Text>
-        </Card>
+        <Ticket
+          kicker={t('paywall.title')}
+          title={t('results.upsellTitle')}
+          detail={t('results.upsellBody')}
+          color={colors.spark}
+          icon="sparkle"
+          onPress={() => router.push('/paywall')}
+          style={styles.upsell}
+        />
       ) : null}
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  hero: { alignItems: 'center', gap: spacing.sm, paddingTop: spacing.xl, paddingBottom: spacing.lg },
+  hero: { gap: spacing.md, paddingTop: spacing.lg, paddingBottom: spacing.xl },
+  stamp: { alignSelf: 'flex-start', paddingHorizontal: spacing.lg, paddingVertical: spacing.xs, borderRadius: radii.xs, transform: [{ skewX: `${SLANT_DEG}deg` }] },
+  unskew: { transform: [{ skewX: `${-SLANT_DEG}deg` }] },
+  scoreRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.lg },
+  badge: { width: 124, height: 124, alignItems: 'center', justifyContent: 'center' },
+  glow: { position: 'absolute', width: 74, height: 74, borderRadius: 74 },
+  scoreText: { flex: 1, gap: 2 },
+  delta: { fontSize: 88, lineHeight: 80 },
+  pointsRow: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing.sm, flexWrap: 'wrap' },
+  points: { fontSize: 104, lineHeight: 94 },
+  unit: { marginBottom: spacing.sm },
   list: { gap: spacing.sm },
-  upsell: { marginTop: spacing.lg, gap: spacing.xs },
+  run: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, borderRadius: radii.md, padding: spacing.md, paddingLeft: spacing.lg, overflow: 'hidden' },
+  tab: { position: 'absolute', left: -4, top: 0, bottom: 0, width: 10, transform: [{ skewX: `${SLANT_DEG}deg` }] },
+  runText: { flex: 1, gap: 2 },
+  upsell: { marginTop: spacing.lg },
   footer: { gap: spacing.sm },
 });
