@@ -3,6 +3,7 @@
 // Build once:  cd apps/mobile && EXPO_PUBLIC_QA_HOOKS=1 npx expo export --platform web --output-dir ../../.qa-web
 // Then:        node scripts/screenshots.mjs [--dist .qa-web] [--scheme dark|light] [--lang en|es|pt|de|fr|it] [--only name] [--out dir] [--now ISO]
 // --now pins the page clock (e.g. mid-season for store assets, so they never show the preseason).
+// --motion captures with animations on (default: reduced motion, so frames are deterministic); use it to QA motion layouts.
 // --width/--height change the viewport for QA at other device sizes (e.g. 360×640, or a tall 412×1600 to see a whole scroll).
 // (or point --base at a running `expo start --web` dev server)
 // Writes raw captures to store/screenshots/raw/<scheme>[-<lang>]/ (1080×1920, 9:16 for Google Play),
@@ -93,7 +94,7 @@ function demoState() {
     },
     'mindtier.account.v1': { state: { displayName: 'Alex', email: null, userId: null }, version: 1 },
     'mindtier.settings.v1': {
-      state: { theme: SCHEME, language: LANG, sound: true, haptics: true, motion: 'reduced', shapeMode: false, reminderEnabled: true, reminderHour: 19, reminderMinute: 0, hiddenGames: [] },
+      state: { theme: SCHEME, language: LANG, sound: true, haptics: true, motion: process.argv.includes('--motion') ? 'system' : 'reduced', shapeMode: false, reminderEnabled: true, reminderHour: 19, reminderMinute: 0, hiddenGames: [] },
       version: 1,
     },
     'mindtier.duels.v1': {
@@ -519,7 +520,7 @@ const browser = await chromium.launch();
 await mkdir(OUT, { recursive: true });
 for (const scene of SCENES) {
   if (ONLY && !scene.name.includes(ONLY)) continue;
-  const context = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: DPR, colorScheme: SCHEME, reducedMotion: 'reduce', locale: LANG });
+  const context = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: DPR, colorScheme: SCHEME, reducedMotion: process.argv.includes('--motion') ? 'no-preference' : 'reduce', locale: LANG });
   const state = scene.fresh ? { 'mindtier.settings.v1': demoState()['mindtier.settings.v1'] } : demoState();
   await context.addInitScript((entries) => {
     if (sessionStorage.getItem('seeded')) return;

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Visual QA: shoots scenes from scripts/screenshots.mjs in dark and light and tiles them into one
 // contact sheet (dark | light, side by side, per scene).
-//   node scripts/qa-sheet.mjs --out <dir> [--dist .qa-web] [--width 412] [--height 732] [--lang en] [--cols 6] [--tile 330] scene...
+//   node scripts/qa-sheet.mjs --out <dir> [--dist .qa-web] [--width 412] [--height 732] [--lang en] [--cols 6] [--tile 330] [--motion on] scene...
 // Writes <dir>/dark/*.png, <dir>/light/*.png and <dir>/sheet.jpg. Scenes match by substring.
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, rmSync } from 'node:fs';
@@ -24,7 +24,7 @@ if (!out || scenes.length === 0) {
 }
 const width = Number(flags.width ?? 412);
 const height = Number(flags.height ?? 732);
-const passthrough = ['--dist', flags.dist ?? '.qa-web', '--width', String(width), '--height', String(height), '--lang', flags.lang ?? 'en'];
+const passthrough = ['--dist', flags.dist ?? '.qa-web', '--width', String(width), '--height', String(height), '--lang', flags.lang ?? 'en', ...(flags.motion ? ['--motion'] : [])];
 
 rmSync(out, { recursive: true, force: true });
 for (const scene of scenes) {
