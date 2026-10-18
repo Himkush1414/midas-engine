@@ -25,7 +25,7 @@ export function RankHero({ ratings }: { ratings: DomainRatings }) {
       <Enter index={0} style={styles.top}>
         <View style={styles.badge}>
           <View style={[styles.glow, { boxShadow: `0 0 56px 10px ${color}66` }]} />
-          <TierBadge info={info} size={BADGE} showProvisional={false} />
+          <TierBadge info={info} size={BADGE} showProvisional={false} shine />
         </View>
         <View style={styles.rating}>
           <Text variant="micro" tone="muted">
