@@ -116,3 +116,25 @@ describe('overallRating', () => {
     expect(tierInfo(overallRating(fresh)).provisional).toBe(true);
   });
 });
+
+describe('forged badge art', () => {
+  it('has one bevel facet per hexagon edge, each a closed quad inside the 100×100 canvas', async () => {
+    const { BADGE_BEVELS, PIP_BARS } = await import('../art/badges');
+    expect(BADGE_BEVELS).toHaveLength(6);
+    for (const facet of BADGE_BEVELS) {
+      const coords = facet.points.split(' ').map((p) => p.split(',').map(Number));
+      expect(coords).toHaveLength(4);
+      for (const [x, y] of coords) {
+        expect(x).toBeGreaterThanOrEqual(0);
+        expect(x).toBeLessThanOrEqual(100);
+        expect(y).toBeGreaterThanOrEqual(0);
+        expect(y).toBeLessThanOrEqual(100);
+      }
+    }
+    // Lit from the upper left: the brightest facet is the upper-left one, the darkest lower left.
+    const light = BADGE_BEVELS.map((f) => (f.tone === 'light' ? f.opacity : -f.opacity));
+    expect(light.indexOf(Math.max(...light))).toBe(5);
+    expect(light.indexOf(Math.min(...light))).toBe(3);
+    expect(PIP_BARS).toHaveLength(4);
+  });
+});

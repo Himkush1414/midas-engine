@@ -33,6 +33,36 @@ export const EMBLEMS: Record<TierId, { stroke: string[]; fill: string[] }> = {
 export const PIP_Y = 79;
 export const PIP_XS = [41, 47, 53, 59] as const;
 
+const points = (list: string) => list.split(' ').map((p) => p.split(',').map(Number) as [number, number]);
+const OUTER = points(BADGE_OUTER);
+const INNER = points(BADGE_INNER);
+
+/**
+ * The forged rim: one bevel facet per edge, between the outer and inner hexagon, lit from the
+ * upper left. `light` facets are washed with white, `dark` ones with black, at `opacity`.
+ * Edges run clockwise from the top vertex.
+ */
+const BEVEL_LIGHT: { tone: 'light' | 'dark'; opacity: number }[] = [
+  { tone: 'light', opacity: 0.32 }, // upper right
+  { tone: 'light', opacity: 0.06 }, // right
+  { tone: 'dark', opacity: 0.2 }, // lower right
+  { tone: 'dark', opacity: 0.34 }, // lower left
+  { tone: 'dark', opacity: 0.12 }, // left
+  { tone: 'light', opacity: 0.46 }, // upper left
+];
+export const BADGE_BEVELS: { points: string; tone: 'light' | 'dark'; opacity: number }[] = BEVEL_LIGHT.map((light, i) => {
+  const j = (i + 1) % 6;
+  const quad = [OUTER[i]!, OUTER[j]!, INNER[j]!, INNER[i]!];
+  return { points: quad.map(([x, y]) => `${x},${y}`).join(' '), ...light };
+});
+
+/** Division pips as slanted bars (the Floodlight slant), left to right. */
+export const PIP_BARS: string[] = PIP_XS.map((x) => {
+  const [w, h, lean] = [4.6, 3.4, 1.2];
+  const left = x - w / 2;
+  return `M${left + lean} ${PIP_Y - h / 2} H${left + w + lean} L${left + w - lean} ${PIP_Y + h / 2} H${left - lean} Z`;
+});
+
 /** Light tiers get dark emblems for contrast. */
 export const LIGHT_TIERS: ReadonlySet<TierId> = new Set(['silver', 'gold', 'platinum']);
 
