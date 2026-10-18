@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { Easing, ReduceMotion, cancelAnimation, interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
-import { radii, useTheme } from '@/theme';
+import { SLANT_DEG, useTheme } from '@/theme';
 
 export interface TimerBarProps {
   /** Total window in ms; null hides the bar (untimed). */
@@ -40,7 +40,7 @@ export function TimerBar({ durationMs, startedAt, frozen, onExpire }: TimerBarPr
 
   const fill = useAnimatedStyle(() => ({
     width: `${remaining.get() * 100}%`,
-    backgroundColor: interpolateColor(remaining.get(), [0, 0.25, 0.5, 1], [colors.danger, colors.warning, colors.accent, colors.accent]),
+    backgroundColor: interpolateColor(remaining.get(), [0, 0.25, 0.5, 1], [colors.danger, colors.spark, colors.success, colors.success]),
   }));
 
   if (durationMs === null) return <View style={styles.placeholder} />;
@@ -51,8 +51,9 @@ export function TimerBar({ durationMs, startedAt, frozen, onExpire }: TimerBarPr
   );
 }
 
+// The clock drains volt → spark → flare along a slanted bar.
 const styles = StyleSheet.create({
-  track: { height: 6, borderRadius: radii.pill, overflow: 'hidden' },
-  fill: { height: '100%', borderRadius: radii.pill },
-  placeholder: { height: 6 },
+  track: { height: 8, marginHorizontal: 2, borderRadius: 1, overflow: 'hidden', transform: [{ skewX: `${SLANT_DEG}deg` }] },
+  fill: { height: '100%' },
+  placeholder: { height: 8 },
 });

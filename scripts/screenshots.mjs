@@ -367,6 +367,52 @@ const SCENES = [
   // QA only: the weekly recap and the profile entries to it.
   { name: '20-week', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/week')); await settle(page, 1200); } },
   { name: '21-profile-cards', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/profile')); await settle(page, 1200); } },
+  // QA only: the walk-out before a game, the countdown, and the score between games.
+  {
+    name: '27-game-intro',
+    path: '/',
+    before: async (page) => {
+      await store(page, () => {
+        const { useSession } = globalThis.__mindtier.stores;
+        useSession.getState().start({ mode: 'ranked', seed: 'shot|intro', games: ['misfit', 'flank', 'grid-recall'] });
+        globalThis.__mindtier.router.push('/session');
+      });
+      await settle(page, 1200);
+    },
+  },
+  {
+    name: '28-countdown',
+    path: '/',
+    before: async (page) => {
+      await store(page, () => {
+        const { useSession } = globalThis.__mindtier.stores;
+        useSession.getState().start({ mode: 'ranked', seed: 'shot|count', games: ['flank', 'pattern', 'grid-recall'] });
+        globalThis.__mindtier.router.push('/session');
+      });
+      await settle(page);
+      await page.getByTestId('intro-start').click();
+      await page.waitForTimeout(250);
+    },
+  },
+  {
+    name: '29-between',
+    path: '/',
+    before: async (page) => {
+      await store(page, () => {
+        const { useSession } = globalThis.__mindtier.stores;
+        useSession.getState().start({ mode: 'ranked', seed: 'shot|between', games: ['pattern', 'flank', 'grid-recall'] });
+        globalThis.__mindtier.router.push('/session');
+      });
+      await settle(page);
+      await page.getByTestId('intro-start').click();
+      const deadline = Date.now() + 120_000;
+      while (Date.now() < deadline && !(await page.getByTestId('session-next').isVisible().catch(() => false))) {
+        await page.evaluate(() => globalThis.__mindtier?.answerCurrent?.());
+        await page.waitForTimeout(250);
+      }
+      await settle(page, 900);
+    },
+  },
 ];
 
 /** Runs in the page: sessions on most days of the current local week. */
