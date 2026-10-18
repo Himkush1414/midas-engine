@@ -5,6 +5,7 @@ export const es: LandingCopy = {
   metaTitle: 'Mindtier — Juegos mentales clasificados',
   metaDescription:
     'Descubre tu rango mental en seis partidas rápidas de clasificación y escala de Hierro a Gran Maestro. Puzles que se adaptan a ti, reto diario, duelos, temporadas mensuales y ligas semanales. Sin anuncios, nunca.',
+  heroKicker: 'Juegos mentales clasificados',
   heroTitle: '¿En qué rango está tu mente?',
   heroLead:
     'Juegos mentales clasificados. Descubre tu rango, de Hierro a Gran Maestro, en seis partidas rápidas de clasificación y después escala con puzles que se adaptan a ti, un reto diario y duelos con amigos.',
@@ -113,4 +114,30 @@ export const es: LandingCopy = {
       a: 'Sí: en la app, en Ajustes → Eliminar cuenta, o en nuestra página de eliminación de cuentas. Se borran tu perfil, tus puntuaciones y tu historial.',
     },
   ],
+  demo: {
+    kicker: 'Pruébalo aquí',
+    title: 'Diez segundos de Flank',
+    body: '¿Hacia dónde apunta la flecha del centro? Ignora a sus vecinas. Toca los botones o usa las flechas del teclado.',
+    start: 'Empezar',
+    again: 'Jugar otra vez',
+    left: 'Izquierda',
+    right: 'Derecha',
+    progress: '{done} de {total}',
+    result: '{correct}/{total} aciertos · {ms} ms de media',
+    verdict: 'Eso es velocidad de nivel {tier}.',
+    note: 'Solo un adelanto: tu rango real sale de seis partidas de clasificación en la app.',
+  },
+  dailyTitle: 'Un reto. Todo el mundo. Cada día.',
+  dailyBody: 'Tres rompecabezas, los mismos para todos los jugadores del planeta, que se renuevan a medianoche UTC. Juégalo aquí mismo en tu navegador, sin registrarte, y mira dónde quedaste en la clasificación de hoy.',
+  finalTitle: 'Descubre tu rango.',
+  finalBody: 'Seis partidas rápidas. Unos cinco minutos. Después, la escalada es tuya.',
+  shots: {
+    home: 'Pantalla de inicio de Mindtier: Platino II, puntuación 1605, con la próxima sesión clasificatoria',
+    reveal: 'Resultado de la clasificación: Platino II con un radar de seis habilidades',
+    results: 'Resultados de la sesión: subida de división, con lo ganado en tres juegos',
+    duel: 'Un duelo terminado: 2140 contra 1985',
+    daily: 'Resultado del reto diario y la clasificación de hoy',
+    league: 'Tabla de la liga semanal con tu puesto',
+    season: 'Resumen de temporada con el rango máximo y la mayor subida',
+  },
 };

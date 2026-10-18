@@ -1,0 +1,766 @@
+/* The landing page, Floodlight edition. Domain colours mirror apps/mobile/src/theme/tokens.ts. */
+.hero,
+.section,
+.dailyBand,
+.final {
+  --memory: #8b6cff;
+  --focus: #22d3ee;
+  --speed: #fbbf24;
+  --logic: #34d399;
+  --math: #f472b6;
+  --language: #f97316;
+  --on-domain: #0f0d0b;
+}
+
+@media (prefers-color-scheme: light) {
+  .hero,
+  .section,
+  .dailyBand,
+  .final {
+    --memory: #6d4cf5;
+    --focus: #0891b2;
+    --speed: #b45309;
+    --logic: #047857;
+    --math: #be185d;
+    --language: #7c2d12;
+    --on-domain: #ffffff;
+  }
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  padding: 48px 0 24px;
+  overflow: hidden;
+}
+
+.heroGrid {
+  display: grid;
+  gap: 40px;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .heroGrid {
+    grid-template-columns: 1.15fr 0.85fr;
+    min-height: calc(100vh - 140px);
+  }
+}
+
+.heroTitle {
+  font-size: clamp(3.6rem, 12.5vw, 8.4rem);
+  line-height: 0.86;
+  margin-bottom: 0.3em;
+}
+
+.lead {
+  font-size: 1.2rem;
+  max-width: 34em;
+  color: var(--muted);
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 28px 0 18px;
+}
+
+.facts {
+  font-family: var(--font-mono-stack);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.heroArt {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 24px 0;
+}
+
+/* Badges float around the phone like trophies on a shelf. */
+.floaters {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.float {
+  position: absolute;
+  z-index: 1;
+  filter: drop-shadow(0 14px 22px rgb(0 0 0 / 0.4));
+}
+
+.float svg {
+  width: clamp(56px, 14vw, 118px);
+  height: auto;
+}
+
+.floatA {
+  left: 2%;
+  top: 18%;
+  transform: rotate(-12deg);
+}
+
+.floatB {
+  right: 0;
+  top: 2%;
+  transform: rotate(10deg);
+}
+
+.floatC {
+  right: 6%;
+  bottom: 8%;
+  transform: rotate(-6deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .floatA {
+    animation: bob 6s ease-in-out infinite;
+  }
+  .floatB {
+    animation: bob 7s ease-in-out -2s infinite;
+  }
+  .floatC {
+    animation: bob 5.5s ease-in-out -1s infinite;
+  }
+}
+
+@keyframes bob {
+  50% {
+    translate: 0 -12px;
+  }
+}
+
+.heroPhone {
+  position: relative;
+  width: min(300px, 72vw);
+  transform: rotate(-5deg);
+}
+
+/* ---------- Phone mockup ---------- */
+.phone {
+  aspect-ratio: 540 / 960;
+  padding: 9px;
+  border-radius: 46px;
+  background: linear-gradient(160deg, #3a342d, #0a0908 40%, #1a1714);
+  box-shadow:
+    0 0 0 1.5px #4a4239,
+    0 40px 80px -20px rgb(0 0 0 / 0.65),
+    0 18px 30px -12px rgb(0 0 0 / 0.5);
+}
+
+.screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 37px;
+  overflow: hidden;
+  background: #0f0d0b;
+}
+
+.screen img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- Sections ---------- */
+.section {
+  padding-top: 112px;
+}
+
+.section h2 {
+  max-width: 14em;
+}
+
+/* Eight tiers, stepping up the slant. */
+.tierRow {
+  list-style: none;
+  padding: 0;
+  margin: 40px 0 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px 12px;
+}
+
+@media (min-width: 900px) {
+  .tierRow {
+    grid-template-columns: repeat(8, 1fr);
+    align-items: end;
+    min-height: 260px;
+  }
+
+  .tierStep {
+    transform: translateY(calc(var(--i) * -18px));
+  }
+}
+
+.tierStep svg {
+  width: min(84px, 100%);
+  height: auto;
+}
+
+.tierStep {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display-stack);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(0.82rem, 3.4vw, 1.15rem);
+  text-align: center;
+  overflow-wrap: anywhere;
+  line-height: 1;
+}
+
+/* How it works: alternating story with real screens. */
+.steps {
+  display: grid;
+  gap: 72px;
+  margin-top: 48px;
+}
+
+.step {
+  display: grid;
+  gap: 28px;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .step {
+    grid-template-columns: 1fr 300px;
+    gap: 64px;
+  }
+
+  .stepFlip {
+    grid-template-columns: 300px 1fr;
+  }
+
+  .stepFlip .stepText {
+    order: 2;
+  }
+}
+
+.stepText h3 {
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  font-weight: 900;
+}
+
+.stepText p {
+  font-size: 1.15rem;
+  max-width: 30em;
+}
+
+.stepNumber {
+  display: block;
+  font-family: var(--font-mono-stack);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  color: var(--primary-text);
+  margin-bottom: 8px;
+}
+
+.stepPhone {
+  width: min(280px, 70vw);
+  justify-self: center;
+}
+
+/* ---------- Demo ---------- */
+.demoHead {
+  max-width: 40em;
+}
+
+.demo {
+  margin-top: 28px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demoIdle,
+.demoStage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  width: 100%;
+}
+
+.demoStage {
+  border-radius: var(--radius-md);
+  padding: 12px;
+  transition: background-color 120ms;
+}
+
+.flashOk {
+  background: color-mix(in srgb, var(--success) 14%, transparent);
+}
+
+.flashMiss {
+  background: color-mix(in srgb, var(--danger) 16%, transparent);
+}
+
+.demoRow {
+  display: flex;
+  gap: 4px;
+  color: var(--faint);
+}
+
+.arrow,
+.arrowStrong {
+  width: clamp(44px, 12vw, 76px);
+  height: clamp(44px, 12vw, 76px);
+}
+
+.arrowStrong {
+  color: var(--text);
+}
+
+.demoCount {
+  font-family: var(--font-mono-stack);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+
+.demoButtons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: min(100%, 420px);
+}
+
+.demoDone {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 28px;
+  max-width: 640px;
+}
+
+.demoDone > div {
+  flex: 1 1 260px;
+}
+
+.demoVerdict {
+  font-family: var(--font-display-stack);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 0.95;
+  margin-bottom: 0.3em;
+}
+
+/* ---------- Daily band ---------- */
+.dailyBand {
+  margin-top: 120px;
+  padding: 88px 0;
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+}
+
+.dailyBand::before {
+  content: '';
+  position: absolute;
+  left: -10%;
+  top: 0;
+  width: 40%;
+  height: 14px;
+  background: var(--spark);
+  transform: skewX(var(--slant));
+}
+
+.dailyGrid {
+  display: grid;
+  gap: 40px;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .dailyGrid {
+    grid-template-columns: 1fr 300px;
+  }
+}
+
+.bandBody {
+  font-size: 1.15rem;
+  color: var(--muted);
+  max-width: 32em;
+  margin-bottom: 28px;
+}
+
+.dailyPhone {
+  width: min(280px, 70vw);
+  justify-self: center;
+  transform: rotate(4deg);
+}
+
+/* ---------- Seasons, leagues, your week ---------- */
+.bento {
+  display: grid;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+@media (min-width: 900px) {
+  .bento {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.tile {
+  position: relative;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 28px 28px 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 520px;
+}
+
+.tile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -12px;
+  width: 55%;
+  height: 10px;
+  transform: skewX(var(--slant));
+}
+
+.tile0::before {
+  background: var(--spark);
+}
+
+.tile1::before {
+  background: var(--accent);
+}
+
+.tile2::before {
+  background: var(--primary-text);
+}
+
+.tilePhone {
+  width: 78%;
+  margin: auto auto -32% auto;
+}
+
+/* ---------- Games ---------- */
+.domains {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  margin-top: 40px;
+}
+
+.domain {
+  border-radius: var(--radius-md);
+  padding: 24px;
+  color: var(--on-domain);
+  min-height: 220px;
+}
+
+.domain h3 {
+  font-size: 2.2rem;
+}
+
+.memory {
+  background: var(--memory);
+}
+.focus {
+  background: var(--focus);
+}
+.speed {
+  background: var(--speed);
+}
+.logic {
+  background: var(--logic);
+}
+.math {
+  background: var(--math);
+}
+.language {
+  background: var(--language);
+}
+
+.gameList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.gameList strong {
+  display: block;
+  font-family: var(--font-display-stack);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+}
+
+.gameList span {
+  font-size: 0.92rem;
+  opacity: 0.88;
+}
+
+/* ---------- Promises ---------- */
+.promises {
+  list-style: none;
+  padding: 0;
+  margin: 40px 0 0;
+  display: grid;
+  gap: 0;
+}
+
+@media (min-width: 900px) {
+  .promises {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.promises li {
+  padding: 28px 0;
+  border-top: 1px solid var(--border);
+  counter-increment: promise;
+}
+
+@media (min-width: 900px) {
+  .promises li:nth-child(odd) {
+    padding-right: 40px;
+  }
+}
+
+.promises li::before {
+  content: '0' counter(promise);
+  display: block;
+  font-family: var(--font-mono-stack);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  color: var(--primary-text);
+  margin-bottom: 10px;
+}
+
+/* ---------- Pricing ---------- */
+.pricing {
+  display: grid;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+@media (min-width: 900px) {
+  .pricing {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.plan {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+}
+
+.plan h3 {
+  font-size: 2.4rem;
+}
+
+.pro {
+  background: var(--surface-raised);
+  box-shadow: inset 0 0 0 2px var(--primary-text);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+  display: grid;
+  gap: 10px;
+}
+
+.list li {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.list li::before {
+  content: '';
+  flex: none;
+  width: 14px;
+  height: 7px;
+  border-radius: 1px;
+  background: var(--primary-text);
+  transform: skewX(var(--slant)) translateY(-2px);
+}
+
+/* ---------- FAQ ---------- */
+.faq {
+  display: grid;
+  gap: 8px;
+  margin-top: 32px;
+  max-width: 820px;
+}
+
+.faq details {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 4px 24px;
+}
+
+.faq summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 18px 0;
+  font-family: var(--font-display-stack);
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: '+';
+  color: var(--primary-text);
+}
+
+.faq details[open] summary::after {
+  content: '–';
+}
+
+/* ---------- Final call ---------- */
+.final {
+  margin-top: 140px;
+  margin-bottom: -96px;
+  padding: 96px 0 112px;
+  background: #d7ff3a;
+  color: #0f0d0b;
+}
+
+.final h2 {
+  font-size: clamp(3.6rem, 13vw, 9rem);
+  max-width: none;
+  margin-bottom: 0.15em;
+}
+
+.final p {
+  font-size: 1.25rem;
+  margin-bottom: 32px;
+}
+
+.finalButton {
+  display: inline-flex;
+  align-items: center;
+  min-height: 60px;
+  padding: 0 30px;
+  border-radius: var(--radius-sm);
+  background: #0f0d0b;
+  color: #d7ff3a;
+  box-shadow: 0 6px 0 #000000;
+  font-family: var(--font-display-stack);
+  font-weight: 800;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+}
+
+.finalButton:active {
+  transform: translateY(6px);
+  box-shadow: none;
+}
+
+.finalButton:focus-visible {
+  outline: 3px solid #0f0d0b;
+  outline-offset: 4px;
+}
+
+/* ---------- Scroll-driven storytelling (where supported, and only with motion allowed) ---------- */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .step,
+    .tile,
+    .domain,
+    .plan,
+    .promises li {
+      animation: enter linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 28%;
+    }
+
+    .tierStep {
+      animation: climb linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 45%;
+    }
+
+    .stepPhone,
+    .dailyPhone {
+      animation: tilt linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+
+    .heroPhone {
+      animation: lift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 80vh;
+    }
+
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(56px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes climb {
+  from {
+    opacity: 0;
+    transform: translateY(80px);
+  }
+}
+
+@keyframes tilt {
+  from {
+    transform: rotate(-6deg) translateY(40px);
+  }
+  to {
+    transform: rotate(5deg) translateY(-40px);
+  }
+}
+
+@keyframes lift {
+  to {
+    transform: rotate(3deg) translateY(-60px) scale(0.96);
+  }
+}
+

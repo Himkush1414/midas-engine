@@ -5,6 +5,7 @@ export const fr: LandingCopy = {
   metaTitle: 'Mindtier — Jeux de réflexion classés',
   metaDescription:
     'Découvre ton rang mental en six parties de placement rapides, puis grimpe de Fer à Grand Maître. Des énigmes qui s’adaptent à toi, un défi du jour, des duels, des saisons mensuelles et des ligues hebdomadaires. Jamais de pub.',
+  heroKicker: 'Jeux de réflexion classés',
   heroTitle: 'À quel rang est ton esprit ?',
   heroLead:
     'Des jeux de réflexion classés. Découvre ton rang, de Fer à Grand Maître, en six parties de placement rapides — puis grimpe avec des énigmes qui s’adaptent à toi, un défi du jour et des duels entre amis.',
@@ -113,4 +114,30 @@ export const fr: LandingCopy = {
       a: 'Oui : dans l’app, dans Réglages → Supprimer le compte, ou sur notre page de suppression de compte. Ton profil, tes scores et ton historique sont supprimés.',
     },
   ],
+  demo: {
+    kicker: 'Essaie ici',
+    title: 'Dix secondes de Flank',
+    body: 'Dans quelle direction pointe la flèche du milieu ? Ignore ses voisines. Touche les boutons ou utilise les flèches du clavier.',
+    start: 'Commencer',
+    again: 'Rejouer',
+    left: 'Gauche',
+    right: 'Droite',
+    progress: '{done} sur {total}',
+    result: '{correct}/{total} justes · {ms} ms en moyenne',
+    verdict: 'C’est une vitesse de niveau {tier}.',
+    note: 'Juste un avant-goût : ton vrai rang vient de six parties de classement dans l’appli.',
+  },
+  dailyTitle: 'Un défi. Tout le monde. Chaque jour.',
+  dailyBody: 'Trois énigmes, les mêmes pour tous les joueurs de la planète, renouvelées à minuit UTC. Joue directement ici dans ton navigateur, sans inscription, puis regarde où tu te places au classement du jour.',
+  finalTitle: 'Trouve ton rang.',
+  finalBody: 'Six parties rapides. Environ cinq minutes. Ensuite, l’ascension t’appartient.',
+  shots: {
+    home: 'Écran d’accueil de Mindtier : Platine II, score 1605, avec la prochaine session classée',
+    reveal: 'Résultat du classement : Platine II avec un radar de six compétences',
+    results: 'Résultats de la session : division supérieure, avec les gains de trois jeux',
+    duel: 'Un duel terminé : 2140 contre 1985',
+    daily: 'Résultat du défi du jour et le classement du jour',
+    league: 'Tableau de la ligue hebdomadaire avec ta place',
+    season: 'Bilan de saison avec le rang maximal et la plus grande progression',
+  },
 };

@@ -5,6 +5,7 @@ export const de: LandingCopy = {
   metaTitle: 'Mindtier — Denkspiele mit Rang',
   metaDescription:
     'Finde deinen Rang in sechs kurzen Einstufungsspielen und steig von Eisen bis Großmeister auf. Rätsel, die sich dir anpassen, Tagesrätsel, Duelle, monatliche Saisons und Wochenligen. Niemals Werbung.',
+  heroKicker: 'Denkspiele mit Rang',
   heroTitle: 'Auf welchem Rang ist dein Kopf?',
   heroLead:
     'Denkspiele mit Rang. Finde deinen Rang von Eisen bis Großmeister in sechs kurzen Einstufungsspielen – und steig dann mit Rätseln auf, die sich dir anpassen, mit einem Tagesrätsel und Duellen gegen Freunde.',
@@ -113,4 +114,30 @@ export const de: LandingCopy = {
       a: 'Ja – in der App unter Einstellungen → Konto löschen oder auf unserer Seite zur Kontolöschung. Profil, Wertungen und Verlauf werden gelöscht.',
     },
   ],
+  demo: {
+    kicker: 'Probier es hier',
+    title: 'Zehn Sekunden Flank',
+    body: 'Wohin zeigt der mittlere Pfeil? Ignoriere seine Nachbarn. Tippe auf die Knöpfe oder nutze die Pfeiltasten.',
+    start: 'Los',
+    again: 'Nochmal',
+    left: 'Links',
+    right: 'Rechts',
+    progress: '{done} von {total}',
+    result: '{correct}/{total} richtig · {ms} ms im Schnitt',
+    verdict: 'Das ist Tempo auf {tier}-Niveau.',
+    note: 'Nur ein Vorgeschmack: Deinen echten Rang bekommst du in der App nach sechs Einstufungsspielen.',
+  },
+  dailyTitle: 'Ein Rätsel. Alle. Jeden Tag.',
+  dailyBody: 'Drei Rätsel, für alle Spieler weltweit gleich, neu um Mitternacht UTC. Spiel es direkt hier im Browser, ohne Anmeldung – und sieh nach, wo du in der heutigen Bestenliste gelandet bist.',
+  finalTitle: 'Finde deinen Rang.',
+  finalBody: 'Sechs kurze Spiele. Etwa fünf Minuten. Danach gehört der Aufstieg dir.',
+  shots: {
+    home: 'Mindtier-Startbildschirm: Platin II, Wertung 1605, mit der nächsten gewerteten Sitzung',
+    reveal: 'Ergebnis der Einstufung: Platin II mit einem Radar über sechs Fähigkeiten',
+    results: 'Ergebnis der Sitzung: Division aufgestiegen, mit den Gewinnen aus drei Spielen',
+    duel: 'Ein beendetes Duell: 2140 gegen 1985',
+    daily: 'Ergebnis des Tagesrätsels und die heutige Bestenliste',
+    league: 'Tabelle der Wochenliga mit deinem Platz',
+    season: 'Saisonrückblick mit höchstem Rang und größtem Aufstieg',
+  },
 };
