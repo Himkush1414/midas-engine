@@ -49,7 +49,7 @@ export default function Today() {
         <Text tone="muted" align="center">
           {t('web.appBody')}
         </Text>
-        <Button label={t('web.getApp')} icon="external" size="lg" fullWidth onPress={getApp} testID="web-get-app" />
+        <Button label={t('web.getApp')} icon="external" size="lg" variant="secondary" fullWidth onPress={getApp} testID="web-get-app" />
         <Text variant="caption" tone="faint" align="center">
           {t('web.iosSoon')}
         </Text>
