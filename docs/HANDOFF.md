@@ -14,7 +14,8 @@ Secrets referenced below live in your local `.env.local` (git-ignored). Nothing 
 | Supabase | Schema + RLS + API functions applied (`supabase/migrations`), anonymous sign-in on, 6-digit email codes (15 min) |
 | Vercel | Project `midas-engine` → root `apps/web`, Node 24, env vars set. It is the only project linked to the GitHub repo. Git auto-deploy is **disabled** twice over (plan limits): `git.deploymentEnabled: false` in `vercel.json`, and Settings → Git → *Create deployments* off. Deploy with `node scripts/deploy-web.mjs` |
 | EAS | Project `@midas-hq/mindtier`, remote Android keystore, env vars per environment, update channels, first production AAB built |
-| Store assets | Listing copy, 8 screenshots, feature graphic and icon in `store/` — see `docs/STORE_LISTING.md` |
+| Design | The **Floodlight** design system (`docs/DESIGN_DIRECTION.md`, research in `docs/DESIGN_RESEARCH.md`) across the app, the web Daily Challenge, the website, the brand mark and the store graphics. Visual QA: `node scripts/qa-sheet.mjs --out <dir> <scene…>` (dark/light contact sheets of any scene in `scripts/screenshots.mjs`) |
+| Store assets | Listing copy, 8 screenshots per language, feature graphics and icon in `store/`, all in the Floodlight style — see `docs/STORE_LISTING.md` |
 | Compliance | Data safety, content rating and permission answers in `docs/PLAY_COMPLIANCE.md` |
 
 ---
@@ -70,6 +71,7 @@ Anonymous play works today. Saving progress to an email needs real email deliver
    npx eas-cli@latest build --platform android --profile production   # builds a fresh AAB; versionCode auto-increments
    ```
    Then upload it to **Internal testing** (download link from the EAS build page), or submit with `npx eas-cli@latest submit -p android` after step 4.9.
+   The AAB built on 2026-10-18 (versionCode 5) predates the Floodlight redesign; build a fresh one so testers get the new look, icon and splash.
 5. Store presence → Main store listing: paste from `docs/STORE_LISTING.md`; upload `store/graphics/play-icon-512.png`, `store/graphics/feature-graphic.png` and `store/screenshots/phone/*.png`.
    Then **Manage translations → Add your own translations** for es-419/es-ES, pt-BR, de-DE, fr-FR and it-IT: paste each language's texts from the *Localized listings* section and upload `store/graphics/feature-graphic-<lang>.png` and `store/screenshots/phone/<lang>/*.png`.
 6. Policy → App content: fill in every declaration from `docs/PLAY_COMPLIANCE.md` (privacy policy URL, ads = No, app access = no login needed, content rating, target audience 13+, Data safety, account deletion URL).
