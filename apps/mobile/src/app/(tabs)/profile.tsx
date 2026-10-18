@@ -7,8 +7,8 @@ import { Alert, StyleSheet, TextInput, View } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
 import { RatingSparkline } from '@/components/RatingSparkline';
 import { SkillRadar } from '@/components/SkillRadar';
-import { DomainBadge, TierBadge } from '@/components/tier';
-import { Button, Card, PressableScale, Screen, Text } from '@/components/ui';
+import { TierBadge } from '@/components/tier';
+import { Button, Enter, PressableScale, Screen, Text, Ticket } from '@/components/ui';
 import { domainSeries, windowDelta } from '@/features/profile/history';
 import { SeasonCard } from '@/features/seasons/SeasonCard';
 import { WeekCard } from '@/features/weekly/WeekCard';
@@ -17,7 +17,7 @@ import { useTierShare } from '@/features/share/useTierShare';
 import { useAccount } from '@/state/account';
 import { useEntitlements } from '@/state/entitlements';
 import { useProgress } from '@/state/progress';
-import { fonts, radii, spacing, useTheme } from '@/theme';
+import { fonts, radii, SLANT_DEG, spacing, tierColors, useTheme } from '@/theme';
 
 function NameEditor() {
   const { colors } = useTheme();
@@ -81,6 +81,7 @@ export default function Profile() {
   const streak = currentStreak(streakState, utcDayKey(new Date()));
   const overall = overallRating(ratings);
   const info = tierInfo(overall);
+  const tc = tierColors[info.tier];
   const series = DOMAINS.map((d) => ({ domain: d, ...domainSeries(history, d, { isPro, startRating: ratings[d].rating }) }));
   const truncated = series.some((s) => s.truncated);
 
@@ -95,112 +96,122 @@ export default function Profile() {
     <Screen scroll>
       {tierShare.card}
       <View style={styles.header}>
-        <Text variant="caption" tone="faint" weight="semibold">
-          {t('profile.you')}
-        </Text>
+        <Text variant="heading">{t('profile.you')}</Text>
         <PressableScale onPress={() => router.push('/settings')} accessibilityLabel={t('home.settings')} style={styles.iconButton}>
           <Icon name="settings" size={24} color={colors.textMuted} />
         </PressableScale>
       </View>
 
       <View style={styles.stack}>
-        <Card raised style={styles.gap}>
-          <View style={styles.identity}>
-            <TierBadge info={info} size={72} showProvisional={false} />
-            <View style={styles.flex}>
-              <NameEditor />
-              <Text tone="muted" tabular>
-                {tierLabel(t, info)} · {Math.round(overall.rating)}
-              </Text>
+        <Enter index={0}>
+          <View style={[styles.player, { backgroundColor: colors.surfaceRaised }]}>
+            <View style={[styles.stripe, { backgroundColor: tc.base }]} />
+            <View style={styles.identity}>
+              <View style={styles.badge}>
+                <View style={[styles.glow, { boxShadow: `0 0 44px 8px ${tc.base}55` }]} />
+                <TierBadge info={info} size={96} showProvisional={false} />
+              </View>
+              <View style={styles.flex}>
+                <NameEditor />
+                <Text variant="micro" tone="muted" tabular>
+                  {tierLabel(t, info)} · {Math.round(overall.rating)}
+                </Text>
+              </View>
             </View>
+            <View style={[styles.stats, { borderTopColor: colors.border }]}>
+              {stats.map((st, i) => (
+                <View key={st.label} style={styles.stat} accessible accessibilityLabel={`${st.label}: ${st.value}`}>
+                  <Text variant="heading" tabular style={i === 1 && streak.current > 0 ? { color: colors.danger } : undefined}>
+                    {st.value}
+                  </Text>
+                  <Text variant="micro" tone="muted" numberOfLines={2}>
+                    {st.label}
+                  </Text>
+                </View>
+              ))}
+            </View>
+            <Button label={t('profile.shareTier')} icon="share" variant="secondary" fullWidth onPress={() => void tierShare.share()} />
           </View>
-          <Button label={t('profile.shareTier')} icon="share" variant="secondary" fullWidth onPress={() => void tierShare.share()} />
-        </Card>
+        </Enter>
 
-        <SeasonCard />
-        <WeekCard />
+        <Enter index={1} style={styles.tickets}>
+          <SeasonCard />
+          <WeekCard />
+        </Enter>
 
-        <View style={styles.stats}>
-          {stats.map((s) => (
-            <Card key={s.label} style={styles.stat}>
-              <Text variant="heading" tabular>
-                {s.value}
-              </Text>
-              <Text variant="caption" tone="muted">
-                {s.label}
-              </Text>
-            </Card>
-          ))}
-        </View>
-
-        <Card style={styles.radar}>
-          <SkillRadar ratings={ratings} />
-        </Card>
+        <Enter index={2}>
+          <View style={[styles.radar, { backgroundColor: colors.surface }]}>
+            <SkillRadar ratings={ratings} color={tc.base} />
+          </View>
+        </Enter>
 
         <View style={styles.sectionHeader}>
-          <Text variant="subheading" weight="semibold">
-            {t('profile.history')}
-          </Text>
-          <PressableScale onPress={() => setTable((t) => !t)} accessibilityLabel={table ? t('profile.showCharts') : t('profile.showTable')} hapticOnPress>
-            <Text variant="caption" tone="primary" weight="semibold">
+          <Text variant="heading">{t('profile.history')}</Text>
+          <PressableScale onPress={() => setTable((t) => !t)} accessibilityLabel={table ? t('profile.showCharts') : t('profile.showTable')} hapticOnPress style={styles.toggle}>
+            <Text variant="micro" tone="primary" weight="bold">
               {table ? t('profile.charts') : t('profile.table')}
             </Text>
           </PressableScale>
         </View>
 
         {table ? (
-          <Card padded={false}>
+          <View style={[styles.table, { backgroundColor: colors.surface }]}>
             {series.map((s, i) => {
               const last = s.points[s.points.length - 1];
               const delta = windowDelta(s.points);
               return (
                 <View key={s.domain} style={[styles.tableRow, i > 0 && { borderTopWidth: 1, borderTopColor: colors.border }]}>
-                  <Text style={styles.flex}>{domainLabel(t, s.domain)}</Text>
-                  <Text tabular weight="semibold">
+                  <View style={[styles.tabSmall, { backgroundColor: dc[s.domain] }]} />
+                  <Text variant="subheading" display weight="semibold" style={styles.flex}>
+                    {domainLabel(t, s.domain)}
+                  </Text>
+                  <Text variant="subheading" display weight="semibold" tabular>
                     {last ? Math.round(last.value) : '—'}
                   </Text>
-                  <Text tabular tone={delta > 0 ? 'success' : delta < 0 ? 'danger' : 'muted'} style={styles.delta}>
+                  <Text variant="micro" tabular tone={delta > 0 ? 'success' : delta < 0 ? 'danger' : 'muted'} style={styles.delta}>
                     {delta > 0 ? '+' : delta < 0 ? '−' : '±'}
                     {Math.abs(delta)}
                   </Text>
-                  <Text variant="caption" tone="faint" style={styles.count}>
+                  <Text variant="micro" tone="faint" style={styles.count}>
                     {t('profile.historyPoints', { count: s.points.length })}
                   </Text>
                 </View>
               );
             })}
-          </Card>
+          </View>
         ) : (
           series.map((s) => {
             const delta = windowDelta(s.points);
             return (
-              <Card key={s.domain} style={styles.gap}>
+              <View key={s.domain} style={[styles.chart, { backgroundColor: colors.surface }]}>
+                <View style={[styles.tab, { backgroundColor: dc[s.domain] }]} />
                 <View style={styles.chartHeader}>
-                  <DomainBadge domain={s.domain} size={28} />
-                  <Text weight="semibold" style={styles.flex}>
+                  <Text variant="heading" style={styles.flex} numberOfLines={1}>
                     {domainLabel(t, s.domain)}
                   </Text>
-                  <Text tabular weight="semibold">
+                  <Text variant="heading" tabular>
                     {Math.round(ratings[s.domain].rating)}
                   </Text>
-                  <Text tabular variant="caption" tone={delta > 0 ? 'success' : delta < 0 ? 'danger' : 'muted'}>
+                  <Text variant="micro" tabular tone={delta > 0 ? 'success' : delta < 0 ? 'danger' : 'muted'} style={styles.delta}>
                     {delta > 0 ? '+' : delta < 0 ? '−' : '±'}
                     {Math.abs(delta)}
                   </Text>
                 </View>
                 <RatingSparkline data={s.points} color={dc[s.domain]} label={domainLabel(t, s.domain)} />
-              </Card>
+              </View>
             );
           })
         )}
 
         {truncated && !isPro ? (
-          <Card onPress={() => router.push({ pathname: '/paywall', params: { from: 'history' } })} accessibilityLabel={t('profile.fullHistory')}>
-            <Text weight="semibold">{t('profile.last30')}</Text>
-            <Text variant="caption" tone="muted">
-              {t('profile.fullHistory')}
-            </Text>
-          </Card>
+          <Ticket
+            kicker={t('paywall.title')}
+            title={t('profile.last30')}
+            detail={t('profile.fullHistory')}
+            color={colors.spark}
+            icon="chart"
+            onPress={() => router.push({ pathname: '/paywall', params: { from: 'history' } })}
+          />
         ) : null}
       </View>
     </Screen>
@@ -209,19 +220,28 @@ export default function Profile() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: spacing.sm },
-  iconButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: spacing.md },
+  iconButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
   stack: { gap: spacing.lg },
-  gap: { gap: spacing.md },
+  player: { borderRadius: radii.md, padding: spacing.lg, paddingTop: spacing.xl, gap: spacing.lg, overflow: 'hidden' },
+  stripe: { position: 'absolute', top: 0, left: -12, right: '45%', height: 8, transform: [{ skewX: `${SLANT_DEG}deg` }] },
   identity: { flexDirection: 'row', alignItems: 'center', gap: spacing.lg },
+  badge: { width: 96, height: 96, alignItems: 'center', justifyContent: 'center' },
+  glow: { position: 'absolute', width: 56, height: 56, borderRadius: 56 },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  input: { flex: 1, minHeight: 44, borderWidth: 1.5, borderRadius: radii.md, paddingHorizontal: spacing.md, fontSize: 16 },
-  stats: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  stat: { flexGrow: 1, flexBasis: '45%', gap: 2 },
-  radar: { alignItems: 'center' },
-  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
-  chartHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  input: { flex: 1, minHeight: 48, borderWidth: 1.5, borderRadius: radii.sm, paddingHorizontal: spacing.md, fontSize: 16 },
+  stats: { flexDirection: 'row', borderTopWidth: 1, paddingTop: spacing.md, gap: spacing.sm },
+  stat: { flex: 1, gap: 2 },
+  tickets: { gap: spacing.sm },
+  radar: { borderRadius: radii.md, paddingVertical: spacing.lg, paddingHorizontal: spacing.md },
+  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: -spacing.sm },
+  toggle: { minHeight: 48, justifyContent: 'center', paddingHorizontal: spacing.sm },
+  chart: { borderRadius: radii.md, padding: spacing.lg, paddingLeft: spacing.xl, gap: spacing.sm, overflow: 'hidden' },
+  tab: { position: 'absolute', left: -4, top: 0, bottom: 0, width: 10, transform: [{ skewX: `${SLANT_DEG}deg` }] },
+  chartHeader: { flexDirection: 'row', alignItems: 'baseline', gap: spacing.sm },
+  table: { borderRadius: radii.md, overflow: 'hidden' },
   tableRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingHorizontal: spacing.lg, paddingVertical: spacing.md },
+  tabSmall: { width: 14, height: 8, borderRadius: 1, transform: [{ skewX: `${SLANT_DEG}deg` }] },
   delta: { minWidth: 48, textAlign: 'right' },
   count: { minWidth: 44, textAlign: 'right' },
 });
