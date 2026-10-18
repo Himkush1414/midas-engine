@@ -2,16 +2,17 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { useCallback, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BackHeader } from '@/components/BackHeader';
-import { DomainBadge, TierBadge } from '@/components/tier';
-import { Button, Card, Screen, Text } from '@/components/ui';
+import { BestPlate, GainList, StatStrip } from '@/components/recap';
+import { TierBadge } from '@/components/tier';
+import { Button, LipPressable, Screen, Text } from '@/components/ui';
 import { SeasonShareCard } from '@/features/seasons/SeasonShareCard';
 import { seasonMonth, seasonName, seasonRecap, seasonShareText } from '@/features/seasons/season';
 import { useCardShare } from '@/features/share/useCardShare';
 import { useLanguage, useT } from '@/i18n';
-import { domainLabel, tierLabel } from '@/i18n/labels';
+import { tierLabel } from '@/i18n/labels';
 import { track } from '@/lib/analytics';
 import { useProgress } from '@/state/progress';
-import { spacing, useTheme } from '@/theme';
+import { lips, radii, spacing, tierColors, useTheme } from '@/theme';
 
 /** Recap of one season: the one in progress (so far) or a finished one. */
 export default function SeasonScreen() {
@@ -43,79 +44,43 @@ export default function SeasonScreen() {
       {sharing.card}
       <BackHeader title={t('season.recapTitle', { season: name })} />
       <View style={styles.stack}>
-        <Text variant="caption" tone="faint" weight="semibold" align="center">
+        <Text variant="micro" tone="muted">
           {[month, isCurrent ? t('season.soFar') : t('season.finished')].filter(Boolean).join(' · ')}
         </Text>
 
         {recap ? (
           <>
-            <Card raised style={styles.tiers}>
+            <View style={[styles.tiers, { backgroundColor: colors.surfaceRaised }]}>
               <View style={styles.tier}>
-                <TierBadge info={recap.peak} size={88} showProvisional={false} />
-                <Text variant="caption" tone="faint" weight="semibold">
+                <View style={[styles.glow, { boxShadow: `0 0 52px 10px ${tierColors[recap.peak.tier].base}55` }]} />
+                <TierBadge info={recap.peak} size={112} showProvisional={false} shine />
+                <Text variant="micro" tone="muted">
                   {t('season.peakTier')}
                 </Text>
-                <Text weight="semibold">{tierLabel(t, recap.peak)}</Text>
+                <Text variant="heading" style={{ color: tierColors[recap.peak.tier].base }}>
+                  {tierLabel(t, recap.peak)}
+                </Text>
               </View>
               <View style={styles.tier}>
-                <TierBadge info={recap.end} size={64} showProvisional={false} />
-                <Text variant="caption" tone="faint" weight="semibold">
+                <TierBadge info={recap.end} size={72} showProvisional={false} />
+                <Text variant="micro" tone="muted">
                   {isCurrent ? t('season.nowTier') : t('season.endTier')}
                 </Text>
-                <Text weight="semibold">{tierLabel(t, recap.end)}</Text>
+                <Text variant="subheading" display weight="semibold">
+                  {tierLabel(t, recap.end)}
+                </Text>
               </View>
-            </Card>
-
-            <View style={styles.stats} testID="season-stats">
-              {[
-                { label: t('season.sessions'), value: recap.sessions },
-                { label: t('season.games'), value: recap.games },
-              ].map((s) => (
-                <Card key={s.label} style={styles.stat}>
-                  <Text variant="heading" tabular>
-                    {s.value}
-                  </Text>
-                  <Text variant="caption" tone="muted">
-                    {s.label}
-                  </Text>
-                </Card>
-              ))}
             </View>
 
-            {recap.best ? (
-              <Card style={styles.best}>
-                <DomainBadge domain={recap.best.domain} size={36} />
-                <View style={styles.flex}>
-                  <Text variant="caption" tone="faint" weight="semibold">
-                    {t('season.bestSkill')}
-                  </Text>
-                  <Text weight="semibold">{domainLabel(t, recap.best.domain)}</Text>
-                </View>
-                <Text tone="success" weight="semibold" tabular>
-                  +{recap.best.gain}
-                </Text>
-              </Card>
-            ) : null}
-
-            {recap.gains.length > 0 ? (
-              <>
-                <Text variant="subheading" weight="semibold">
-                  {t('season.gains')}
-                </Text>
-                <Card padded={false}>
-                  {recap.gains.map((g, i) => (
-                    <View key={g.domain} style={[styles.row, i > 0 && { borderTopWidth: 1, borderTopColor: colors.border }]}>
-                      <DomainBadge domain={g.domain} size={28} />
-                      <Text style={styles.flex}>{domainLabel(t, g.domain)}</Text>
-                      <Text tabular weight="semibold" tone={g.gain > 0 ? 'success' : g.gain < 0 ? 'danger' : 'muted'}>
-                        {g.gain > 0 ? '+' : g.gain < 0 ? '−' : '±'}
-                        {Math.abs(g.gain)}
-                      </Text>
-                    </View>
-                  ))}
-                </Card>
-              </>
-            ) : null}
+            <StatStrip
+              testID="season-stats"
+              items={[
+                { label: t('season.sessions'), value: recap.sessions },
+                { label: t('season.games'), value: recap.games },
+              ]}
+            />
+            {recap.best ? <BestPlate kicker={t('season.bestSkill')} domain={recap.best.domain} gain={recap.best.gain} /> : null}
+            {recap.gains.length > 0 ? <GainList title={t('season.gains')} gains={recap.gains} /> : null}
 
             <Button
               label={t('season.share')}
@@ -126,45 +91,46 @@ export default function SeasonScreen() {
             />
           </>
         ) : (
-          <Card>
-            <Text tone="muted">{t('season.empty')}</Text>
-          </Card>
+          <Text tone="muted">{t('season.empty')}</Text>
         )}
 
         {past.length > 0 ? (
           <>
-            <Text variant="subheading" weight="semibold">
-              {t('season.past')}
-            </Text>
-            <Card padded={false}>
-              {past.map((p, i) => {
-                const r = seasonRecap(p);
-                return (
-                  <Card
-                    key={p.season}
-                    padded={false}
-                    onPress={() => router.setParams({ n: String(p.season) })}
-                    accessibilityLabel={t('season.recapTitle', { season: seasonName(t, p.season) })}
-                    style={[styles.row, styles.pastRow, i > 0 && { borderTopWidth: 1, borderTopColor: colors.border }]}
-                  >
-                    <TierBadge info={r.peak} size={32} showProvisional={false} />
-                    <Text weight={p.season === season ? 'semibold' : 'regular'} style={styles.flex}>
-                      {seasonName(t, p.season)}
-                    </Text>
-                    <Text tone="muted">{tierLabel(t, r.peak)}</Text>
-                  </Card>
-                );
-              })}
-            </Card>
+            <Text variant="heading">{t('season.past')}</Text>
+            {past.map((p) => {
+              const r = seasonRecap(p);
+              return (
+                <LipPressable
+                  key={p.season}
+                  onPress={() => router.setParams({ n: String(p.season) })}
+                  accessibilityLabel={t('season.recapTitle', { season: seasonName(t, p.season) })}
+                  face={p.season === season ? colors.surfaceRaised : colors.surface}
+                  lipColor={colors.lip}
+                  lip={lips.sm}
+                  radius={radii.md}
+                  faceStyle={styles.pastRow}
+                >
+                  <TierBadge info={r.peak} size={36} showProvisional={false} />
+                  <Text variant="subheading" display weight="semibold" style={styles.flex}>
+                    {seasonName(t, p.season)}
+                  </Text>
+                  <Text variant="micro" tone="muted">
+                    {tierLabel(t, r.peak)}
+                  </Text>
+                </LipPressable>
+              );
+            })}
           </>
         ) : null}
 
-        <Card style={styles.how}>
-          <Text weight="semibold">{t('season.howTitle')}</Text>
+        <View style={[styles.how, { backgroundColor: colors.surface }]}>
+          <Text variant="micro" tone="muted">
+            {t('season.howTitle')}
+          </Text>
           <Text variant="caption" tone="muted">
             {t('season.howBody')}
           </Text>
-        </Card>
+        </View>
       </View>
     </Screen>
   );
@@ -173,12 +139,9 @@ export default function SeasonScreen() {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   stack: { gap: spacing.lg },
-  tiers: { flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end' },
+  tiers: { flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end', borderRadius: radii.md, padding: spacing.lg },
   tier: { alignItems: 'center', gap: spacing.xs },
-  stats: { flexDirection: 'row', gap: spacing.sm },
-  stat: { flex: 1, gap: 2 },
-  best: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingHorizontal: spacing.lg, paddingVertical: spacing.md },
-  pastRow: { borderWidth: 0, borderRadius: 0 },
-  how: { gap: spacing.xs },
+  glow: { position: 'absolute', top: 22, width: 68, height: 68, borderRadius: 68 },
+  pastRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingHorizontal: spacing.lg, paddingVertical: spacing.md },
+  how: { gap: spacing.xs, borderRadius: radii.md, padding: spacing.lg },
 });
