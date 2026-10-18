@@ -219,6 +219,10 @@ export const fr: Translations = {
   },
   results: {
     tierUp: 'Nouveau rang !',
+    streak_one: 'Série de {count} jour',
+    streak_other: 'Série de {count} jours',
+    streakLabel_one: 'jour d’affilée',
+    streakLabel_other: 'jours d’affilée',
     divisionUp: 'Division supérieure !',
     divisionDown: 'Une division de moins : tu la reprendras',
     tierDown: 'Rang perdu : ça arrive à tout grimpeur',

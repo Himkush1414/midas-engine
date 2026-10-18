@@ -218,6 +218,10 @@ export const it: Translations = {
   },
   results: {
     tierUp: 'Nuovo grado!',
+    streak_one: 'Serie di {count} giorno',
+    streak_other: 'Serie di {count} giorni',
+    streakLabel_one: 'giorno di fila',
+    streakLabel_other: 'giorni di fila',
     divisionUp: 'Divisione su!',
     divisionDown: 'Una divisione in meno: la riprenderai',
     tierDown: 'Un grado in meno: capita a chiunque scali',
