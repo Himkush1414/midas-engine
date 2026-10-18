@@ -1,80 +1,99 @@
 import { TIER_COLORS, type Domain } from '@mindtier/core';
 
-/** Semantic colour roles. Every component reads colours from here, never hard-codes them. */
+/**
+ * Semantic colour roles for the Floodlight direction (docs/DESIGN_DIRECTION.md).
+ * Every component reads colours from here, never hard-codes them.
+ */
 export interface Palette {
+  /** The field: screen background. */
   background: string;
+  /** The stand: plates and tickets on the field. */
   surface: string;
+  /** Pressables and the plate in front. */
   surfaceRaised: string;
+  /** Tracks, wells and empty segments. */
   surfaceSunken: string;
+  /** Inputs and dividers only; surfaces never get an outline. */
   border: string;
   borderStrong: string;
   text: string;
   textMuted: string;
   textFaint: string;
   textInverse: string;
-  /** Fill colour for primary buttons (white label meets AA). */
+  /** Face of the one primary ("go") action on a screen. */
   primary: string;
+  /** Solid lip under the primary face. */
+  primaryLip: string;
   /** Primary colour for text and icons on the background (meets AA). */
   primaryText: string;
   primaryPressed: string;
   onPrimary: string;
+  /** Lip under raised (secondary) pressables. */
+  lip: string;
   accent: string;
   spark: string;
   success: string;
   danger: string;
   warning: string;
   overlay: string;
-  /** Gradient used for hero surfaces and the brand edge. */
-  brandGradient: [string, string];
+  /** Opacity of the grain tile over the field. */
+  grain: number;
 }
 
 export const darkPalette: Palette = {
-  background: '#0A0D1A',
-  surface: '#121734',
-  surfaceRaised: '#1A2045',
-  surfaceSunken: '#070913',
-  border: '#232A55',
-  borderStrong: '#343D78',
-  text: '#F4F6FF',
-  textMuted: '#A3ABD1',
-  textFaint: '#7D85AC',
-  textInverse: '#0A0D1A',
-  primary: '#6D4CF5',
-  primaryText: '#A996FF',
-  primaryPressed: '#5B3BE0',
-  onPrimary: '#FFFFFF',
-  accent: '#22D3EE',
-  spark: '#FCD34D',
-  success: '#34D399',
-  danger: '#F87171',
-  warning: '#FBBF24',
-  overlay: 'rgba(5, 7, 15, 0.72)',
-  brandGradient: ['#8B6CFF', '#22D3EE'],
+  background: '#0F0D0B',
+  surface: '#1A1714',
+  surfaceRaised: '#25211C',
+  surfaceSunken: '#090807',
+  border: '#332D27',
+  borderStrong: '#4A4239',
+  text: '#F4EFE6',
+  textMuted: '#B7AD9E',
+  textFaint: '#958C7E',
+  textInverse: '#0F0D0B',
+  primary: '#D7FF3A',
+  primaryLip: '#8FAE12',
+  primaryText: '#D7FF3A',
+  primaryPressed: '#C4EC22',
+  onPrimary: '#0F0D0B',
+  lip: '#0A0908',
+  accent: '#8FE3FF',
+  spark: '#FFC93D',
+  success: '#D7FF3A',
+  danger: '#FF5B35',
+  warning: '#FFB020',
+  overlay: 'rgba(8, 7, 6, 0.78)',
+  grain: 0.05,
 };
 
 export const lightPalette: Palette = {
-  background: '#F5F6FB',
-  surface: '#FFFFFF',
+  background: '#F1EBE1',
+  surface: '#FAF6EF',
   surfaceRaised: '#FFFFFF',
-  surfaceSunken: '#E9ECF6',
-  border: '#DDE1F0',
-  borderStrong: '#C3C9E2',
-  text: '#0E1230',
-  textMuted: '#4B5378',
-  textFaint: '#5F678A',
-  textInverse: '#FFFFFF',
-  primary: '#6A47F5',
-  primaryText: '#6A47F5',
-  primaryPressed: '#5835E0',
-  onPrimary: '#FFFFFF',
-  accent: '#0E7490',
-  spark: '#D99A06',
-  success: '#047857',
-  danger: '#DC2626',
-  warning: '#B45309',
-  overlay: 'rgba(14, 18, 48, 0.45)',
-  brandGradient: ['#6A47F5', '#0891B2'],
+  surfaceSunken: '#E5DDD0',
+  border: '#D6CCBC',
+  borderStrong: '#B9AD9A',
+  text: '#15120F',
+  textMuted: '#574E44',
+  textFaint: '#6B6256',
+  textInverse: '#FAF6EF',
+  primary: '#15120F',
+  primaryLip: '#000000',
+  primaryText: '#4A5E00',
+  primaryPressed: '#2A2520',
+  onPrimary: '#D7FF3A',
+  lip: '#CFC4B3',
+  accent: '#0A6C8C',
+  spark: '#8A5600',
+  success: '#3F6B00',
+  danger: '#C2361A',
+  warning: '#9A5B00',
+  overlay: 'rgba(21, 18, 15, 0.5)',
+  grain: 0.04,
 };
+
+/** The volt signal colour, the same in both themes (labels on ink, faces on the field). */
+export const VOLT = '#D7FF3A';
 
 /** Tier colours are the same in both themes (shared with the website). */
 export const tierColors = TIER_COLORS;
@@ -101,6 +120,8 @@ export const domainColors: Record<Domain, string> = {
 };
 
 export const spacing = {
+  /** Screen side margin. */
+  gutter: 20,
   xxs: 2,
   xs: 4,
   sm: 8,
@@ -112,39 +133,66 @@ export const spacing = {
 } as const;
 
 export const radii = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 24,
+  xs: 4,
+  sm: 6,
+  md: 10,
+  lg: 14,
+  xl: 18,
   pill: 999,
 } as const;
 
 export const fonts = {
-  display: 'SpaceGrotesk_700Bold',
-  displayMedium: 'SpaceGrotesk_600SemiBold',
-  body: 'Inter_400Regular',
-  bodyMedium: 'Inter_500Medium',
-  bodySemibold: 'Inter_600SemiBold',
-  bodyBold: 'Inter_700Bold',
+  /** Big Shoulders: tier names, numbers, headlines, buttons (set uppercase). */
+  display: 'BigShoulders_900Black',
+  displayBold: 'BigShoulders_800ExtraBold',
+  displayMedium: 'BigShoulders_700Bold',
+  body: 'InstrumentSans_400Regular',
+  bodyMedium: 'InstrumentSans_500Medium',
+  bodySemibold: 'InstrumentSans_600SemiBold',
+  bodyBold: 'InstrumentSans_700Bold',
+  /** JetBrains Mono: uppercase micro-labels over data. */
+  mono: 'JetBrainsMono_500Medium',
+  monoBold: 'JetBrainsMono_700Bold',
 } as const;
 
-/** Type scale: [fontSize, lineHeight]. */
+/** Type scale: [fontSize, lineHeight]. mega…heading use the display face. */
 export const type = {
-  hero: [44, 50],
-  title: [28, 34],
-  heading: [22, 28],
-  subheading: [18, 24],
-  body: [16, 22],
-  label: [14, 18],
+  mega: [96, 84],
+  hero: [64, 58],
+  title: [40, 38],
+  heading: [28, 28],
+  subheading: [20, 26],
+  body: [16, 23],
+  label: [14, 19],
   caption: [12, 16],
+  micro: [11, 14],
 } as const;
 
 export const durations = {
-  fast: 140,
-  base: 220,
+  flash: 120,
+  fast: 160,
+  base: 240,
   slow: 420,
-  ceremony: 1200,
+  ceremony: 1400,
 } as const;
+
+/** Spring presets of the motion language (docs/DESIGN_DIRECTION.md §6). */
+export const springs = {
+  press: { damping: 30, stiffness: 700 },
+  release: { damping: 14, stiffness: 380 },
+  enter: { damping: 18, stiffness: 200, mass: 0.9 },
+  slam: { damping: 9, stiffness: 160 },
+} as const;
+
+/** Entrance stagger between siblings, and how many siblings animate at most. */
+export const STAGGER_MS = 40;
+export const STAGGER_MAX = 8;
+
+/** The slant motif: progress segments, pips and highlights lean this far. */
+export const SLANT_DEG = -12;
+
+/** Lip heights under pressables, by size. */
+export const lips = { lg: 5, md: 4, sm: 3 } as const;
 
 /** Minimum touch target (Android guideline: 48dp). */
 export const HIT_TARGET = 48;
