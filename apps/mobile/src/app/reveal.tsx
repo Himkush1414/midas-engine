@@ -1,22 +1,22 @@
 import { DOMAINS, initialRatings, overallRating, tierInfo, type Domain } from '@mindtier/core';
 import { Redirect, router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import Animated, { FadeIn, FadeInUp, ZoomIn } from 'react-native-reanimated';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 import { Celebration } from '@/components/Celebration';
 import { SkillRadar } from '@/components/SkillRadar';
-import { DomainBadge, TierBadge } from '@/components/tier';
-import { Button, Card, ProgressBar, Screen, Text } from '@/components/ui';
+import { TierBadge } from '@/components/tier';
+import { Button, Enter, fitDisplaySize, MAX_CONTENT_WIDTH, ProgressBar, Screen, Text } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { haptic } from '@/lib/feedback';
 import { play } from '@/lib/sound';
 import { useReduceMotion } from '@/lib/motion';
 import { useTierShare } from '@/features/share/useTierShare';
 import { useT } from '@/i18n';
-import { domainLabel, tierLabel } from '@/i18n/labels';
+import { domainLabel, tierLabel, tierParts } from '@/i18n/labels';
 import { useEntitlements } from '@/state/entitlements';
 import { useSession } from '@/state/session';
-import { spacing, tierColors, useTheme } from '@/theme';
+import { radii, SLANT_DEG, spacing, springs, tierColors, type, useTheme } from '@/theme';
 
 const SUSPENSE_MS = 2200;
 const INITIAL = initialRatings();
@@ -24,7 +24,8 @@ const INITIAL = initialRatings();
 export default function Reveal() {
   const reduce = useReduceMotion();
   const t = useT();
-  const { domain: domainColor } = useTheme();
+  const { colors, domain: domainColor } = useTheme();
+  const { width } = useWindowDimensions();
   const finished = useSession((s) => s.finished);
   const isPro = useEntitlements((s) => s.isPro);
   const [revealed, setRevealed] = useState(false);
@@ -35,8 +36,10 @@ export default function Reveal() {
       () => {
         setRevealed(true);
         track('placement_completed');
-        haptic.success();
+        // Impact, then settle: a heavy hit as the badge slams in, success as it lands.
+        haptic.heavy();
         play('rankup');
+        setTimeout(() => haptic.success(), 450);
       },
       reduce ? 400 : SUSPENSE_MS,
     );
@@ -58,20 +61,24 @@ export default function Reveal() {
     else router.replace({ pathname: '/paywall', params: { from: 'placement' } });
   };
 
+  const { name, division } = tierParts(t, info);
+  const column = Math.min(width, MAX_CONTENT_WIDTH) - spacing.gutter * 2;
+  const nameSize = fitDisplaySize(division ? `${name} ${division}` : name, column, type.mega[0], 48);
+
   if (!revealed) {
     return (
       <Screen>
         <View style={styles.suspense}>
-          <Text variant="heading" align="center">
+          <Text variant="micro" tone="muted">
             {t('reveal.calculating')}
           </Text>
           <View style={styles.bars}>
             {DOMAINS.map((d, i) => (
               <Animated.View key={d} entering={reduce ? undefined : FadeIn.delay(i * 280)} style={styles.barRow}>
-                <DomainBadge domain={d} size={32} />
-                <View style={styles.flex}>
-                  <ProgressBar value={(ratings[d].rating - 700) / 1700} color={domainColor[d]} />
-                </View>
+                <Text variant="heading" style={[styles.barLabel, { color: domainColor[d] }]} numberOfLines={1}>
+                  {domainLabel(t, d)}
+                </Text>
+                <ProgressBar value={(ratings[d].rating - 700) / 1700} color={domainColor[d]} segments={8} height={14} />
               </Animated.View>
             ))}
           </View>
@@ -93,52 +100,52 @@ export default function Reveal() {
     >
       {tierShare.card}
       <View style={styles.hero}>
-        <Celebration colors={[c.highlight, c.base, '#FFFFFF']} reduceMotion={reduce} top={60} />
-        <Text variant="label" tone="muted" align="center">
+        <Celebration colors={[c.highlight, c.base, '#FFFFFF']} reduceMotion={reduce} top={80} />
+        <Text variant="micro" tone="muted">
           {t('reveal.placed')}
         </Text>
-        <Animated.View entering={reduce ? undefined : ZoomIn.springify().damping(11)}>
-          <TierBadge info={info} size={168} showProvisional={false} />
+        <Animated.View
+          entering={reduce ? undefined : ZoomIn.springify().damping(springs.slam.damping).stiffness(springs.slam.stiffness)}
+          style={styles.badge}
+        >
+          <View style={[styles.glow, { boxShadow: `0 0 80px 18px ${c.base}70` }]} />
+          <TierBadge info={info} size={188} showProvisional={false} shine />
         </Animated.View>
-        <Animated.View entering={reduce ? undefined : FadeInUp.delay(250)}>
-          <Text variant="hero" align="center">
-            {tierLabel(t, info)}
+        <Enter index={2}>
+          <Text variant="mega" numberOfLines={1} style={{ fontSize: nameSize, lineHeight: nameSize * 0.92, color: c.base }}>
+            {name}
+            {division ? <Text variant="mega" style={{ fontSize: nameSize, lineHeight: nameSize * 0.92 }}>{` ${division}`}</Text> : null}
           </Text>
-          <Text tone="muted" align="center">
-            {t('reveal.settles')}
-          </Text>
-        </Animated.View>
+          <Text tone="muted">{t('reveal.settles')}</Text>
+        </Enter>
       </View>
 
-      <Card style={styles.radarCard}>
-        <SkillRadar ratings={ratings} />
-      </Card>
+      <Enter index={4}>
+        <View style={[styles.radar, { backgroundColor: colors.surface }]}>
+          <SkillRadar ratings={ratings} color={c.base} />
+        </View>
+      </Enter>
 
       <View style={styles.insights}>
-        <Card style={styles.insight}>
-          <Text variant="caption" tone="faint" weight="semibold">
-            {t('reveal.strongest')}
-          </Text>
-          <View style={styles.insightRow}>
-            <DomainBadge domain={strongest} size={28} />
-            <Text weight="semibold">{domainLabel(t, strongest)}</Text>
-          </View>
-          <Text variant="caption" tone="muted">
-            {tierLabel(t, tierInfo(ratings[strongest]))}
-          </Text>
-        </Card>
-        <Card style={styles.insight}>
-          <Text variant="caption" tone="faint" weight="semibold">
-            {t('reveal.room')}
-          </Text>
-          <View style={styles.insightRow}>
-            <DomainBadge domain={weakest} size={28} />
-            <Text weight="semibold">{domainLabel(t, weakest)}</Text>
-          </View>
-          <Text variant="caption" tone="muted">
-            {tierLabel(t, tierInfo(ratings[weakest]))}
-          </Text>
-        </Card>
+        {[
+          { kicker: t('reveal.strongest'), d: strongest },
+          { kicker: t('reveal.room'), d: weakest },
+        ].map(({ kicker, d }, i) => (
+          <Enter key={kicker} index={5 + i} style={styles.flex}>
+            <View style={[styles.insight, { backgroundColor: colors.surface }]}>
+              <View style={[styles.tab, { backgroundColor: domainColor[d] }]} />
+              <Text variant="micro" tone="muted" numberOfLines={2}>
+                {kicker}
+              </Text>
+              <Text variant="heading" numberOfLines={1} style={{ color: domainColor[d] }}>
+                {domainLabel(t, d)}
+              </Text>
+              <Text variant="caption" tone="muted">
+                {tierLabel(t, tierInfo(ratings[d]))}
+              </Text>
+            </View>
+          </Enter>
+        ))}
       </View>
     </Screen>
   );
@@ -146,13 +153,16 @@ export default function Reveal() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  suspense: { flex: 1, justifyContent: 'center', gap: spacing.xxl },
+  suspense: { flex: 1, justifyContent: 'center', gap: spacing.xl },
   bars: { gap: spacing.md },
-  barRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  hero: { alignItems: 'center', gap: spacing.md, paddingTop: spacing.xl, paddingBottom: spacing.lg },
-  radarCard: { alignItems: 'center' },
-  insights: { flexDirection: 'row', gap: spacing.md, marginTop: spacing.md },
-  insight: { flex: 1, gap: spacing.xs },
-  insightRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  barRow: { gap: spacing.xs },
+  barLabel: { fontSize: 22, lineHeight: 22 },
+  hero: { gap: spacing.md, paddingTop: spacing.lg, paddingBottom: spacing.xl },
+  badge: { alignSelf: 'center', width: 188, height: 188, alignItems: 'center', justifyContent: 'center', marginVertical: spacing.md },
+  glow: { position: 'absolute', width: 110, height: 110, borderRadius: 110 },
+  radar: { borderRadius: radii.md, paddingVertical: spacing.lg, paddingHorizontal: spacing.md },
+  insights: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.sm },
+  insight: { gap: spacing.xs, padding: spacing.lg, borderRadius: radii.md, overflow: 'hidden', flexGrow: 1 },
+  tab: { width: 22, height: 8, borderRadius: 1, transform: [{ skewX: `${SLANT_DEG}deg` }], marginBottom: spacing.xs },
   footer: { gap: spacing.xs },
 });

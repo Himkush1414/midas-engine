@@ -7,9 +7,9 @@ import Svg, { Circle, Line, Polygon, Text as SvgText } from 'react-native-svg';
 import { fonts, useTheme } from '@/theme';
 import { svgA11y } from './svgA11y';
 
-const LABEL_SIZE = 12;
-/** Generous average glyph width for Inter semibold, so estimates err towards fitting. */
-const GLYPH_EM = 0.62;
+const LABEL_SIZE = 15;
+/** Generous average glyph width for uppercase Big Shoulders Bold (measured ≈0.5), so estimates err towards fitting. */
+const GLYPH_EM = 0.56;
 const LABEL_GAP = 8;
 
 export function radarPoint(index: number, value: number, radius: number, cx: number, cy: number = cx): [number, number] {
@@ -40,12 +40,16 @@ export function radarRadius(width: number, size: number, labels: string[]): numb
   return Math.max(size * 0.2, r);
 }
 
-/** Five-axis skill shape. Labels sit outside the pentagon and never leave the canvas. */
-export function SkillRadar({ ratings, size = 260 }: { ratings: DomainRatings; size?: number }) {
+/**
+ * Six-axis skill shape in the player's tier colour (or volt): slanted-feeling dashed rings,
+ * domain-coloured vertices and labels in the display voice.
+ */
+export function SkillRadar({ ratings, size = 260, color }: { ratings: DomainRatings; size?: number; color?: string }) {
   const { colors, domain } = useTheme();
   const t = useT();
+  const tone = color ?? colors.primaryText;
   const [width, setWidth] = useState(size);
-  const labels = DOMAINS.map((d) => domainLabel(t, d));
+  const labels = DOMAINS.map((d) => domainLabel(t, d).toLocaleUpperCase());
   const cx = width / 2;
   const cy = size / 2;
   const r = radarRadius(width, size, labels);
@@ -62,16 +66,16 @@ export function SkillRadar({ ratings, size = 260 }: { ratings: DomainRatings; si
     <View onLayout={onLayout} style={{ alignSelf: 'stretch', height: size }}>
       <Svg width={width} height={size} {...svgA11y(t('reveal.skillShape', { summary }))}>
         {[0.25, 0.5, 0.75, 1].map((k) => (
-          <Polygon key={k} points={ring(k)} fill="none" stroke={colors.border} strokeWidth={1} />
+          <Polygon key={k} points={ring(k)} fill={k === 1 ? colors.surfaceSunken : 'none'} fillOpacity={0.5} stroke={colors.borderStrong} strokeWidth={1} strokeDasharray={k === 1 ? undefined : '3 4'} />
         ))}
         {DOMAINS.map((_, i) => {
           const [x, y] = radarPoint(i, 1, r, cx, cy);
           return <Line key={i} x1={cx} y1={cy} x2={x} y2={y} stroke={colors.border} strokeWidth={1} />;
         })}
-        <Polygon points={shape} fill={colors.primary} fillOpacity={0.28} stroke={colors.primaryText} strokeWidth={2.5} strokeLinejoin="round" />
+        <Polygon points={shape} fill={tone} fillOpacity={0.24} stroke={tone} strokeWidth={3} strokeLinejoin="round" />
         {DOMAINS.map((d, i) => {
           const [x, y] = radarPoint(i, normalise(ratings[d].rating), r, cx, cy);
-          return <Circle key={d} cx={x} cy={y} r={4.5} fill={domain[d]} />;
+          return <Circle key={d} cx={x} cy={y} r={5.5} fill={domain[d]} stroke={colors.background} strokeWidth={2} />;
         })}
         {DOMAINS.map((d, i) => {
           const [tipX, tipY] = radarPoint(i, 1, r, cx, cy);
@@ -81,7 +85,7 @@ export function SkillRadar({ ratings, size = 260 }: { ratings: DomainRatings; si
           // Top label above the tip, bottom labels below it, side labels level with it.
           const y = tipY < cy - r * 0.9 ? tipY - 10 : tipY > cy + r * 0.5 ? tipY + 20 : tipY + 4;
           return (
-            <SvgText key={d} x={x} y={y} fontSize={LABEL_SIZE} fontFamily={fonts.bodySemibold} fill={colors.textMuted} textAnchor={anchor}>
+            <SvgText key={d} x={x} y={y} fontSize={LABEL_SIZE} fontFamily={fonts.displayMedium} fill={colors.textMuted} letterSpacing={0.6} textAnchor={anchor}>
               {labels[i]}
             </SvgText>
           );
