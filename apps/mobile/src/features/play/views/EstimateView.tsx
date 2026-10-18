@@ -6,6 +6,7 @@ import { PressableScale, Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
 import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
+import { Prompt } from './controls';
 
 function describeQuantity(t: ReturnType<typeof useT>, q: Quantity): string {
   switch (q.kind) {
@@ -64,9 +65,9 @@ export function EstimateView({ trial, onInputOpen, onAnswer, locked, demo }: Gam
   const sides = [trial.left, trial.right] as const;
   return (
     <View style={styles.root}>
-      <Text variant="label" tone="muted" align="center">
+      <Prompt>
         {t('play.larger')}
-      </Text>
+      </Prompt>
       <View style={styles.pair}>
         {sides.map((q, i) => (
           <PressableScale

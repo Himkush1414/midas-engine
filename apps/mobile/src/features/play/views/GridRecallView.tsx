@@ -1,11 +1,12 @@
 import type { GridRecallTrial } from '@mindtier/core';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
-import { PressableScale, Text } from '@/components/ui';
+import { PressableScale } from '@/components/ui';
 import { haptic } from '@/lib/feedback';
 import { radii, spacing, useTheme } from '@/theme';
 import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
+import { Prompt } from './controls';
 
 export function GridRecallView({ trial, onInputOpen, onAnswer, locked, demo }: GameViewProps<GridRecallTrial, number[]>) {
   const { colors } = useTheme();
@@ -40,9 +41,9 @@ export function GridRecallView({ trial, onInputOpen, onAnswer, locked, demo }: G
 
   return (
     <View style={styles.root}>
-      <Text variant="label" tone="muted" align="center" accessibilityLiveRegion="polite">
+      <Prompt accessibilityLiveRegion="polite">
         {phase === 'show' ? t('play.memorise') : t('play.tapMore', { count: trial.cells.length - taps.length })}
-      </Text>
+      </Prompt>
       <View style={[styles.board, { width: boardSize, height: boardSize, gap }]}>
         {Array.from({ length: trial.size }, (_, r) => (
           <View key={r} style={[styles.row, { gap }]}>

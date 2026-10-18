@@ -1,12 +1,11 @@
 import { flankAnswer, type FlankDirection, type FlankTrial } from '@mindtier/core';
 import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { Text } from '@/components/ui';
 import { spacing, useTheme } from '@/theme';
 import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
-import { BinaryChoice } from './controls';
+import { BinaryChoice, Prompt } from './controls';
 
 function Arrow({ dir, color, size }: { dir: FlankDirection; color: string; size: number }) {
   return (
@@ -25,14 +24,16 @@ export function FlankView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
 
   const row = [...trial.left, trial.center, ...trial.right];
   const centerIndex = trial.left.length;
-  const size = row.length > 5 ? 40 : 52;
+  const { width } = useWindowDimensions();
+  // As big as the row allows: seven arrows across the column, never more than 64 pt each.
+  const size = Math.min(64, Math.floor((Math.min(width, 640) - 48) / row.length) - 2);
   const answer = flankAnswer(trial);
 
   return (
     <View style={styles.root}>
-      <Text variant="label" tone="muted" align="center">
+      <Prompt>
         {trial.reverse ? t('play.flankReverse') : t('play.flankAsk')}
-      </Text>
+      </Prompt>
       <View
         style={styles.row}
         accessible
@@ -62,7 +63,7 @@ export function FlankView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
 
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.xl, paddingTop: spacing.xl },
-  row: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 2, minHeight: 140 },
-  halo: { borderWidth: 2, borderRadius: 14, padding: 2 },
+  row: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 2, minHeight: 160 },
+  halo: { borderWidth: 2.5, borderRadius: 6, padding: 2 },
   actions: { marginTop: 'auto', marginBottom: spacing.lg },
 });

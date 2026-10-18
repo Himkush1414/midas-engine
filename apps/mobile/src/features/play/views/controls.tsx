@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Icon, type IconName } from '@/components/icons/Icon';
-import { LipPressable, Text } from '@/components/ui';
+import { LipPressable, Text, type TextProps } from '@/components/ui';
 import { useT } from '@/i18n';
 import { lips, radii, spacing, useTheme } from '@/theme';
 
@@ -14,6 +14,11 @@ export interface AnswerButtonProps {
   tone?: 'neutral' | 'positive' | 'negative';
   height?: number;
   testID?: string;
+}
+
+/** The instruction over a game board: big enough to read mid-game without looking for it. */
+export function Prompt({ style, ...rest }: Omit<TextProps, 'variant'>) {
+  return <Text variant="subheading" weight="semibold" align="center" style={[styles.prompt, style]} {...rest} />;
 }
 
 /** A game answer: a raised key on a lip, labelled in the display voice. Tones colour the glyph only. */
@@ -151,6 +156,7 @@ export function Keypad({
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
+  prompt: { paddingHorizontal: spacing.sm },
   answer: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing.md },
   answerRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   binary: { flexDirection: 'row', gap: spacing.sm },

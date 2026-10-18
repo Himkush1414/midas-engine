@@ -2,11 +2,10 @@ import type { MatchTrial } from '@mindtier/core';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Circle, Rect } from 'react-native-svg';
-import { Text } from '@/components/ui';
 import { radii, spacing, useTheme } from '@/theme';
 import { useT } from '@/i18n';
 import type { GameViewProps } from '../types';
-import { BinaryChoice } from './controls';
+import { BinaryChoice, Prompt } from './controls';
 
 function DotGlyph({ size, cells, dim, color, frame }: { size: number; cells: number[]; dim: number; color: string; frame: string }) {
   const step = 100 / dim;
@@ -37,14 +36,14 @@ export function MatchView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
 
   return (
     <View style={styles.root}>
-      <Text variant="label" tone="muted" align="center">
+      <Prompt>
         {t('play.sameAsk')}
-      </Text>
+      </Prompt>
       <View style={styles.pair} accessible accessibilityLabel={t('a11y.twoPatterns')}>
-        <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+        <View style={[styles.card, { backgroundColor: colors.surface }]}>
           <DotGlyph size={136} cells={trial.left} dim={trial.size} color={color} frame={colors.border} />
         </View>
-        <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+        <View style={[styles.card, { backgroundColor: colors.surface }]}>
           <DotGlyph size={136} cells={trial.right} dim={trial.size} color={color} frame={colors.border} />
         </View>
       </View>
@@ -63,6 +62,6 @@ export function MatchView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.xl, paddingTop: spacing.xl },
   pair: { flexDirection: 'row', justifyContent: 'center', gap: spacing.lg },
-  card: { padding: spacing.md, borderRadius: radii.xl, borderWidth: 1 },
+  card: { padding: spacing.md, borderRadius: radii.md },
   actions: { marginTop: 'auto', marginBottom: spacing.lg },
 });
