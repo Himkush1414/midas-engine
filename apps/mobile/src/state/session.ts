@@ -1,4 +1,4 @@
-import type { DomainRatings, RunSummary, SessionPlan, SessionUpdate } from '@mindtier/core';
+import { currentStreak, utcDayKey, type DomainRatings, type RunSummary, type SessionPlan, type SessionUpdate } from '@mindtier/core';
 import { create } from 'zustand';
 import { track } from '@/lib/analytics';
 import { useDuels } from './duels';
@@ -17,6 +17,8 @@ export interface FinishedSession {
   runs: RunSummary[];
   result: SessionUpdate;
   ratingsBefore: DomainRatings;
+  /** The new streak length when this session extended the daily streak (for the streak moment). */
+  streakExtendedTo?: number;
 }
 
 interface SessionStore {
@@ -46,8 +48,17 @@ export const useSession = create<SessionStore>((set, get) => ({
   finish() {
     const active = get().active;
     if (!active) return null;
+    const today = utcDayKey(new Date());
+    const streakBefore = currentStreak(useProgress.getState().streak, today).current;
     const result = useProgress.getState().completeSession(active.plan, active.runs);
-    const finished: FinishedSession = { plan: active.plan, runs: active.runs, result, ratingsBefore: active.ratingsAtStart };
+    const streakAfter = currentStreak(useProgress.getState().streak, today).current;
+    const finished: FinishedSession = {
+      plan: active.plan,
+      runs: active.runs,
+      result,
+      ratingsBefore: active.ratingsAtStart,
+      ...(streakAfter > streakBefore ? { streakExtendedTo: streakAfter } : {}),
+    };
     set({ active: null, finished });
     if (active.plan.mode === 'duel') {
       const duelId = active.plan.seed.split('|')[1];

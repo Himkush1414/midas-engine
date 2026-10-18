@@ -217,6 +217,10 @@ export const en = {
   },
   results: {
     tierUp: 'New tier!',
+    streak_one: '{count}-day streak',
+    streak_other: '{count}-day streak',
+    streakLabel_one: 'day streak',
+    streakLabel_other: 'day streak',
     divisionUp: 'Division up!',
     divisionDown: 'Slipped a division — you’ll climb back',
     tierDown: 'Dropped a tier — every climber does',

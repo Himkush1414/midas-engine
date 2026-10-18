@@ -219,6 +219,10 @@ export const pt: Translations = {
   },
   results: {
     tierUp: 'Novo nível!',
+    streak_one: 'Sequência de {count} dia',
+    streak_other: 'Sequência de {count} dias',
+    streakLabel_one: 'dia seguido',
+    streakLabel_other: 'dias seguidos',
     divisionUp: 'Subiu de divisão!',
     divisionDown: 'Caiu uma divisão: você vai recuperar',
     tierDown: 'Caiu de nível: acontece com todo mundo',

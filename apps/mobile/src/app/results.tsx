@@ -8,6 +8,7 @@ import { TierBadge } from '@/components/tier';
 import { Button, Enter, ProgressBar, RollingNumber, Screen, Text, Ticket } from '@/components/ui';
 import { shareDuel } from '@/features/duels/actions';
 import { DeltaRow } from '@/features/results/DeltaRow';
+import { StreakStamp } from '@/features/results/StreakStamp';
 import { webPlay } from '@/lib/config';
 import { haptic } from '@/lib/feedback';
 import { useReduceMotion } from '@/lib/motion';
@@ -182,6 +183,12 @@ export default function Results() {
         )}
       </View>
 
+      {finished.streakExtendedTo ? (
+        <View style={styles.streak}>
+          <StreakStamp days={finished.streakExtendedTo} reduceMotion={reduce} />
+        </View>
+      ) : null}
+
       {rated ? (
         <View style={styles.list}>
           {result.updates.map((u, i) => (
@@ -241,6 +248,7 @@ const styles = StyleSheet.create({
   pointsRow: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing.sm, flexWrap: 'wrap' },
   points: { fontSize: 104, lineHeight: 94 },
   unit: { marginBottom: spacing.sm },
+  streak: { marginTop: -spacing.md, marginBottom: spacing.lg },
   list: { gap: spacing.sm },
   run: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, borderRadius: radii.md, padding: spacing.md, paddingLeft: spacing.lg, overflow: 'hidden' },
   tab: { position: 'absolute', left: -4, top: 0, bottom: 0, width: 10, transform: [{ skewX: `${SLANT_DEG}deg` }] },

@@ -405,6 +405,7 @@ const SCENES = [
             runs: [],
             ratingsBefore: before,
             result: { ratings: after, updates: [upd('memory', 'grid-recall'), upd('speed', 'snap'), upd('language', 'misfit')] },
+            streakExtendedTo: 13,
           },
         });
         globalThis.__mindtier.router.push('/results');

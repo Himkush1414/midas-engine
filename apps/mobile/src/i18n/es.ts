@@ -219,6 +219,10 @@ export const es: Translations = {
   },
   results: {
     tierUp: '¡Nuevo rango!',
+    streak_one: 'Racha de {count} día',
+    streak_other: 'Racha de {count} días',
+    streakLabel_one: 'día de racha',
+    streakLabel_other: 'días de racha',
     divisionUp: '¡Subes de división!',
     divisionDown: 'Bajaste una división: la recuperarás',
     tierDown: 'Bajaste de rango: le pasa a todo escalador',
