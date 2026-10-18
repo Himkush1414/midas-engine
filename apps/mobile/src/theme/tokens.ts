@@ -196,3 +196,14 @@ export const lips = { lg: 5, md: 4, sm: 3 } as const;
 
 /** Minimum touch target (Android guideline: 48dp). */
 export const HIT_TARGET = 48;
+
+/** Ink or chalk, whichever reads on a solid colour face (domain slabs, tier plates). */
+export function onColor(hex: string): string {
+  const lin = (i: number) => {
+    const c = parseInt(hex.slice(i, i + 2), 16) / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  };
+  const l = 0.2126 * lin(1) + 0.7152 * lin(3) + 0.0722 * lin(5);
+  // Contrast against ink (#0F0D0B, L≈0.004) vs chalk (#FFFFFF): pick the larger.
+  return (l + 0.05) / 0.054 >= 1.05 / (l + 0.05) ? '#0F0D0B' : '#FFFFFF';
+}

@@ -97,10 +97,15 @@ export function RunPlayer({ gameId, mode, seed, rating, trialCount, reduceMotion
   return (
     <View style={styles.root}>
       <View style={styles.meta}>
-        <Text variant="caption" tone="faint" tabular accessibilityLabel={t('play.round', { index: run.index + 1, total: run.total })}>
-          {run.index + 1} / {run.total}
-        </Text>
-        <Text variant="caption" tone="faint" tabular>
+        <View style={styles.count} accessible accessibilityLabel={t('play.round', { index: run.index + 1, total: run.total })}>
+          <Text variant="heading" tabular>
+            {run.index + 1}
+          </Text>
+          <Text variant="micro" tone="faint" tabular>
+            / {run.total}
+          </Text>
+        </View>
+        <Text variant="micro" tone="muted" tabular>
           {t('common.level', { level: run.level })}
         </Text>
       </View>
@@ -125,6 +130,7 @@ export function RunPlayer({ gameId, mode, seed, rating, trialCount, reduceMotion
 
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.sm },
-  meta: { flexDirection: 'row', justifyContent: 'space-between' },
+  meta: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' },
+  count: { flexDirection: 'row', alignItems: 'baseline', gap: spacing.xs },
   stage: { flex: 1, marginTop: spacing.md },
 });

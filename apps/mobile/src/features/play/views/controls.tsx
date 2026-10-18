@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Icon, type IconName } from '@/components/icons/Icon';
-import { PressableScale, Text } from '@/components/ui';
+import { LipPressable, Text } from '@/components/ui';
 import { useT } from '@/i18n';
-import { radii, spacing, useTheme } from '@/theme';
+import { lips, radii, spacing, useTheme } from '@/theme';
 
 export interface AnswerButtonProps {
   label: string;
@@ -16,27 +16,32 @@ export interface AnswerButtonProps {
   testID?: string;
 }
 
+/** A game answer: a raised key on a lip, labelled in the display voice. Tones colour the glyph only. */
 export function AnswerButton({ label, onPress, disabled, icon, children, tone = 'neutral', height = 72, testID }: AnswerButtonProps) {
   const { colors } = useTheme();
-  const border = tone === 'positive' ? colors.success : tone === 'negative' ? colors.danger : colors.borderStrong;
+  const glyph = tone === 'positive' ? colors.success : tone === 'negative' ? colors.danger : colors.text;
   return (
-    <PressableScale
+    <LipPressable
       testID={testID}
       onPress={onPress}
       disabled={disabled}
       hapticOnPress={false}
       accessibilityLabel={label}
-      style={[styles.answer, { minHeight: height, backgroundColor: colors.surfaceRaised, borderColor: border }]}
+      face={colors.surfaceRaised}
+      lipColor={colors.lip}
+      lip={lips.md}
+      radius={radii.sm}
+      faceStyle={[styles.answer, { minHeight: height }]}
     >
       {children ?? (
         <View style={styles.answerRow}>
-          {icon ? <Icon name={icon} size={26} color={colors.text} /> : null}
-          <Text variant="subheading" weight="semibold">
+          {icon ? <Icon name={icon} size={28} color={glyph} strokeWidth={2.4} /> : null}
+          <Text variant="heading" numberOfLines={1}>
             {label}
           </Text>
         </View>
       )}
-    </PressableScale>
+    </LipPressable>
   );
 }
 
@@ -112,23 +117,20 @@ export function Keypad({
         const label = k === 'del' ? t('play.delete') : k === 'ok' ? t('play.submit') : k;
         return (
           <View key={k} style={styles.keyCell}>
-            <PressableScale
+            <LipPressable
               testID={`key-${k}`}
               disabled={disabled || (k === 'ok' && value.length === 0)}
-              hapticOnPress
               accessibilityLabel={label}
               onPress={() => {
                 if (k === 'del') onChange(value.slice(0, -1));
                 else if (k === 'ok') onSubmit();
                 else if (value.length < 5) onChange(value + k);
               }}
-              style={[
-                styles.key,
-                {
-                  backgroundColor: k === 'ok' ? colors.primary : isAction ? colors.surface : colors.surfaceRaised,
-                  borderColor: colors.border,
-                },
-              ]}
+              face={k === 'ok' ? colors.primary : isAction ? colors.surface : colors.surfaceRaised}
+              lipColor={k === 'ok' ? colors.primaryLip : colors.lip}
+              lip={lips.sm}
+              radius={radii.sm}
+              faceStyle={styles.key}
             >
               {k === 'del' ? (
                 <Icon name="backspace" size={26} color={colors.text} />
@@ -139,7 +141,7 @@ export function Keypad({
                   {k}
                 </Text>
               )}
-            </PressableScale>
+            </LipPressable>
           </View>
         );
       })}
@@ -149,12 +151,12 @@ export function Keypad({
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  answer: { borderRadius: radii.lg, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing.md },
+  answer: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing.md },
   answerRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  binary: { flexDirection: 'row', gap: spacing.md },
+  binary: { flexDirection: 'row', gap: spacing.sm },
   grid: { flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: -spacing.xs },
   gridCell: { width: '50%', padding: spacing.xs },
   keypad: { flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: -spacing.xs },
   keyCell: { width: '33.333%', padding: spacing.xs },
-  key: { height: 60, borderRadius: radii.md, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  key: { height: 58, alignItems: 'center', justifyContent: 'center' },
 });

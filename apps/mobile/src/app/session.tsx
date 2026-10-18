@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { Icon } from '@/components/icons/Icon';
-import { Button, PressableScale, Screen, Text } from '@/components/ui';
+import { Button, PressableScale, RollingNumber, Screen, Text } from '@/components/ui';
 import { RunPlayer } from '@/features/play/RunPlayer';
 import { Countdown } from '@/features/session/Countdown';
 import { GameIntro } from '@/features/session/GameIntro';
@@ -12,14 +12,14 @@ import { useT } from '@/i18n';
 import { track } from '@/lib/analytics';
 import { useReduceMotion } from '@/lib/motion';
 import { useSession } from '@/state/session';
-import { spacing, useTheme } from '@/theme';
+import { SLANT_DEG, spacing, useTheme } from '@/theme';
 
 type Phase = 'intro' | 'practice' | 'countdown' | 'play' | 'between';
 
 const PRACTICE_TRIALS = 3;
 
 export default function SessionScreen() {
-  const { colors } = useTheme();
+  const { colors, domain: domainColor } = useTheme();
   const t = useT();
   const reduceMotion = useReduceMotion();
   const active = useSession((s) => s.active);
@@ -83,11 +83,16 @@ export default function SessionScreen() {
         <PressableScale onPress={quit} accessibilityLabel={t('session.leaveA11y')} style={styles.close} testID="session-quit">
           <Icon name="close" size={24} color={colors.textMuted} />
         </PressableScale>
-        <View style={styles.dots} accessibilityLabel={t('session.gameOf', { index: Math.min(index + 1, total), total })}>
+        <View style={styles.dots} accessible accessibilityLabel={t('session.gameOf', { index: Math.min(index + 1, total), total })}>
           {active.plan.games.map((g, i) => (
             <View
               key={`${g}-${i}`}
-              style={[styles.dot, { backgroundColor: i < index ? colors.primary : i === index ? colors.primaryText : colors.surfaceRaised }]}
+              style={[
+                styles.dot,
+                {
+                  backgroundColor: i < index ? colors.primary : i === index ? domainColor[getGame(g).domain] : colors.surfaceRaised,
+                },
+              ]}
             />
           ))}
         </View>
@@ -143,13 +148,17 @@ export default function SessionScreen() {
 
       {phase === 'between' && last ? (
         <Animated.View entering={reduceMotion ? undefined : FadeIn} style={styles.between}>
-          <Text variant="label" tone="faint" align="center">
+          <View style={[styles.betweenTab, { backgroundColor: domainColor[getGame(last.gameId).domain] }]} />
+          <Text variant="micro" tone="muted">
             {t('session.complete', { game: getGame(last.gameId).name })}
           </Text>
-          <Text variant="hero" align="center" tabular>
-            {Math.round(last.accuracy * 100)}%
-          </Text>
-          <Text tone="muted" align="center">
+          <View style={styles.score}>
+            <RollingNumber value={String(Math.round(last.accuracy * 100))} variant="mega" style={styles.scoreNumber} />
+            <Text variant="hero" tone="muted" style={styles.percent}>
+              %
+            </Text>
+          </View>
+          <Text variant="micro" tone="muted">
             {t('session.accuracy', { level: Math.max(last.peakLevel, 1) })}
           </Text>
           <View style={styles.betweenAction}>
@@ -172,8 +181,12 @@ const styles = StyleSheet.create({
   flex: { flex: 1, gap: spacing.sm },
   topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 48 },
   close: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
-  dots: { flexDirection: 'row', gap: spacing.sm },
-  dot: { width: 28, height: 6, borderRadius: 3 },
+  dots: { flex: 1, flexDirection: 'row', gap: 4, maxWidth: 240 },
+  dot: { flex: 1, height: 8, borderRadius: 1, transform: [{ skewX: `${SLANT_DEG}deg` }] },
   between: { flex: 1, justifyContent: 'center', gap: spacing.sm },
+  betweenTab: { width: 40, height: 10, borderRadius: 1, transform: [{ skewX: `${SLANT_DEG}deg` }], marginBottom: spacing.sm },
+  score: { flexDirection: 'row', alignItems: 'flex-end' },
+  scoreNumber: { fontSize: 168, lineHeight: 150 },
+  percent: { marginBottom: spacing.md, marginLeft: spacing.xs },
   betweenAction: { marginTop: spacing.xxl },
 });

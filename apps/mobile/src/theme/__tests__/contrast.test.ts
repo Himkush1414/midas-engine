@@ -53,3 +53,10 @@ describe.each(themes)('%s palette', (_name, c, domains) => {
 it('tier base colours stay visible as large shapes on the dark field (3:1)', () => {
   for (const tier of TIERS) expect(contrast(tierColors[tier].base, darkPalette.background)).toBeGreaterThanOrEqual(3);
 });
+
+describe('onColor', () => {
+  const { onColor } = jest.requireActual('../tokens') as typeof import('../tokens');
+  it.each([...Object.values(domainColors), ...Object.values(domainColorsLight)])('puts readable ink or chalk on %s', (hex) => {
+    expect(contrast(onColor(hex), hex)).toBeGreaterThanOrEqual(4.5);
+  });
+});
