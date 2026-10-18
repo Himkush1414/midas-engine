@@ -5,6 +5,7 @@ export const it: LandingCopy = {
   metaTitle: 'Mindtier — Giochi di logica a gradi',
   metaDescription:
     'Scopri il tuo grado mentale in sei partite rapide di piazzamento, poi scala da Ferro a Gran Maestro. Rompicapi che si adattano a te, sfida del giorno, duelli, stagioni mensili e leghe settimanali. Mai pubblicità.',
+  heroKicker: 'Giochi di logica a gradi',
   heroTitle: 'A che grado è la tua mente?',
   heroLead:
     'Giochi di logica a gradi. Scopri il tuo grado, da Ferro a Gran Maestro, in sei partite rapide di piazzamento, poi scala con rompicapi che si adattano a te, una sfida del giorno e duelli con gli amici.',
@@ -113,4 +114,30 @@ export const it: LandingCopy = {
       a: 'Sì: nell’app, in Impostazioni → Elimina account, oppure sulla nostra pagina di eliminazione dell’account. Profilo, punteggi e storico vengono eliminati.',
     },
   ],
+  demo: {
+    kicker: 'Provalo qui',
+    title: 'Dieci secondi di Flank',
+    body: 'Da che parte punta la freccia centrale? Ignora le vicine. Tocca i pulsanti o usa le frecce della tastiera.',
+    start: 'Inizia',
+    again: 'Gioca ancora',
+    left: 'Sinistra',
+    right: 'Destra',
+    progress: '{done} di {total}',
+    result: '{correct}/{total} giuste · {ms} ms in media',
+    verdict: 'È una velocità da livello {tier}.',
+    note: 'Solo un assaggio: il tuo grado vero arriva da sei partite di piazzamento nell’app.',
+  },
+  dailyTitle: 'Una sfida. Tutti. Ogni giorno.',
+  dailyBody: 'Tre rompicapi, uguali per tutti i giocatori del pianeta, rinnovati a mezzanotte UTC. Giocala qui nel browser, senza registrarti, e guarda dove sei arrivato nella classifica di oggi.',
+  finalTitle: 'Scopri il tuo grado.',
+  finalBody: 'Sei partite veloci. Circa cinque minuti. Poi la scalata è tua.',
+  shots: {
+    home: 'Schermata iniziale di Mindtier: Platino II, punteggio 1605, con la prossima sessione classificata',
+    reveal: 'Risultato del piazzamento: Platino II con un radar su sei abilità',
+    results: 'Risultati della sessione: divisione superiore, con i guadagni di tre giochi',
+    duel: 'Un duello finito: 2140 contro 1985',
+    daily: 'Risultato della sfida del giorno e la classifica di oggi',
+    league: 'Classifica della lega settimanale con la tua posizione',
+    season: 'Riepilogo della stagione con il grado massimo e la scalata più grande',
+  },
 };

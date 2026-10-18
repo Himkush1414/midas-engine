@@ -5,6 +5,7 @@ export const pt: LandingCopy = {
   metaTitle: 'Mindtier — Jogos mentais ranqueados',
   metaDescription:
     'Descubra seu nível mental em seis partidas rápidas de classificação e suba do Ferro ao Grão-Mestre. Quebra-cabeças que se adaptam a você, desafio diário, duelos, temporadas mensais e ligas semanais. Sem anúncios, nunca.',
+  heroKicker: 'Jogos mentais ranqueados',
   heroTitle: 'Em que nível está sua mente?',
   heroLead:
     'Jogos mentais ranqueados. Descubra seu nível, do Ferro ao Grão-Mestre, em seis partidas rápidas de classificação e depois suba com quebra-cabeças que se adaptam a você, um desafio diário e duelos com amigos.',
@@ -113,4 +114,30 @@ export const pt: LandingCopy = {
       a: 'Sim: no app, em Configurações → Excluir conta, ou na nossa página de exclusão de conta. Seu perfil, suas pontuações e seu histórico são apagados.',
     },
   ],
+  demo: {
+    kicker: 'Experimente aqui',
+    title: 'Dez segundos de Flank',
+    body: 'Para onde aponta a seta do meio? Ignore as vizinhas. Toque nos botões ou use as setas do teclado.',
+    start: 'Começar',
+    again: 'Jogar de novo',
+    left: 'Esquerda',
+    right: 'Direita',
+    progress: '{done} de {total}',
+    result: '{correct}/{total} acertos · {ms} ms em média',
+    verdict: 'Isso é velocidade de nível {tier}.',
+    note: 'Só uma prévia: seu nível real vem de seis jogos de classificação no app.',
+  },
+  dailyTitle: 'Um desafio. Todo mundo. Todo dia.',
+  dailyBody: 'Três quebra-cabeças, iguais para todos os jogadores do planeta, renovados à meia-noite UTC. Jogue aqui mesmo no navegador, sem cadastro, e veja onde você ficou no ranking de hoje.',
+  finalTitle: 'Descubra seu nível.',
+  finalBody: 'Seis jogos rápidos. Uns cinco minutos. Depois, a escalada é sua.',
+  shots: {
+    home: 'Tela inicial do Mindtier: Platina II, pontuação 1605, com a próxima sessão ranqueada',
+    reveal: 'Resultado da classificação: Platina II com um radar de seis habilidades',
+    results: 'Resultado da sessão: subiu de divisão, com os ganhos em três jogos',
+    duel: 'Um duelo encerrado: 2140 contra 1985',
+    daily: 'Resultado do desafio diário e o ranking de hoje',
+    league: 'Tabela da liga semanal com a sua posição',
+    season: 'Resumo da temporada com o nível máximo e a maior subida',
+  },
 };

@@ -10,6 +10,8 @@ export interface LandingCopy {
   lang: 'en' | 'es' | 'pt' | 'de' | 'fr' | 'it';
   metaTitle: string;
   metaDescription: string;
+  /** Mono label above the hero title. */
+  heroKicker: string;
   heroTitle: string;
   heroLead: string;
   ctaPlay: string;
@@ -35,6 +37,26 @@ export interface LandingCopy {
   proItems: string[];
   faqTitle: string;
   faq: { q: string; a: string }[];
+  /** The playable taste of Flank on the page. {ms}, {correct}, {total} and {tier} are filled in. */
+  demo: {
+    kicker: string;
+    title: string;
+    body: string;
+    start: string;
+    again: string;
+    left: string;
+    right: string;
+    progress: string;
+    result: string;
+    verdict: string;
+    note: string;
+  };
+  dailyTitle: string;
+  dailyBody: string;
+  finalTitle: string;
+  finalBody: string;
+  /** Alt text for the app screens in the device mockups. */
+  shots: Record<'home' | 'reveal' | 'results' | 'duel' | 'daily' | 'league' | 'season', string>;
 }
 
 export const en: LandingCopy = {
@@ -42,6 +64,7 @@ export const en: LandingCopy = {
   metaTitle: 'Mindtier — Ranked brain games',
   metaDescription:
     'Find your brain rank in six quick placement games, then climb from Iron to Grandmaster. Adaptive puzzles, daily challenges, friend duels, monthly seasons and weekly leagues. No ads, ever.',
+  heroKicker: 'Ranked brain games',
   heroTitle: 'What tier is your mind?',
   heroLead:
     'Ranked brain games. Find your rank from Iron to Grandmaster in six quick placement games — then climb with adaptive puzzles, a Daily Challenge and duels with friends.',
@@ -146,4 +169,31 @@ export const en: LandingCopy = {
       a: 'Yes — in the app under Settings → Delete account, or on our account deletion page. Deletion removes your profile, ratings and history.',
     },
   ],
+  demo: {
+    kicker: 'Try it here',
+    title: 'Ten seconds of Flank',
+    body: 'Which way does the middle arrow point? Ignore its neighbours. Tap the buttons or use your arrow keys.',
+    start: 'Start',
+    again: 'Play again',
+    left: 'Left',
+    right: 'Right',
+    progress: '{done} of {total}',
+    result: '{correct}/{total} right · {ms} ms average',
+    verdict: 'That’s {tier}-level speed.',
+    note: 'Just a taste: your real rank comes from six placement games in the app.',
+  },
+  dailyTitle: 'One challenge. Everyone. Every day.',
+  dailyBody:
+    'Three puzzles, the same for every player on Earth, reset at midnight UTC. Play it right here in your browser, no sign-up — then see where you landed on today’s board.',
+  finalTitle: 'Find your tier.',
+  finalBody: 'Six quick games. About five minutes. Then the climb is yours.',
+  shots: {
+    home: 'Mindtier home screen: Platinum II, rating 1605, with the next ranked session',
+    reveal: 'Placement reveal: Platinum II with a skill radar across six skills',
+    results: 'Session results: Division up, with rating gains for three games',
+    duel: 'A finished duel: 2,140 against 1,985',
+    daily: 'Daily Challenge result and today’s leaderboard',
+    league: 'Weekly league table with your place',
+    season: 'Season recap with peak tier and biggest climb',
+  },
 };
