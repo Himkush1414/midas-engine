@@ -1,13 +1,10 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Space_Grotesk } from 'next/font/google';
 import { Footer, Header } from '@/components/SiteChrome';
+import { body, display, mono } from '@/lib/fonts';
 import { SITE } from '@/lib/site';
-import './globals.css';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
-const grotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-grotesk', weight: ['600', '700'], display: 'swap' });
-
-export const metadata: Metadata = {
+/** Shared by every root layout (English pages, translated landing pages) and the global 404. */
+export const rootMetadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: { default: `${SITE.name} — ${SITE.tagline}`, template: `%s · ${SITE.name}` },
   description: SITE.description,
@@ -30,17 +27,18 @@ export const metadata: Metadata = {
   other: { 'google-play-app': `app-id=${SITE.androidPackage}` },
 };
 
-export const viewport: Viewport = {
+export const rootViewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#0A0D1A' },
-    { media: '(prefers-color-scheme: light)', color: '#F5F6FB' },
+    { media: '(prefers-color-scheme: dark)', color: '#0F0D0B' },
+    { media: '(prefers-color-scheme: light)', color: '#F1EBE1' },
   ],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+/** The <html> document with the page's real language, fonts and site chrome. */
+export function RootDocument({ lang, children }: { lang: string; children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${grotesk.variable}`}>
-      <body style={{ ['--font-body' as string]: 'var(--font-inter)', ['--font-display' as string]: 'var(--font-grotesk)' }}>
+    <html lang={lang} className={`${display.variable} ${body.variable} ${mono.variable}`}>
+      <body>
         <a href="#main" className="sr-skip">
           Skip to content
         </a>

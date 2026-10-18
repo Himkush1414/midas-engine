@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
   // The shared engine ships TypeScript source.
   transpilePackages: ['@mindtier/core'],
   poweredByHeader: false,
+  // One root layout per language (so <html lang> is right) needs a global 404 for unmatched URLs.
+  experimental: { globalNotFound: true },
   // The runtime OG image route reads its font from disk.
   outputFileTracingIncludes: {
     '/duel/[id]/opengraph-image': ['./src/assets/**'],
