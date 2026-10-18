@@ -4,7 +4,8 @@
 // Inputs:  store/screenshots/raw/<scheme>[-<lang>]/*.png (from scripts/screenshots.mjs --lang)
 // Outputs: store/screenshots/phone[/<lang>]/*.png (1080×1920) and store/graphics/feature-graphic[-<lang>].png (1024×500);
 //          English keeps the unsuffixed paths.
-// Requires the Space Grotesk and Inter fonts to be installed for librsvg (see docs/STORE_LISTING.md).
+// Floodlight style (docs/DESIGN_DIRECTION.md). Requires Big Shoulders, Instrument Sans and JetBrains Mono installed for
+// librsvg: copy apps/web/src/assets/fonts/*.ttf to ~/.local/share/fonts and run fc-cache (see docs/STORE_LISTING.md).
 import { mkdir, readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -114,48 +115,96 @@ const FRAMES = FILES.map((file, i) => ({ file, title: copy.frames[i][0], sub: co
 
 const W = 1080;
 const H = 1920;
+const INK = '#0F0D0B';
+const CHALK = '#F4EFE6';
+const MUTED = '#B7AD9E';
+/** Accent per frame, cycling volt → spark → ice → flare (the Floodlight signal colours). */
+const ACCENTS = ['#D7FF3A', '#FFC93D', '#8FE3FF', '#FF5B35'];
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
-/** Shrink a font so text fits `width`; `em` is the face's average glyph width (Space Grotesk bold ≈ 0.56, Inter ≈ 0.52). */
-const fit = (text, size, width, em) => Math.min(size, Math.floor(width / (text.length * em)));
+/** Greedy word wrap with an average glyph width `em` (Big Shoulders Black ≈ 0.52, Instrument Sans ≈ 0.5). */
+function wrap(text, size, width, em) {
+  const lines = [];
+  let line = '';
+  for (const word of text.split(' ')) {
+    const next = line ? `${line} ${word}` : word;
+    if (next.length * size * em > width && line) {
+      lines.push(line);
+      line = word;
+    } else line = next;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
 
-function background() {
+/** Largest size (≤ max) at which `text` fits in `maxLines` lines of `width`. */
+function fitLines(text, max, width, em, maxLines) {
+  for (let size = max; size > 24; size -= 2) {
+    const lines = wrap(text, size, width, em);
+    if (lines.length <= maxLines && lines.every((l) => l.length * size * em <= width)) return { size, lines };
+  }
+  return { size: 24, lines: wrap(text, 24, width, em) };
+}
+
+const GRAIN = `<filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>`;
+
+function background(accent) {
+  // The phone stands on a slanted slab of the frame's accent colour.
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-    <defs>
-      <radialGradient id="g" cx="50%" cy="0%" r="90%">
-        <stop offset="0" stop-color="#2A2470"/>
-        <stop offset="0.55" stop-color="#121734"/>
-        <stop offset="1" stop-color="#0A0D1A"/>
-      </radialGradient>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#g)"/>
+    <defs>${GRAIN}</defs>
+    <rect width="100%" height="100%" fill="${INK}"/>
+    <rect width="100%" height="100%" filter="url(#n)" opacity="0.07"/>
+    <polygon points="0,1110 ${W},900 ${W},${H} 0,${H}" fill="${accent}"/>
+    <polygon points="0,1110 ${W},900 ${W},930 0,1140" fill="${INK}" opacity="0.18"/>
   </svg>`;
 }
 
-function caption(title, sub) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="330">
-    <text x="${W / 2}" y="150" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="${fit(title, 76, 1040, 0.56)}" fill="#F4F6FF">${esc(title)}</text>
-    <text x="${W / 2}" y="232" text-anchor="middle" font-family="Inter" font-weight="500" font-size="${fit(sub, 40, 1040, 0.52)}" fill="#A3ABD1">${esc(sub)}</text>
+function caption(index, title, sub, accent) {
+  const t = fitLines(title.toLocaleUpperCase(), 132, 960, 0.52, 2);
+  const s = fitLines(sub, 42, 960, 0.5, 2);
+  const titleTop = 230;
+  const lineH = Math.round(t.size * 0.9);
+  const subTop = titleTop + lineH * (t.lines.length - 1) + 78;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="560">
+    <polygon points="60,96 112,96 104,114 52,114" fill="${accent}"/>
+    <text x="128" y="114" font-family="JetBrains Mono" font-weight="700" font-size="26" letter-spacing="5" fill="${MUTED}">${String(index + 1).padStart(2, '0')} / ${String(FILES.length).padStart(2, '0')}</text>
+    ${t.lines.map((l, i) => `<text x="60" y="${titleTop + i * lineH}" font-family="Big Shoulders" font-weight="900" font-size="${t.size}" fill="${CHALK}">${esc(l)}</text>`).join('')}
+    ${s.lines.map((l, i) => `<text x="60" y="${subTop + i * Math.round(s.size * 1.3)}" font-family="Instrument Sans" font-weight="500" font-size="${s.size}" fill="${MUTED}">${esc(l)}</text>`).join('')}
   </svg>`;
+}
+
+/** A phone body around the screenshot, with a soft shadow, tilted a few degrees. */
+async function phone(file, width, tilt) {
+  const pad = 18;
+  const shotW = width - pad * 2;
+  const shotH = Math.round((shotW * 1920) / 1080);
+  const bodyH = shotH + pad * 2;
+  const mask = Buffer.from(`<svg width="${shotW}" height="${shotH}"><rect width="${shotW}" height="${shotH}" rx="62" ry="62"/></svg>`);
+  const shot = await sharp(raw(file)).resize(shotW, shotH).composite([{ input: mask, blend: 'dest-in' }]).png().toBuffer();
+  const body = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${bodyH}">
+    <defs><linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3A342D"/><stop offset="0.4" stop-color="#0A0908"/><stop offset="1" stop-color="#1A1714"/></linearGradient></defs>
+    <rect x="1" y="1" width="${width - 2}" height="${bodyH - 2}" rx="78" ry="78" fill="url(#b)" stroke="#4A4239" stroke-width="2"/>
+  </svg>`);
+  const device = await sharp(body).composite([{ input: shot, left: pad, top: pad }]).png().toBuffer();
+  const shadow = await sharp({ create: { width: width + 160, height: bodyH + 160, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
+    .composite([{ input: Buffer.from(`<svg width="${width}" height="${bodyH}"><rect width="${width}" height="${bodyH}" rx="78" fill="#000" fill-opacity="0.6"/></svg>`), left: 80, top: 110 }])
+    .blur(36)
+    .png()
+    .toBuffer();
+  const stacked = await sharp(shadow).composite([{ input: device, left: 80, top: 80 }]).png().toBuffer();
+  return sharp(stacked).rotate(tilt, { background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
 }
 
 async function frame({ file, title, sub }, index) {
-  const shotW = 830;
-  const shotH = Math.round((shotW * 1920) / 1080);
-  const radius = 54;
-  const mask = Buffer.from(`<svg width="${shotW}" height="${shotH}"><rect width="${shotW}" height="${shotH}" rx="${radius}" ry="${radius}"/></svg>`);
-  const shot = await sharp(raw(file)).resize(shotW, shotH).composite([{ input: mask, blend: 'dest-in' }]).png().toBuffer();
-  const border = Buffer.from(
-    `<svg width="${shotW + 8}" height="${shotH + 8}"><rect x="4" y="4" width="${shotW}" height="${shotH}" rx="${radius}" ry="${radius}" fill="none" stroke="#343D78" stroke-width="4"/></svg>`,
-  );
-  const left = Math.round((W - shotW) / 2);
-  const top = 340;
+  const accent = ACCENTS[index % ACCENTS.length];
+  const device = await phone(file, 720, index % 2 ? 3 : -3);
+  const meta = await sharp(device).metadata();
   const out = join(outDir, `${String(index + 1).padStart(2, '0')}-${file.replace(/^\d+-/, '')}`);
-  await sharp(Buffer.from(background()))
+  await sharp(Buffer.from(background(accent)))
     .composite([
-      { input: Buffer.from(caption(title, sub)), left: 0, top: 30 },
-      { input: shot, left, top },
-      { input: border, left: left - 4, top: top - 4 },
+      { input: Buffer.from(caption(index, title, sub, accent)), left: 0, top: 0 },
+      // Bleeds off the bottom: the top of the screen is what matters.
+      { input: await sharp(device).extract({ left: 0, top: 0, width: meta.width, height: Math.min(meta.height, H - 590) }).toBuffer(), left: Math.round((W - meta.width) / 2), top: 590 },
     ])
     .png({ compressionLevel: 9 })
     .toFile(out);
@@ -163,23 +212,30 @@ async function frame({ file, title, sub }, index) {
 }
 
 async function featureGraphic() {
-  const logo = await readFile(join(root, 'brand/icon-foreground.svg'), 'utf8');
-  const logoPng = await sharp(Buffer.from(logo), { density: 300 }).resize(300, 300).png().toBuffer();
+  const mark = await readFile(join(root, 'brand/logo-mark.svg'), 'utf8');
+  const markPng = await sharp(Buffer.from(mark), { density: 300 }).resize(96, 96).png().toBuffer();
+  const tag = fitLines(copy.tagline.toLocaleUpperCase(), 76, 560, 0.52, 2);
+  const lineH = Math.round(tag.size * 0.9);
+  // Mono strapline kept inside the text column, clear of the phone.
+  const strap = fitLines(copy.strap.toLocaleUpperCase(), 18, 470, 0.68, 2);
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500">
-    <defs>
-      <radialGradient id="g" cx="20%" cy="30%" r="100%">
-        <stop offset="0" stop-color="#2A2470"/><stop offset="0.6" stop-color="#121734"/><stop offset="1" stop-color="#0A0D1A"/>
-      </radialGradient>
-      <linearGradient id="t" x1="0" x2="1"><stop offset="0" stop-color="#A996FF"/><stop offset="1" stop-color="#22D3EE"/></linearGradient>
-    </defs>
-    <rect width="1024" height="500" fill="url(#g)"/>
-    <text x="372" y="210" font-family="Space Grotesk" font-weight="700" font-size="104" fill="#F4F6FF">Mindtier</text>
-    <text x="376" y="282" font-family="Space Grotesk" font-weight="600" font-size="${fit(copy.tagline, 44, 648, 0.56)}" fill="url(#t)">${esc(copy.tagline)}</text>
-    <text x="376" y="340" font-family="Inter" font-weight="500" font-size="${fit(copy.strap, 28, 648, 0.52)}" fill="#A3ABD1">${esc(copy.strap)}</text>
+    <defs>${GRAIN}</defs>
+    <rect width="1024" height="500" fill="${INK}"/>
+    <rect width="1024" height="500" filter="url(#n)" opacity="0.07"/>
+    <polygon points="660,0 1024,0 1024,500 560,500" fill="#D7FF3A"/>
+    <text x="164" y="104" font-family="Big Shoulders" font-weight="900" font-size="60" fill="${CHALK}">MINDTIER</text>
+    ${tag.lines.map((l, i) => `<text x="56" y="${214 + i * lineH}" font-family="Big Shoulders" font-weight="900" font-size="${tag.size}" fill="${CHALK}">${esc(l)}</text>`).join('')}
+    ${strap.lines.map((l, i) => `<text x="56" y="${214 + (tag.lines.length - 1) * lineH + 62 + i * 28}" font-family="JetBrains Mono" font-weight="700" font-size="${strap.size}" letter-spacing="2" fill="${MUTED}">${esc(l)}</text>`).join('')}
   </svg>`;
+  const device = await phone(FILES[0], 300, 6);
+  const meta = await sharp(device).metadata();
   const out = join(root, `store/graphics/feature-graphic${suffix}.png`);
   await sharp(Buffer.from(svg))
-    .composite([{ input: logoPng, left: 52, top: 100 }])
+    .composite([
+      { input: markPng, left: 52, top: 40 },
+      // The phone runs off the right and bottom edges.
+      { input: await sharp(device).extract({ left: 0, top: 0, width: meta.width - 30, height: 440 }).toBuffer(), left: 1024 - meta.width + 30, top: 60 },
+    ])
     .png({ compressionLevel: 9 })
     .toFile(out);
   return out;
