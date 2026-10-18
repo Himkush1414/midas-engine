@@ -1,5 +1,11 @@
-import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
-import { SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
+import { BigShoulders_700Bold, BigShoulders_800ExtraBold, BigShoulders_900Black } from '@expo-google-fonts/big-shoulders';
+import {
+  InstrumentSans_400Regular,
+  InstrumentSans_500Medium,
+  InstrumentSans_600SemiBold,
+  InstrumentSans_700Bold,
+} from '@expo-google-fonts/instrument-sans';
+import { JetBrainsMono_500Medium, JetBrainsMono_700Bold } from '@expo-google-fonts/jetbrains-mono';
 import { useFonts } from 'expo-font';
 import { Stack, type ErrorBoundaryProps } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -78,12 +84,15 @@ function AppStack() {
 export default function RootLayout() {
   const theme = useSettings((s) => s.theme);
   const [loaded, error] = useFonts({
-    SpaceGrotesk_600SemiBold,
-    SpaceGrotesk_700Bold,
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-    Inter_700Bold,
+    BigShoulders_700Bold,
+    BigShoulders_800ExtraBold,
+    BigShoulders_900Black,
+    InstrumentSans_400Regular,
+    InstrumentSans_500Medium,
+    InstrumentSans_600SemiBold,
+    InstrumentSans_700Bold,
+    JetBrainsMono_500Medium,
+    JetBrainsMono_700Bold,
   });
 
   useEffect(() => {

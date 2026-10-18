@@ -21,13 +21,13 @@ No purple-to-blue gradients, no navy. The field is warm black, so tier metals an
 | `border` / `borderStrong` | `#332D27` / `#4A4239` | `#D6CCBC` / `#B9AD9A` | Inputs and dividers only, never around surfaces |
 | `text` (chalk / ink) | `#F4EFE6` | `#15120F` | Primary text |
 | `textMuted` | `#B7AD9E` | `#574E44` | Secondary text |
-| `textFaint` | `#8E8577` | `#6B6256` | Captions, at least 4.5:1 on the field |
+| `textFaint` | `#958C7E` | `#6B6256` | Captions, at least 4.5:1 on the field |
 | `primary` (volt) | `#D7FF3A` face, `#8FAE12` lip | `#15120F` face, `#000000` lip | The one "go" action per screen |
 | `onPrimary` | `#0F0D0B` | `#D7FF3A` | Label on the primary face |
 | `primaryText` | `#D7FF3A` | `#4A5E00` | Links and active states on the field |
 | `flare` (danger) | `#FF5B35` | `#C2361A` | Wrong answers, streak flame, destructive actions |
 | `success` | `#D7FF3A` | `#3F6B00` | Correct, rating gains (always shown with a ▲ or ✓) |
-| `spark` | `#FFC93D` | `#A86A00` | Streaks, Daily Challenge, rewards |
+| `spark` | `#FFC93D` | `#8A5600` | Streaks, Daily Challenge, rewards |
 | `accent` (ice) | `#8FE3FF` | `#0A6C8C` | Info, duels |
 
 Tier colours (`TIER_COLORS` in `packages/core`) and domain colours stay as they are; both were
