@@ -28,6 +28,7 @@ set -a; . ./.env.local; set +a
 node scripts/db-migrate.mjs      # applies pending supabase/migrations (0003_seasons, 0004_leagues, 0005_language_skill, …) — always before deploying
 node scripts/deploy-web.mjs      # deploys HEAD of main to production and waits for READY (refuses while migrations are pending)
 # The Vercel build also exports the web Daily Challenge to /play (scripts/build-play.mjs, about 1–2 extra minutes).
+# It installs the whole workspace (apps/web/vercel.json installCommand) because /play is built from apps/mobile.
 curl https://midas-engine.vercel.app/api/health
 ```
 
