@@ -3,22 +3,16 @@ import { SITE } from '@/lib/site';
 import { HomeLink, LanguageLinks, MainNav, Tagline } from './SiteNav';
 import styles from './SiteChrome.module.css';
 
+/** The Floodlight mark (brand/logo-mark.svg): a volt tier hexagon on ink with two climbing chevrons. */
 export function Logo({ size = 32 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 1024 1024" aria-hidden="true">
-      <defs>
-        <linearGradient id="logo-edge" x1="226" y1="182" x2="798" y2="842" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#8B6CFF" />
-          <stop offset="1" stopColor="#22D3EE" />
-        </linearGradient>
-      </defs>
-      <rect width="1024" height="1024" rx="224" fill="#0A0D1A" />
-      <g fill="none" stroke="url(#logo-edge)" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="512,182 797.8,347 797.8,677 512,842 226.2,677 226.2,347" strokeWidth="56" />
-        <polyline points="352,704 512,584 672,704" strokeWidth="64" opacity="0.5" />
-        <polyline points="352,584 512,464 672,584" strokeWidth="64" />
+      <rect width="1024" height="1024" rx="200" fill="#0F0D0B" />
+      <g strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="512,170 808,341 808,683 512,854 216,683 216,341" fill="#D7FF3A" stroke="#D7FF3A" strokeWidth="40" />
+        <polyline points="352,672 512,560 672,672" fill="none" stroke="#0F0D0B" strokeWidth="76" opacity="0.42" />
+        <polyline points="352,528 512,416 672,528" fill="none" stroke="#0F0D0B" strokeWidth="76" />
       </g>
-      <circle cx="512" cy="352" r="40" fill="#FCD34D" />
     </svg>
   );
 }

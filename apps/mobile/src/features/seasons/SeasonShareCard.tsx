@@ -7,7 +7,7 @@ import { CARD_HEIGHT, CARD_WIDTH } from '@/features/share/TierShareCard';
 import { useLanguage, useT } from '@/i18n';
 import { domainLabel, tierLabel } from '@/i18n/labels';
 import { WEB_URL } from '@/lib/links';
-import { ThemeProvider } from '@/theme';
+import { darkPalette, SLANT_DEG, ThemeProvider, tierColors } from '@/theme';
 import { seasonMonth, seasonName, type SeasonRecap } from './season';
 
 /** Shareable season recap: peak tier and effort, no rating numbers. Always in the dark brand theme. */
@@ -15,28 +15,30 @@ export const SeasonShareCard = forwardRef<View, { recap: SeasonRecap }>(function
   const t = useT();
   const language = useLanguage();
   const host = WEB_URL.replace(/^https?:\/\//, '');
+  const glow = tierColors[recap.peak.tier].base;
   const eyebrow = [seasonName(t, recap.season), seasonMonth(recap.season, language)].filter(Boolean).join(' · ');
   return (
     <ThemeProvider preference="dark">
       <View ref={ref} collapsable={false} style={styles.card} testID="season-share-card">
         <Svg style={StyleSheet.absoluteFill} width={CARD_WIDTH} height={CARD_HEIGHT}>
           <Defs>
-            <RadialGradient id="season-bg" cx="50%" cy="0%" r="95%">
-              <Stop offset="0" stopColor="#3A2470" />
-              <Stop offset="0.6" stopColor="#121734" />
-              <Stop offset="1" stopColor="#0A0D1A" />
+            <RadialGradient id="season-bg" cx="50%" cy="30%" r="55%">
+              <Stop offset="0" stopColor={glow} stopOpacity={0.35} />
+              <Stop offset="1" stopColor={glow} stopOpacity={0} />
             </RadialGradient>
           </Defs>
+          <Rect width={CARD_WIDTH} height={CARD_HEIGHT} fill={darkPalette.background} />
           <Rect width={CARD_WIDTH} height={CARD_HEIGHT} fill="url(#season-bg)" />
         </Svg>
-        <Text variant="caption" weight="semibold" style={styles.eyebrow}>
-          {eyebrow.toLocaleUpperCase(language)}
+        <View style={[styles.stripe, { backgroundColor: darkPalette.spark }]} />
+        <Text variant="micro" weight="bold" style={styles.eyebrow}>
+          {eyebrow}
         </Text>
         {/* Wrapped so it stacks above the absolutely positioned background on every platform. */}
         <View>
           <TierBadge info={recap.peak} size={120} showProvisional={false} />
         </View>
-        <Text variant="title" align="center">
+        <Text variant="title" align="center" style={{ color: glow }}>
           {t('season.peak', { label: tierLabel(t, recap.peak) })}
         </Text>
         <View style={styles.stats}>
@@ -72,8 +74,9 @@ export const SeasonShareCard = forwardRef<View, { recap: SeasonRecap }>(function
 });
 
 const styles = StyleSheet.create({
-  card: { width: CARD_WIDTH, height: CARD_HEIGHT, alignItems: 'center', justifyContent: 'space-between', paddingVertical: 22, paddingHorizontal: 26, overflow: 'hidden', backgroundColor: '#0A0D1A' },
-  eyebrow: { color: '#A996FF', letterSpacing: 2 },
+  card: { width: CARD_WIDTH, height: CARD_HEIGHT, alignItems: 'center', justifyContent: 'space-between', paddingVertical: 22, paddingHorizontal: 26, overflow: 'hidden', backgroundColor: darkPalette.background },
+  stripe: { position: 'absolute', top: 0, left: -10, width: 150, height: 8, transform: [{ skewX: `${SLANT_DEG}deg` }] },
+  eyebrow: { color: darkPalette.spark },
   stats: { flexDirection: 'row', gap: 40 },
   stat: { alignItems: 'center' },
   best: { flexDirection: 'row', alignItems: 'center', gap: 10 },

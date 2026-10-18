@@ -1,22 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
-  <defs>
-    <linearGradient id="edge" x1="226" y1="182" x2="798" y2="842" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#8B6CFF"/>
-      <stop offset="1" stop-color="#22D3EE"/>
-    </linearGradient>
-    <radialGradient id="spark" cx="50%" cy="50%" r="50%">
-      <stop offset="0" stop-color="#FFF7D6"/>
-      <stop offset="0.55" stop-color="#FCD34D"/>
-      <stop offset="1" stop-color="#FCD34D" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  <g transform="translate(512 512) scale(0.85) translate(-512 -512)">
-    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="512,182 797.8,347 797.8,677 512,842 226.2,677 226.2,347" stroke="url(#edge)" stroke-width="56"/>
-      <polyline points="352,704 512,584 672,704" stroke="url(#edge)" stroke-width="64" opacity="0.5"/>
-      <polyline points="352,584 512,464 672,584" stroke="url(#edge)" stroke-width="64"/>
-    </g>
-    <circle cx="512" cy="352" r="88" fill="url(#spark)"/>
-    <circle cx="512" cy="352" r="34" fill="#FFF7D6"/>
+  <g transform="translate(512 512) scale(0.7) translate(-512 -512)">
+    <g stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="512,170 808,341 808,683 512,854 216,683 216,341" fill="#D7FF3A" stroke="#D7FF3A" stroke-width="40"/>
+    <polyline points="352,672 512,560 672,672" fill="none" stroke="#0F0D0B" stroke-width="76" opacity="0.42"/>
+    <polyline points="352,528 512,416 672,528" fill="none" stroke="#0F0D0B" stroke-width="76"/>
+  </g>
   </g>
 </svg>
