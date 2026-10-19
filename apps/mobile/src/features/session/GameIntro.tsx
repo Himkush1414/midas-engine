@@ -52,7 +52,12 @@ export function GameIntro({ gameId, mode, position, total, onStart, onPractice }
             <View style={styles.glyph} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
               <Icon name={def.domain} size={120} color={ink} strokeWidth={1.3} />
             </View>
-            <View style={[styles.cut, { backgroundColor: ink }]} />
+            {/* One slanted pip per game in the session: done and current games are solid. */}
+            <View style={styles.pips} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+              {Array.from({ length: total }, (_, i) => (
+                <View key={i} style={[styles.pip, { backgroundColor: ink, opacity: i < position ? 1 : 0.28, width: i === position - 1 ? 40 : 20 }]} />
+              ))}
+            </View>
           </View>
         </Enter>
         <Enter index={1}>
@@ -83,7 +88,8 @@ const styles = StyleSheet.create({
   slab: { borderRadius: radii.md, padding: spacing.lg, minHeight: 200, overflow: 'hidden', justifyContent: 'space-between' },
   slabHead: { flexDirection: 'row', justifyContent: 'space-between', gap: spacing.md },
   glyph: { alignSelf: 'flex-end', marginRight: -spacing.lg, marginBottom: -spacing.xxl, opacity: 0.9 },
-  cut: { position: 'absolute', left: spacing.lg, bottom: spacing.lg, width: 56, height: 10, borderRadius: 1, transform: [{ skewX: `${SLANT_DEG}deg` }] },
+  pips: { position: 'absolute', left: spacing.lg, bottom: spacing.lg, flexDirection: 'row', gap: spacing.xs },
+  pip: { height: 10, borderRadius: 1, transform: [{ skewX: `${SLANT_DEG}deg` }] },
   rules: { gap: spacing.md },
   actions: { gap: spacing.xs, paddingBottom: spacing.md },
 });
