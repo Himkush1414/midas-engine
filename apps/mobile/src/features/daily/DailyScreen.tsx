@@ -75,6 +75,8 @@ export function DailyScreen({ header, footer, onNamePress = () => router.push('/
 
   const column = Math.min(width, MAX_CONTENT_WIDTH) - spacing.gutter * 2;
   const cardWidth = (column - CARD_GAP * 2) / 3 - spacing.md * 2;
+  // The score and its unit share one line: leave room for the unit (about 56 pt) on narrow phones.
+  const pointsSize = record ? fitDisplaySize(record.points.toLocaleString(locale), column - 56, 104, 64) : 104;
 
   return (
     <Screen scroll>
@@ -106,7 +108,7 @@ export function DailyScreen({ header, footer, onNamePress = () => router.push('/
                     <Text variant="heading" numberOfLines={2} style={{ color: ink, fontSize: fitDisplaySize(def.name.split(' ').reduce((a, b) => (b.length > a.length ? b : a), ''), cardWidth, 26, 16), lineHeight: 24 }}>
                       {def.name}
                     </Text>
-                    <Text variant="micro" weight="bold" numberOfLines={1} style={{ color: ink }}>
+                    <Text variant="micro" weight="bold" numberOfLines={1} style={{ color: ink, fontSize: monoFit(domainLabel(t, def.domain), cardWidth) }}>
                       {domainLabel(t, def.domain)}
                     </Text>
                   </View>
@@ -124,7 +126,7 @@ export function DailyScreen({ header, footer, onNamePress = () => router.push('/
         {record ? (
           <Enter index={3} style={styles.result}>
             <View style={styles.points}>
-              <RollingNumber value={record.points.toLocaleString(locale)} variant="mega" style={styles.pointsNumber} />
+              <RollingNumber value={record.points.toLocaleString(locale)} variant="mega" style={{ fontSize: pointsSize, lineHeight: Math.round(pointsSize * 0.9) }} />
               <Text variant="heading" tone="muted" style={styles.unit}>
                 {t('common.points', { points: '' }).trim()}
               </Text>
@@ -209,6 +211,15 @@ const CARD_GAP = spacing.sm;
 /** Places 1–3 in gold, silver and bronze: the bright metal on the dark field, the deep tone on paper. */
 const PODIUM = (scheme: 'dark' | 'light') => (['gold', 'silver', 'bronze'] as const).map((m) => tierColors[m][scheme === 'dark' ? 'base' : 'deep']);
 
+/**
+ * Largest micro size (≤ 11) at which a mono label fits the card on one line: JetBrains Mono glyphs are
+ * 0.6 em wide plus 1.3 pt tracking, so "LANGUAGE" or "LINGUAGGIO" never truncate on a 320 pt phone.
+ */
+function monoFit(label: string, width: number) {
+  // 4 pt of slack: web rounds sub-pixel widths up, and a label that fits exactly still ellipsizes.
+  return Math.max(8, Math.min(11, Math.floor((((width - 4) / label.length - 1.3) / 0.6) * 2) / 2));
+}
+
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   header: { paddingTop: spacing.md, paddingBottom: spacing.lg, gap: spacing.xs },
@@ -221,7 +232,6 @@ const styles = StyleSheet.create({
   gameText: { gap: 2 },
   result: { gap: spacing.md },
   points: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing.sm, flexWrap: 'wrap' },
-  pointsNumber: { fontSize: 104, lineHeight: 94 },
   unit: { marginBottom: spacing.sm },
   board: { borderRadius: radii.md, padding: spacing.lg, gap: spacing.sm },
   boardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: spacing.sm },
