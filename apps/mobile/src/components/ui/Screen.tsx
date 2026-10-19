@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import { Image, ScrollView, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { spacing, useTheme } from '@/theme';
 
 export interface ScreenProps {
@@ -31,6 +32,24 @@ export function Grain() {
   );
 }
 
+/** Content scrolling under a pinned footer fades out instead of being cut by a hard edge, so it reads as "more below". */
+function FooterFade({ color }: { color: string }) {
+  const id = useId().replace(/:/g, '');
+  return (
+    <View pointerEvents="none" style={styles.fade}>
+      <Svg width="100%" height="100%" preserveAspectRatio="none">
+        <Defs>
+          <LinearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor={color} stopOpacity={0} />
+            <Stop offset="1" stopColor={color} stopOpacity={1} />
+          </LinearGradient>
+        </Defs>
+        <Rect width="100%" height="100%" fill={`url(#${id})`} />
+      </Svg>
+    </View>
+  );
+}
+
 /** Content column width on tablets and large phones in landscape. */
 export const MAX_CONTENT_WIDTH = 640;
 
@@ -52,7 +71,12 @@ export function Screen({ children, scroll, edges = ['top', 'left', 'right'], pad
       ) : (
         <View style={[styles.root, pad, column, contentStyle]}>{children}</View>
       )}
-      {footer ? <View style={[styles.footer, pad, column]}>{footer}</View> : null}
+      {footer ? (
+        <View style={[styles.footer, pad, column]}>
+          {scroll ? <FooterFade color={colors.background} /> : null}
+          {footer}
+        </View>
+      ) : null}
     </SafeAreaView>
   );
 }
@@ -61,4 +85,5 @@ const styles = StyleSheet.create({
   root: { flex: 1 },
   scrollContent: { paddingBottom: spacing.xxxl },
   footer: { paddingTop: spacing.md, paddingBottom: spacing.lg },
+  fade: { position: 'absolute', left: 0, right: 0, top: -32, height: 32 },
 });
