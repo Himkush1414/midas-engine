@@ -5,7 +5,7 @@ import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState, type ReactNode } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
-import { Button, Enter, fitDisplaySize, MAX_CONTENT_WIDTH, RollingNumber, Screen, SkeletonRows, StatusNote, Text, Ticket } from '@/components/ui';
+import { Button, Enter, fitDisplaySize, fitMicroSize, MAX_CONTENT_WIDTH, RollingNumber, Screen, SkeletonRows, StatusNote, Text, Ticket } from '@/components/ui';
 import { dailyShareText, untilNextDaily } from './dailyShare';
 import { startDaily } from '@/features/session/start';
 import { syncNow } from '@/features/sync/sync';
@@ -108,7 +108,7 @@ export function DailyScreen({ header, footer, onNamePress = () => router.push('/
                     <Text variant="heading" numberOfLines={2} style={{ color: ink, fontSize: fitDisplaySize(def.name.split(' ').reduce((a, b) => (b.length > a.length ? b : a), ''), cardWidth, 26, 16), lineHeight: 24 }}>
                       {def.name}
                     </Text>
-                    <Text variant="micro" weight="bold" numberOfLines={1} style={{ color: ink, fontSize: monoFit(domainLabel(t, def.domain), cardWidth) }}>
+                    <Text variant="micro" weight="bold" numberOfLines={1} style={{ color: ink, fontSize: fitMicroSize(domainLabel(t, def.domain), cardWidth) }}>
                       {domainLabel(t, def.domain)}
                     </Text>
                   </View>
@@ -205,15 +205,6 @@ export function DailyScreen({ header, footer, onNamePress = () => router.push('/
 const CARD_GAP = spacing.sm;
 /** Places 1–3 in gold, silver and bronze: the bright metal on the dark field, the deep tone on paper. */
 const PODIUM = (scheme: 'dark' | 'light') => (['gold', 'silver', 'bronze'] as const).map((m) => tierColors[m][scheme === 'dark' ? 'base' : 'deep']);
-
-/**
- * Largest micro size (≤ 11) at which a mono label fits the card on one line: JetBrains Mono glyphs are
- * 0.6 em wide plus 1.3 pt tracking, so "LANGUAGE" or "LINGUAGGIO" never truncate on a 320 pt phone.
- */
-function monoFit(label: string, width: number) {
-  // 4 pt of slack: web rounds sub-pixel widths up, and a label that fits exactly still ellipsizes.
-  return Math.max(8, Math.min(11, Math.floor((((width - 4) / label.length - 1.3) / 0.6) * 2) / 2));
-}
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
