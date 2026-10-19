@@ -11,6 +11,7 @@ Copy rules (FTC / Play policy): describe **games, ranks and challenges**. Never 
 | App or game | App |
 | Category | **Education** (alternative: Games → Puzzle) |
 | Tags | Brain games, Puzzle, Logic, Memory games, Trivia & word games (pick the closest available) |
+| Developer name (shown on the listing) | **Manik Rana** |
 | Contact email | `[support email]` (same as `NEXT_PUBLIC_SUPPORT_EMAIL`) |
 | Website | https://midas-engine.vercel.app |
 | Privacy policy URL | https://midas-engine.vercel.app/privacy |

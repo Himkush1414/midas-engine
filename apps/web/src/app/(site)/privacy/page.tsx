@@ -175,7 +175,8 @@ export default function Privacy() {
 
       <h2>Contact</h2>
       <p>
-        {SITE.legalName}, {SITE.legalAddress}. Email: <a href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a>.
+        {SITE.legalName}
+        {SITE.legalAddress ? `, ${SITE.legalAddress}` : ''}. Email: <a href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a>.
       </p>
     </article>
   );
