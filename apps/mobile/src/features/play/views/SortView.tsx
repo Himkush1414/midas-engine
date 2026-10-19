@@ -47,6 +47,7 @@ export function SortView({ trial, onInputOpen, onAnswer, locked, demo }: GameVie
 
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.xl, paddingTop: spacing.xl },
-  group: { borderWidth: 2, borderRadius: radii.xl, paddingVertical: spacing.xl, paddingHorizontal: spacing.lg, gap: spacing.md },
-  actions: { marginTop: 'auto', marginBottom: spacing.lg },
+  // Auto margins centre the card in the space between the prompt and the answer keys.
+  group: { borderWidth: 2, borderRadius: radii.xl, paddingVertical: spacing.xl, paddingHorizontal: spacing.lg, gap: spacing.md, marginVertical: 'auto' },
+  actions: { marginBottom: spacing.lg },
 });

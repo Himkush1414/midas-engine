@@ -33,7 +33,7 @@ export function ClashView({ trial, onInputOpen, onAnswer, locked, shapeMode, dem
   return (
     <View style={styles.root}>
       <View style={[styles.cue, { backgroundColor: trial.ask === 'ink' ? colors.surfaceRaised : colors.spark }]}>
-        <Text variant="label" weight="bold" style={{ color: trial.ask === 'ink' ? colors.text : onColor(colors.spark) }}>
+        <Text variant="body" weight="bold" align="center" style={{ color: trial.ask === 'ink' ? colors.text : onColor(colors.spark) }}>
           {t('play.clashAsk', { property: askLabel })}
         </Text>
       </View>
@@ -83,7 +83,7 @@ export function ClashView({ trial, onInputOpen, onAnswer, locked, shapeMode, dem
 
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.lg, paddingTop: spacing.md },
-  cue: { alignSelf: 'center', paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, borderRadius: radii.xs },
+  cue: { paddingHorizontal: spacing.lg, paddingVertical: spacing.md, borderRadius: radii.xs },
   card: { height: 170, borderRadius: radii.md, alignItems: 'center', justifyContent: 'center' },
   probe: { height: 100 },
   word: { paddingHorizontal: spacing.md },

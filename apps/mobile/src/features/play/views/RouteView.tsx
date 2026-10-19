@@ -37,7 +37,7 @@ export function RouteView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
       <Prompt>
         {t('play.routeAsk', { count: trial.steps })}
       </Prompt>
-      <View style={{ width: board, gap }}>
+      <View style={[styles.board, { width: board, gap }]}>
         {Array.from({ length: trial.size }, (_, r) => (
           <View key={r} style={[styles.row, { gap }]}>
             {Array.from({ length: trial.size }, (_, c) => {
@@ -99,6 +99,7 @@ export function RouteView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
 }
 
 const styles = StyleSheet.create({
+  board: { marginVertical: 'auto' },
   root: { flex: 1, alignItems: 'center', gap: spacing.lg, paddingTop: spacing.md },
   row: { flexDirection: 'row' },
   cell: { borderRadius: radii.sm, alignItems: 'center', justifyContent: 'center' },

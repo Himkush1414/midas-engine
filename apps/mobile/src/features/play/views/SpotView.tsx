@@ -46,7 +46,7 @@ export function SpotView({ trial, onInputOpen, onAnswer, locked, demo }: GameVie
       <Prompt>
         {t('play.spotAsk')}
       </Prompt>
-      <View style={{ width: board, gap }}>
+      <View style={[styles.board, { width: board, gap }]}>
         {Array.from({ length: trial.rows }, (_, r) => (
           <View key={r} style={[styles.row, { gap }]}>
             {Array.from({ length: trial.cols }, (_, c) => {
@@ -83,6 +83,7 @@ export function SpotView({ trial, onInputOpen, onAnswer, locked, demo }: GameVie
 }
 
 const styles = StyleSheet.create({
+  board: { marginVertical: 'auto' },
   root: { flex: 1, alignItems: 'center', gap: spacing.xl, paddingTop: spacing.lg },
   row: { flexDirection: 'row' },
   cell: { borderRadius: radii.md, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
