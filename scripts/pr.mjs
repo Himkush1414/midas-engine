@@ -34,8 +34,21 @@ const git = (...args) =>
     stdio: ['ignore', 'pipe', 'pipe'],
   }).trim();
 
+// Long CI waits outlive flaky connections: retry network errors (not HTTP errors) a few times with backoff.
+async function fetchRetry(url, init, attempts = 5) {
+  for (let i = 1; ; i++) {
+    try {
+      return await fetch(url, init);
+    } catch (e) {
+      if (i >= attempts) throw e;
+      console.error(`network error (${e.cause?.code ?? e.message}), retry ${i}/${attempts - 1}`);
+      await new Promise((r) => setTimeout(r, 2000 * i));
+    }
+  }
+}
+
 async function api(path, init = {}) {
-  const res = await fetch(`https://api.github.com/repos/${REPO}${path}`, {
+  const res = await fetchRetry(`https://api.github.com/repos/${REPO}${path}`, {
     ...init,
     headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
   });
