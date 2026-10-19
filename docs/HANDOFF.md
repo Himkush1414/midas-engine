@@ -35,11 +35,10 @@ curl https://midas-engine.vercel.app/api/health
 
 Recommended:
 1. **Delete the stray project `midas-engine-pggb`** (Vercel → midas-engine-pggb → Settings → Advanced → Delete). It was an accidental duplicate with no env vars, no custom domain and no working build. It has been unlinked from the repo (2026-10-17), so it can no longer post failing checks to GitHub; deleting it just tidies the dashboard.
-2. Add legal identity env vars (Project → Settings → Environment Variables, Production and Preview), then redeploy:
-   - `NEXT_PUBLIC_SUPPORT_EMAIL` = `[support@yourdomain]`
-   - `NEXT_PUBLIC_LEGAL_NAME` = `[Your company or full legal name]`
-   - `NEXT_PUBLIC_LEGAL_ADDRESS` = `[Registered address]`
-3. In `apps/web/src/app/terms/page.tsx`, replace `[Governing jurisdiction]`.
+2. The legal name **Manik Rana** is the built-in default (`apps/web/src/lib/site.ts`), used by the privacy policy, terms, refunds page and footer. Still to set (Project → Settings → Environment Variables, Production and Preview), then redeploy:
+   - `NEXT_PUBLIC_SUPPORT_EMAIL` = `[support@yourdomain]` — the pages show `support@example.com` until this is set. Play requires a working contact email.
+   - `NEXT_PUBLIC_LEGAL_ADDRESS` = optional postal address; the contact lines leave it out when unset.
+3. The terms are governed by "the laws of the country where Manik Rana is resident" (`apps/web/src/app/(site)/terms/page.tsx`). Name a specific country there if you prefer.
 4. Optional: a custom domain (e.g. `mindtier.app`). If you add one, update `NEXT_PUBLIC_SITE_URL` (Vercel), `EXPO_PUBLIC_WEB_URL` / `EXPO_PUBLIC_API_URL` (EAS env, all environments) and `WEB_URL` for `scripts/configure-auth.mjs`, then rebuild the app. App links read the host from `EXPO_PUBLIC_WEB_URL`.
 
 ## 2. Supabase — email delivery (needed for "Save progress to email")

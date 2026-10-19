@@ -51,7 +51,7 @@ export default function Refunds() {
 
       <h2>Contact</h2>
       <p>
-        Email <a href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a> with your purchase order number (from your
+        Refund requests are handled by {SITE.legalName}, the developer of Mindtier. Email <a href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a> with your purchase order number (from your
         receipt email) and we will reply within 3 business days.
       </p>
     </article>

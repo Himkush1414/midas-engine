@@ -98,13 +98,14 @@ export default function Terms() {
       <h2>9. Changes and governing law</h2>
       <p>
         We may update these terms; the effective date above will change and material updates will be shown in the app.
-        These terms are governed by the laws of [Governing jurisdiction], without affecting mandatory protections of the
+        These terms are governed by the laws of the country where {SITE.legalName} is resident, without affecting mandatory protections of the
         country where you live.
       </p>
 
       <h2>10. Contact</h2>
       <p>
-        {SITE.legalName}, {SITE.legalAddress}. Email: <a href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a>.
+        {SITE.legalName}
+        {SITE.legalAddress ? `, ${SITE.legalAddress}` : ''}. Email: <a href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a>.
       </p>
     </article>
   );
