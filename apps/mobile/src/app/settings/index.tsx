@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { Alert, Linking, Platform, StyleSheet, View } from 'react-native';
 import { BackHeader } from '@/components/BackHeader';
-import { Segmented, SettingsRow, SettingsSection } from '@/components/settings';
+import { ChoiceGrid, Segmented, SettingsRow, SettingsSection } from '@/components/settings';
 import { Screen, Text } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { links } from '@/lib/links';
@@ -120,7 +120,10 @@ export default function Settings() {
         </SettingsSection>
 
         <SettingsSection title={t('settings.appearance')}>
-          <View style={styles.padded}>
+          <View style={[styles.padded, styles.labelled]}>
+            <Text variant="caption" tone="muted">
+              {t('settings.theme')}
+            </Text>
             <Segmented<ThemePreference>
               label={t('settings.theme')}
               value={s.theme}
@@ -136,21 +139,15 @@ export default function Settings() {
             <Text variant="caption" tone="muted">
               {t('settings.language')}
             </Text>
-            <View style={styles.languages}>
-              {(['system', ...LANGUAGES] as LanguagePreference[]).map((l) => (
-                <Text
-                  key={l}
-                  variant="label"
-                  tone={s.language === l ? 'primary' : 'muted'}
-                  onPress={() => s.setLanguage(l)}
-                  accessibilityRole="radio"
-                  accessibilityState={{ selected: s.language === l }}
-                  style={styles.language}
-                >
-                  {l === 'system' ? t('settings.languageSystem') : LANGUAGE_NAMES[l]}
-                </Text>
-              ))}
-            </View>
+            <ChoiceGrid<LanguagePreference>
+              label={t('settings.language')}
+              value={s.language}
+              onChange={s.setLanguage}
+              options={(['system', ...LANGUAGES] as LanguagePreference[]).map((l) => ({
+                value: l,
+                label: l === 'system' ? t('settings.languageSystem') : LANGUAGE_NAMES[l],
+              }))}
+            />
           </View>
         </SettingsSection>
 
@@ -229,6 +226,4 @@ const styles = StyleSheet.create({
   timeRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg },
   timeControls: { flexDirection: 'row', alignItems: 'center', gap: spacing.lg },
   step: { fontSize: 24, paddingHorizontal: spacing.md, paddingVertical: spacing.xs },
-  languages: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  language: { paddingHorizontal: spacing.md, paddingVertical: spacing.sm, minHeight: 40 },
 });
