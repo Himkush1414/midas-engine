@@ -10,3 +10,4 @@ export * from './RollingNumber';
 export * from './fit';
 export * from './Ticket';
 export * from './Skeleton';
+export * from './TextLink';

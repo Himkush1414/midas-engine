@@ -3,8 +3,9 @@ import { router } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { Alert, Linking, Platform, StyleSheet, View } from 'react-native';
 import { BackHeader } from '@/components/BackHeader';
+import { Icon } from '@/components/icons/Icon';
 import { ChoiceGrid, Segmented, SettingsRow, SettingsSection } from '@/components/settings';
-import { Screen, Text } from '@/components/ui';
+import { PressableScale, Screen, Text } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { links } from '@/lib/links';
 import { cancelDailyReminder, ensurePermission, scheduleDailyReminder } from '@/lib/notifications';
@@ -16,7 +17,7 @@ import { useEntitlements } from '@/state/entitlements';
 import { usePrivacy } from '@/state/privacy';
 import { useSettings, type MotionPreference } from '@/state/settings';
 import type { ThemePreference } from '@/theme';
-import { spacing } from '@/theme';
+import { HIT_TARGET, radii, spacing, useTheme } from '@/theme';
 
 const fmtDate = (iso: string) => new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
 
@@ -32,6 +33,7 @@ function pad(n: number) {
 export default function Settings() {
   const s = useSettings();
   const t = useT();
+  const { colors } = useTheme();
   const privacy = usePrivacy();
   const ent = useEntitlements();
   const email = useAccount((a) => a.email);
@@ -178,15 +180,15 @@ export default function Settings() {
           <View style={[styles.padded, styles.timeRow]}>
             <Text tone="muted">{t('settings.time')}</Text>
             <View style={styles.timeControls}>
-              <Text variant="label" tone="primary" onPress={() => void shiftReminder(-1)} accessibilityRole="button" accessibilityLabel={t('settings.earlier')} style={styles.step}>
-                −
-              </Text>
+              <PressableScale onPress={() => void shiftReminder(-1)} accessibilityLabel={t('settings.earlier')} style={[styles.step, { backgroundColor: colors.surfaceSunken }]}>
+                <Icon name="minus" size={20} color={colors.primaryText} strokeWidth={2.6} />
+              </PressableScale>
               <Text variant="subheading" tabular accessibilityLabel={t('settings.reminderAt', { time: `${s.reminderHour}:${pad(s.reminderMinute)}` })}>
                 {pad(s.reminderHour)}:{pad(s.reminderMinute)}
               </Text>
-              <Text variant="label" tone="primary" onPress={() => void shiftReminder(1)} accessibilityRole="button" accessibilityLabel={t('settings.later')} style={styles.step}>
-                +
-              </Text>
+              <PressableScale onPress={() => void shiftReminder(1)} accessibilityLabel={t('settings.later')} style={[styles.step, { backgroundColor: colors.surfaceSunken }]}>
+                <Icon name="plus" size={20} color={colors.primaryText} strokeWidth={2.6} />
+              </PressableScale>
             </View>
           </View>
           <SettingsRow
@@ -225,5 +227,5 @@ const styles = StyleSheet.create({
   labelled: { gap: spacing.xs },
   timeRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg },
   timeControls: { flexDirection: 'row', alignItems: 'center', gap: spacing.lg },
-  step: { fontSize: 24, paddingHorizontal: spacing.md, paddingVertical: spacing.xs },
+  step: { width: HIT_TARGET, height: HIT_TARGET, borderRadius: radii.xs, alignItems: 'center', justifyContent: 'center' },
 });
