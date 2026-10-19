@@ -140,6 +140,45 @@ export function Segmented<T extends string>({
   );
 }
 
+/** A wrapping grid of choices for longer option lists (languages): two per row, the chosen one solid with a tick. */
+export function ChoiceGrid<T extends string>({
+  options,
+  value,
+  onChange,
+  label,
+}: {
+  options: { value: T; label: string }[];
+  value: T;
+  onChange(v: T): void;
+  label: string;
+}) {
+  const { colors } = useTheme();
+  return (
+    <View style={styles.grid} accessibilityRole="radiogroup" accessibilityLabel={label}>
+      {options.map((o) => {
+        const active = o.value === value;
+        return (
+          <PressableScale
+            key={o.value}
+            onPress={() => onChange(o.value)}
+            accessibilityRole="radio"
+            accessibilityState={{ selected: active }}
+            accessibilityLabel={o.label}
+            style={[styles.choice, { backgroundColor: active ? colors.text : colors.surfaceSunken }]}
+          >
+            <Text variant="label" weight="bold" numberOfLines={1} style={[styles.choiceLabel, { color: active ? colors.background : colors.textMuted }]}>
+              {o.label}
+            </Text>
+            {active ? <Icon name="check" size={16} color={colors.background} strokeWidth={3} /> : null}
+          </PressableScale>
+        );
+      })}
+      {/* Keeps the last chip of an odd list half width. */}
+      {options.length % 2 === 1 ? <View style={styles.choiceSpacer} /> : null}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   section: { gap: spacing.sm },
   sectionTitle: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, paddingHorizontal: spacing.xs },
@@ -148,6 +187,10 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingHorizontal: spacing.lg, minHeight: HIT_TARGET + 8, paddingVertical: spacing.sm },
   text: { flex: 1, gap: 2 },
   value: { maxWidth: '45%' },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  choice: { flexBasis: '45%', flexGrow: 1, minHeight: HIT_TARGET, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing.xs, borderRadius: radii.xs, paddingHorizontal: spacing.md },
+  choiceLabel: { flexShrink: 1 },
+  choiceSpacer: { flexBasis: '45%', flexGrow: 1 },
   segmented: { flexDirection: 'row', borderRadius: radii.sm, padding: 3, gap: 3 },
   segment: { flex: 1, minHeight: HIT_TARGET, alignItems: 'center', justifyContent: 'center', borderRadius: radii.xs, paddingHorizontal: spacing.xs },
   toggle: { width: 52, height: 30, borderRadius: radii.xs, padding: 4, justifyContent: 'center' },
