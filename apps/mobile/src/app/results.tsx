@@ -1,11 +1,11 @@
 import { getGame, overallRating, tierChange, tierInfo } from '@mindtier/core';
 import { Redirect, router } from 'expo-router';
 import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import Animated, { ZoomIn } from 'react-native-reanimated';
 import { Celebration } from '@/components/Celebration';
 import { TierBadge } from '@/components/tier';
-import { Button, Enter, ProgressBar, RollingNumber, Screen, Text, Ticket } from '@/components/ui';
+import { Button, Enter, fitDisplaySize, MAX_CONTENT_WIDTH, ProgressBar, RollingNumber, Screen, Text, Ticket } from '@/components/ui';
 import { shareDuel } from '@/features/duels/actions';
 import { DeltaRow } from '@/features/results/DeltaRow';
 import { StreakStamp } from '@/features/results/StreakStamp';
@@ -43,6 +43,7 @@ export default function Results() {
   const reduce = useReduceMotion();
   const t = useT();
   const locale = useLanguage();
+  const { width } = useWindowDimensions();
   const { colors, domain: domainColor } = useTheme();
   const finished = useSession((s) => s.finished);
   const isPro = useEntitlements((s) => s.isPro);
@@ -81,6 +82,8 @@ export default function Results() {
   const change = rated ? tierChange(before, after) : 'none';
   const overallDelta = Math.round(after.rating) - Math.round(before.rating);
   const points = runs.reduce((s, r) => s + r.points, 0);
+  // The score and its unit share one line: leave room for the unit (about 56 pt) on narrow phones.
+  const pointsSize = fitDisplaySize(points.toLocaleString(locale), Math.min(width, MAX_CONTENT_WIDTH) - spacing.gutter * 2 - 56, 104, 64);
   const celebrate = change === 'tier-up' || change === 'promoted';
   const c = tierColors[info.tier];
 
@@ -173,7 +176,7 @@ export default function Results() {
               </View>
             ) : (
               <View style={styles.pointsRow}>
-                <RollingNumber value={points.toLocaleString(locale)} variant="mega" style={styles.points} />
+                <RollingNumber value={points.toLocaleString(locale)} variant="mega" style={{ fontSize: pointsSize, lineHeight: Math.round(pointsSize * 0.9) }} />
                 <Text variant="heading" tone="muted" style={styles.unit}>
                   {t('common.points', { points: '' }).trim()}
                 </Text>
@@ -207,9 +210,16 @@ export default function Results() {
                     <Text variant="heading" numberOfLines={1}>
                       {game.name}
                     </Text>
-                    <Text variant="micro" tone="muted" tabular>
-                      {plan.mode === 'zen' ? t('results.reached', { level: Math.max(1, r.peakLevel) }) : t('results.pointsPeak', { points: r.points, level: r.peakLevel })}
-                    </Text>
+                    {/* Wrap between the "·" parts, never inside one, so a narrow phone never orphans the level. */}
+                    <View style={styles.meta}>
+                      {(plan.mode === 'zen' ? t('results.reached', { level: Math.max(1, r.peakLevel) }) : t('results.pointsPeak', { points: r.points.toLocaleString(locale), level: r.peakLevel }))
+                        .split(' · ')
+                        .map((part, j, parts) => (
+                          <Text key={j} variant="micro" tone="muted" tabular style={styles.metaPart}>
+                            {j < parts.length - 1 ? `${part} ·` : part}
+                          </Text>
+                        ))}
+                    </View>
                   </View>
                   <Text variant="heading" tabular>
                     {Math.round(r.accuracy * 100)}%
@@ -253,6 +263,8 @@ const styles = StyleSheet.create({
   run: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, borderRadius: radii.md, padding: spacing.md, paddingLeft: spacing.lg, overflow: 'hidden' },
   tab: { position: 'absolute', left: -4, top: 0, bottom: 0, width: 10, transform: [{ skewX: `${SLANT_DEG}deg` }] },
   runText: { flex: 1, gap: 2 },
+  meta: { flexDirection: 'row', flexWrap: 'wrap', columnGap: spacing.xs },
+  metaPart: { flexShrink: 0 },
   upsell: { marginTop: spacing.lg },
   footer: { gap: spacing.sm },
 });
