@@ -211,9 +211,10 @@
   font-family: var(--font-display-stack);
   font-weight: 800;
   text-transform: uppercase;
-  font-size: clamp(0.82rem, 3.4vw, 1.15rem);
+  /* Four columns on phones: an 11-letter name (GRANDMASTER, GROSSMEISTER) must fit one column at 320 px,
+     so the size follows the viewport and words never break mid-word; two-word names wrap at the space. */
+  font-size: clamp(0.62rem, 3.1vw, 1.15rem);
   text-align: center;
-  overflow-wrap: anywhere;
   line-height: 1;
 }
 
