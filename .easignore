@@ -1,0 +1,73 @@
+# Private, local-only files — never commit
+MIDAS_PRIVATE_NOTES.md
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.keystore
+*.jks
+*.p8
+*.p12
+*.mobileprovision
+google-services.json
+GoogleService-Info.plist
+service-account*.json
+.git-credentials
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+build/
+web-build/
+.next/
+out/
+.expo/
+.expo-shared/
+android/
+ios/
+*.aab
+*.apk
+*.ipa
+coverage/
+.turbo/
+.vercel/
+
+# Logs and caches
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+.eslintcache
+*.tsbuildinfo
+.cache/
+
+# Editors and OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# Web QA export used for screenshots
+.qa-web/
+.qa-web-e2e/
+.qa-web-play/
+apps/web/public/play/
+
+# ---- EAS only (this file replaces .gitignore for EAS uploads) ----
+# The Android build needs apps/mobile, packages/core and the workspace manifests. Everything
+# below is store artwork, website code and docs: about 75 MB the build server never reads.
+store/
+docs/
+brand/
+supabase/
+.github/
+apps/web/*
+!apps/web/package.json
