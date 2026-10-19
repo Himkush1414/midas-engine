@@ -295,6 +295,7 @@ export const es: Translations = {
     expired: 'Este duelo ha caducado.',
     play: 'Jugar el duelo',
     shareLink: 'Compartir enlace del duelo',
+    byGame: 'Juego a juego',
   },
   profile: {
     you: 'TÚ',

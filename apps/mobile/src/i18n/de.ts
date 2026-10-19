@@ -295,6 +295,7 @@ export const de: Translations = {
     expired: 'Dieses Duell ist abgelaufen.',
     play: 'Duell spielen',
     shareLink: 'Duell-Link teilen',
+    byGame: 'Spiel für Spiel',
   },
   profile: {
     you: 'DU',
