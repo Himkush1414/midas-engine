@@ -141,7 +141,8 @@ function leagueView(optedIn) {
   };
 }
 
-async function stubNetwork(page, { fresh = false, league = 'in' } = {}) {
+// net: 'hang' keeps leaderboard/league/duel reads pending (loading states), 'down' fails them (offline states).
+async function stubNetwork(page, { fresh = false, league = 'in', net = 'up' } = {}) {
   await page.route(/supabase\.co|\/api\/v1\//, async (route) => {
     const url = route.request().url();
     if (url.includes('/auth/v1/signup')) {
@@ -160,6 +161,7 @@ async function stubNetwork(page, { fresh = false, league = 'in' } = {}) {
       });
     }
     if (url.includes('/api/v1/events')) return route.fulfill({ status: 202, json: { accepted: 0 } });
+    if (net !== 'up' && /\/api\/v1\/(daily|league|duels)/.test(url)) return net === 'down' ? route.abort() : new Promise(() => {});
     if (url.includes('/api/v1/daily/')) return route.fulfill({ json: BOARD });
     if (url.includes('/api/v1/league')) return route.fulfill({ json: leagueView(league === 'in') });
     if (url.includes('/api/v1/duels/')) {
@@ -364,6 +366,25 @@ const SCENES = [
   },
   // QA only: the weekly league, joined and not yet joined.
   { name: '23-league', path: '/', before: async (page) => { await store(page, () => globalThis.__mindtier.router.push('/league')); await settle(page, 1500); } },
+  { name: '35-league-loading', path: '/', net: 'hang', before: async (page) => { await store(page, () => globalThis.__mindtier.router.push('/league')); await settle(page, 1500); } },
+  { name: '36-league-offline', path: '/', net: 'down', before: async (page) => { await store(page, () => globalThis.__mindtier.router.push('/league')); await settle(page, 1500); } },
+  { name: '37-daily-loading', path: '/', net: 'hang', before: async (page) => {
+      await store(page, (day) => {
+        const { useProgress } = globalThis.__mindtier.stores;
+        useProgress.setState((s) => ({ daily: { ...s.daily, [day]: { points: 2905, accuracy: [0.9, 0.8, 1], completedAt: Date.now() } } }));
+        globalThis.__mindtier.router.push('/daily');
+      }, today);
+      await settle(page, 1500);
+    } },
+  { name: '38-daily-offline', path: '/', net: 'down', before: async (page) => {
+      await store(page, (day) => {
+        const { useProgress } = globalThis.__mindtier.stores;
+        useProgress.setState((s) => ({ daily: { ...s.daily, [day]: { points: 2905, accuracy: [0.9, 0.8, 1], completedAt: Date.now() } } }));
+        globalThis.__mindtier.router.push('/daily');
+      }, today);
+      await settle(page, 1500);
+    } },
+  { name: '39-duel-offline', path: '/', net: 'down', before: async (page) => { await store(page, () => globalThis.__mindtier.router.push('/duel/k7px2mqa')); await settle(page, 1500); } },
   { name: '24-league-intro', path: '/', league: 'out', before: async (page) => { await store(page, () => globalThis.__mindtier.router.push('/league')); await settle(page, 1500); } },
   // QA only: the weekly recap and the profile entries to it.
   { name: '20-week', path: '/', before: async (page) => { await store(page, seedWeek); await store(page, () => globalThis.__mindtier.router.push('/week')); await settle(page, 1200); } },
@@ -530,7 +551,7 @@ for (const scene of SCENES) {
   const page = await context.newPage();
   if (NOW) await page.clock.setFixedTime(now);
   page.on('pageerror', (e) => console.error(`  [${scene.name}] page error: ${e.message}`));
-  await stubNetwork(page, { fresh: Boolean(scene.fresh), league: scene.league });
+  await stubNetwork(page, { fresh: Boolean(scene.fresh), league: scene.league, net: scene.net });
   await page.goto(`${BASE}${scene.path}`, { waitUntil: 'networkidle' });
   await page.waitForFunction(() => Boolean(globalThis.__mindtier), null, { timeout: 60_000 });
   await settle(page, 1200);

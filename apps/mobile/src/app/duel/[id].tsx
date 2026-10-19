@@ -3,9 +3,9 @@ import { useLanguage, useT } from '@/i18n';
 import { domainLabel } from '@/i18n/labels';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
-import { Button, PressableScale, Screen, Text } from '@/components/ui';
+import { Button, PressableScale, Screen, SkeletonRows, StatusNote, Text } from '@/components/ui';
 import { playDuel, shareDuel } from '@/features/duels/actions';
 import { api, type DuelInfo } from '@/lib/api';
 import { normaliseDuelCode, useDuels } from '@/state/duels';
@@ -103,12 +103,8 @@ export default function DuelScreen() {
           })}
         </View>
 
-        {state === 'loading' ? <ActivityIndicator color={colors.primaryText} /> : null}
-        {state === 'offline' ? (
-          <Text tone="muted" align="center">
-            {t('duels.offlineScores')}
-          </Text>
-        ) : null}
+        {state === 'loading' ? <SkeletonRows rows={2} /> : null}
+        {state === 'offline' ? <StatusNote message={t('duels.offlineScores')} /> : null}
 
         {info && (me || other) ? (
           <View style={[styles.scores, { backgroundColor: colors.surface }]}>

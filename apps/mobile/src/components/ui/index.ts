@@ -9,3 +9,4 @@ export * from './Enter';
 export * from './RollingNumber';
 export * from './fit';
 export * from './Ticket';
+export * from './Skeleton';

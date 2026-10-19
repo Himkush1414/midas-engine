@@ -9,6 +9,7 @@ export const en = {
     share: 'Share',
     next: 'Next',
     tryAgain: 'Try again',
+    loading: 'Loading',
     open: 'Open',
     copied: 'Copied',
     offline: 'You’re offline.',

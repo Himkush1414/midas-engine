@@ -1,8 +1,8 @@
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { BackHeader } from '@/components/BackHeader';
-import { Button, Card, Screen, Text, Ticket } from '@/components/ui';
+import { Button, Card, Screen, SkeletonRows, StatusNote, Text, Ticket } from '@/components/ui';
 import { leagueDaysLeft, useLeague } from '@/features/leagues/league';
 import { useLanguage, useT } from '@/i18n';
 import { track } from '@/lib/analytics';
@@ -49,13 +49,15 @@ export default function LeagueScreen() {
       <BackHeader title={t('league.title')} />
       <View style={styles.stack}>
         {!view ? (
-          offline ? (
-            <Card style={styles.gap}>
-              <Text tone="muted">{t('league.offline')}</Text>
-              <Button label={t('common.tryAgain')} variant="secondary" onPress={() => void useLeague.getState().refresh()} />
+          // A retry shows the skeleton again, so "Try again" visibly does something.
+          offline && !loading ? (
+            <Card>
+              <StatusNote message={t('league.offline')} onRetry={() => void useLeague.getState().refresh()} />
             </Card>
           ) : (
-            <ActivityIndicator color={colors.primary} style={styles.spinner} />
+            <Card>
+              <SkeletonRows rows={8} testID="league-loading" />
+            </Card>
           )
         ) : !view.optedIn ? (
           <View style={[styles.intro, { backgroundColor: colors.surfaceRaised }]}>
@@ -141,8 +143,6 @@ export default function LeagueScreen() {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   stack: { gap: spacing.lg },
-  gap: { gap: spacing.md },
-  spinner: { marginTop: spacing.xl },
   intro: { borderRadius: radii.md, padding: spacing.lg, gap: spacing.md },
   ladder: { gap: 6, marginBottom: spacing.sm },
   rung: { height: 12, borderRadius: radii.xs, transform: [{ skewX: `${SLANT_DEG}deg` }] },
