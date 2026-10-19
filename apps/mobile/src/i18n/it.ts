@@ -293,6 +293,7 @@ export const it: Translations = {
     expired: 'Questo duello è scaduto.',
     play: 'Gioca il duello',
     shareLink: 'Condividi il link del duello',
+    byGame: 'Gioco per gioco',
   },
   profile: {
     you: 'TU',

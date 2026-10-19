@@ -292,6 +292,7 @@ export const en = {
     expired: 'This duel has expired.',
     play: 'Play duel',
     shareLink: 'Share duel link',
+    byGame: 'Game by game',
   },
   profile: {
     you: 'YOU',

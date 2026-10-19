@@ -110,6 +110,25 @@ export default function DuelScreen() {
           </Text>
         ) : null}
 
+        {me && other ? (
+          // The verdict, stamped like a result: volt for a win, flare for a loss.
+          <View
+            style={[
+              styles.stamp,
+              { backgroundColor: me.points > other.points ? colors.primary : me.points < other.points ? colors.danger : colors.surfaceRaised },
+            ]}
+          >
+            <Text
+              variant="subheading"
+              display
+              weight="semibold"
+              style={[styles.unskew, { color: me.points > other.points ? colors.onPrimary : me.points < other.points ? onColor(colors.danger) : colors.text }]}
+            >
+              {me.points > other.points ? t('duels.youWon', { name: other.name }) : me.points < other.points ? t('duels.theyWon', { name: other.name }) : t('duels.draw')}
+            </Text>
+          </View>
+        ) : null}
+
         {info && (me || other) ? (
           <View style={[styles.scores, { backgroundColor: colors.surface }]}>
             {[
@@ -130,6 +149,41 @@ export default function DuelScreen() {
                 {t('duels.vs')}
               </Text>
             </View>
+          </View>
+        ) : null}
+
+        {me && other ? (
+          <View style={[styles.breakdown, { backgroundColor: colors.surface }]}>
+            <View style={styles.versus}>
+              <Text variant="micro" tone="muted" style={styles.flex}>
+                {t('duels.byGame')}
+              </Text>
+              <Text variant="micro" tone="muted" style={styles.pct}>
+                {t('duels.you')}
+              </Text>
+              <Text variant="micro" tone="muted" numberOfLines={1} style={styles.pct}>
+                {other.name}
+              </Text>
+            </View>
+            {plan.games.map((g, i) => {
+              const def = getGame(g);
+              const mine = Math.round((me.accuracy[i] ?? 0) * 100);
+              const theirs = Math.round((other.accuracy[i] ?? 0) * 100);
+              return (
+                <View key={`${g}-${i}`} style={styles.versus} accessible accessibilityLabel={`${def.name}: ${t('duels.you')} ${mine}%, ${other.name} ${theirs}%`}>
+                  <View style={[styles.pip, { backgroundColor: domain[def.domain] }]} />
+                  <Text variant="subheading" display weight="semibold" numberOfLines={1} style={styles.flex}>
+                    {def.name}
+                  </Text>
+                  <Text variant="subheading" display tabular style={[styles.pct, { color: mine > theirs ? colors.success : colors.textMuted }]}>
+                    {mine}%
+                  </Text>
+                  <Text variant="subheading" display tabular style={[styles.pct, { color: theirs > mine ? colors.text : colors.textMuted }]}>
+                    {theirs}%
+                  </Text>
+                </View>
+              );
+            })}
           </View>
         ) : null}
 
@@ -163,4 +217,10 @@ const styles = StyleSheet.create({
   scoreRight: { alignItems: 'flex-end' },
   vs: { position: 'absolute', left: '50%', marginLeft: -26, width: 52, height: 40, borderRadius: radii.xs, alignItems: 'center', justifyContent: 'center', transform: [{ skewX: `${SLANT_DEG}deg` }] },
   unskew: { transform: [{ skewX: `${-SLANT_DEG}deg` }] },
+  stamp: { alignSelf: 'flex-start', paddingHorizontal: spacing.lg, paddingVertical: spacing.xs, borderRadius: radii.xs, transform: [{ skewX: `${SLANT_DEG}deg` }] },
+  breakdown: { borderRadius: radii.md, padding: spacing.lg, gap: spacing.md },
+  versus: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  pip: { width: 12, height: 8, borderRadius: 1, transform: [{ skewX: `${SLANT_DEG}deg` }] },
+  flex: { flex: 1 },
+  pct: { minWidth: 52, textAlign: 'right' },
 });
