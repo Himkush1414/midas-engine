@@ -8,12 +8,8 @@ import { radii, spacing, useTheme } from '@/theme';
 import { Button } from './Button';
 import { Text } from './Text';
 
-const NAME_WIDTHS: DimensionValue[] = ['46%', '38%', '52%', '34%', '42%'];
-
-/** Placeholder rows shaped like the list that is loading (rank, name, points), breathing slowly. */
-export function SkeletonRows({ rows = 5, testID }: { rows?: number; testID?: string }) {
-  const { colors } = useTheme();
-  const t = useT();
+/** Slow opacity breathing shared by every placeholder; still under reduced motion. */
+function useBreathing() {
   const reduce = useReduceMotion();
   const pulse = useSharedValue(1);
   useEffect(() => {
@@ -21,7 +17,16 @@ export function SkeletonRows({ rows = 5, testID }: { rows?: number; testID?: str
     pulse.set(withRepeat(withTiming(0.45, { duration: 800 }), -1, true));
     return () => cancelAnimation(pulse);
   }, [reduce, pulse]);
-  const breathe = useAnimatedStyle(() => ({ opacity: pulse.get() }));
+  return useAnimatedStyle(() => ({ opacity: pulse.get() }));
+}
+
+const NAME_WIDTHS: DimensionValue[] = ['46%', '38%', '52%', '34%', '42%'];
+
+/** Placeholder rows shaped like the list that is loading (rank, name, points), breathing slowly. */
+export function SkeletonRows({ rows = 5, testID }: { rows?: number; testID?: string }) {
+  const { colors } = useTheme();
+  const t = useT();
+  const breathe = useBreathing();
   const bar = (width: DimensionValue, height = 14) => <View style={[styles.bar, { width, height, backgroundColor: colors.surfaceSunken }]} />;
   return (
     <Animated.View style={[styles.rows, breathe]} accessible accessibilityRole="progressbar" accessibilityLabel={t('common.loading')} testID={testID}>
@@ -33,6 +38,20 @@ export function SkeletonRows({ rows = 5, testID }: { rows?: number; testID?: str
           <View style={styles.flex} />
           {bar(52)}
         </View>
+      ))}
+    </Animated.View>
+  );
+}
+
+/** Placeholder plates shaped like a stack of option cards (e.g. paywall plans). */
+export function SkeletonBlocks({ count = 3, height = 72 }: { count?: number; height?: number }) {
+  const { colors } = useTheme();
+  const t = useT();
+  const breathe = useBreathing();
+  return (
+    <Animated.View style={[styles.blocks, breathe]} accessible accessibilityRole="progressbar" accessibilityLabel={t('common.loading')}>
+      {Array.from({ length: count }, (_, i) => (
+        <View key={i} style={[styles.block, { height, backgroundColor: colors.surface }]} />
       ))}
     </Animated.View>
   );
@@ -62,6 +81,8 @@ const styles = StyleSheet.create({
   rows: { gap: spacing.md, paddingVertical: spacing.xs },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, minHeight: 24 },
   bar: { borderRadius: radii.xs },
+  blocks: { gap: spacing.sm },
+  block: { borderRadius: radii.md },
   note: { gap: spacing.md },
   // The icon sits on the first line of the copy (body line height 23), not in the middle of a paragraph.
   noteRow: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm },

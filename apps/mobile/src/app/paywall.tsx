@@ -1,10 +1,10 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { Alert, Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
 import { TierBadge } from '@/components/tier';
-import { Button, Enter, LipPressable, PressableScale, Screen, Text } from '@/components/ui';
+import { Button, Enter, LipPressable, PressableScale, Screen, SkeletonBlocks, StatusNote, Text } from '@/components/ui';
 import { ctaCopy, planDetail, planTitle } from '@/features/paywall/copy';
 import { useLanguage, useT, type TKey } from '@/i18n';
 import { track } from '@/lib/analytics';
@@ -38,8 +38,13 @@ export default function Paywall() {
   const [selected, setSelected] = useState<string | null>(null);
   const [busy, setBusy] = useState<'buy' | 'restore' | null>(null);
 
+  const [attempt, setAttempt] = useState(0);
+
   useEffect(() => {
     track('paywall_viewed', { from: from ?? 'unknown' });
+  }, [from]);
+
+  useEffect(() => {
     purchases
       .getPlans()
       .then((p) => {
@@ -47,7 +52,12 @@ export default function Paywall() {
         setSelected((p.find((x) => x.kind === 'yearly') ?? p[0])?.id ?? null);
       })
       .catch(() => setPlans([]));
-  }, [from]);
+  }, [attempt]);
+
+  const retryPlans = () => {
+    setPlans(null);
+    setAttempt((a) => a + 1);
+  };
 
   const close = () => {
     track('paywall_dismissed', { from: from ?? 'unknown' });
@@ -150,11 +160,9 @@ export default function Paywall() {
 
       <View style={styles.plans} accessibilityRole="radiogroup">
         {plans === null ? (
-          <ActivityIndicator color={colors.primaryText} />
+          <SkeletonBlocks count={3} height={76} />
         ) : plans.length === 0 ? (
-          <Text tone="muted" align="center">
-            {t('paywall.loadFailed')}
-          </Text>
+          <StatusNote message={t('paywall.loadFailed')} onRetry={retryPlans} />
         ) : (
           plans.map((p, i) => {
             const active = p.id === selected;
