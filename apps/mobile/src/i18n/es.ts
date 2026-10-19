@@ -11,6 +11,7 @@ export const es: Translations = {
     share: 'Compartir',
     next: 'Siguiente',
     tryAgain: 'Reintentar',
+    loading: 'Cargando',
     open: 'Abrir',
     copied: 'Copiado',
     offline: 'Sin conexión.',

@@ -3,9 +3,9 @@ import { useLanguage, useT } from '@/i18n';
 import { domainLabel } from '@/i18n/labels';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState, type ReactNode } from 'react';
-import { ActivityIndicator, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
-import { Button, Enter, fitDisplaySize, MAX_CONTENT_WIDTH, RollingNumber, Screen, Text, Ticket } from '@/components/ui';
+import { Button, Enter, fitDisplaySize, MAX_CONTENT_WIDTH, RollingNumber, Screen, SkeletonRows, StatusNote, Text, Ticket } from '@/components/ui';
 import { dailyShareText, untilNextDaily } from './dailyShare';
 import { startDaily } from '@/features/session/start';
 import { syncNow } from '@/features/sync/sync';
@@ -158,14 +158,9 @@ export function DailyScreen({ header, footer, onNamePress = () => router.push('/
               {!backendConfigured ? (
                 <Text tone="muted">{t('daily.unavailable')}</Text>
               ) : loading && !board ? (
-                <ActivityIndicator color={colors.primaryText} />
+                <SkeletonRows rows={5} />
               ) : offline && !board ? (
-                <View style={styles.offline}>
-                  <Icon name="wifiOff" size={20} color={colors.textMuted} />
-                  <Text tone="muted" style={styles.flex}>
-                    {t('daily.offline')}
-                  </Text>
-                </View>
+                <StatusNote message={t('daily.offline')} />
               ) : board ? (
                 <>
                   {!displayName && onNamePress ? (
@@ -240,5 +235,4 @@ const styles = StyleSheet.create({
   boardRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.sm, paddingHorizontal: spacing.sm, borderRadius: radii.sm, overflow: 'hidden' },
   meTab: { position: 'absolute', left: -3, top: 0, bottom: 0, width: 7, transform: [{ skewX: `${SLANT_DEG}deg` }] },
   place: { width: 32 },
-  offline: { flexDirection: 'row', gap: spacing.sm, alignItems: 'center' },
 });
