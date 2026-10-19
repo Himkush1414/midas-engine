@@ -1,5 +1,6 @@
 # Private, local-only files — never commit
 MIDAS_PRIVATE_NOTES.md
+*PRIVATE_NOTES*.md
 .env
 .env.*
 !.env.example
@@ -13,7 +14,20 @@ MIDAS_PRIVATE_NOTES.md
 google-services.json
 GoogleService-Info.plist
 service-account*.json
+*service-account*.json
+*-service-account.json
+pc-api-*.json
+credentials.json
+credentials/
+secrets/
+supabase/.temp/
+supabase/.branches/
 .git-credentials
+
+# Internal strategy, research and session notes (kept locally, not published)
+docs/research/
+docs/DECISION.md
+docs/SESSION_LOG.md
 
 # Dependencies
 node_modules/

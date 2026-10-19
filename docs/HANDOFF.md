@@ -135,4 +135,3 @@ The code is iOS-ready: privacy manifest, no tracking (no ATT prompt needed), uni
 
 - Watch the funnel in Supabase (`events` table): `onboarding_started → placement_completed → paywall_viewed → purchase_completed`.
 - Ship JS-only fixes over the air: `cd apps/mobile && npx eas-cli@latest update --channel production --message "…"`.
-- First experiments worth running: trial length (7 vs 14 days — RevenueCat data favours longer trials), paywall timing after placement, and regional prices.

@@ -1,6 +1,6 @@
 import { FREE_ENTITLEMENT, PRODUCT_IDS, type EntitlementSnapshot, type PlanOffer, type PurchasesProvider } from './types';
 
-/** Reference US prices from docs/DECISION.md; real prices always come from the store. */
+/** Reference US prices (docs/STORE_LISTING.md, subscription products); real prices always come from the store. */
 export const REFERENCE_PLANS: PlanOffer[] = [
   { id: '$rc_annual', kind: 'yearly', productId: PRODUCT_IDS.yearly, priceString: '$39.99', pricePerMonthString: '$3.33', trialDays: 7 },
   { id: '$rc_monthly', kind: 'monthly', productId: PRODUCT_IDS.monthly, priceString: '$7.99', pricePerMonthString: '$7.99', trialDays: null },
