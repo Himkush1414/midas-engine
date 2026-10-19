@@ -440,4 +440,4 @@ Screenshots use sample data (a demo player and sample leaderboard names) inside 
 | `mindtier_pro_monthly` | Subscription | `monthly` — auto-renewing, 1 month | — | $7.99 |
 | `mindtier_pro_lifetime` | One-time product | — | — | $79.99 |
 
-Use Play's price templates to set local prices in every country (Adapty data: localized pricing is the biggest LTV lever). Enable **grace period** (7 days) and **account hold** (30 days) — 31% of Play cancellations are billing failures.
+Use Play's price templates to set local prices in every country. Enable **grace period** (7 days) and **account hold** (30 days) so failed renewals can recover.

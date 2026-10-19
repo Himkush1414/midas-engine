@@ -2,7 +2,7 @@
 
 **What tier is your mind?** Mindtier gives every player a competitive rating for five skills (Memory, Focus, Speed, Logic, Math). Five placement games place you on a ladder from Iron to Grandmaster; every ranked session moves your Glicko-2 rating. Add a worldwide Daily Challenge, friend duels on identical puzzles and an honest, ad-free freemium model.
 
-- Product rationale: [`docs/DECISION.md`](docs/DECISION.md) · research: [`docs/research/`](docs/research/) · roadmap: [`docs/ROADMAP.md`](docs/ROADMAP.md)
+- Roadmap: [`docs/ROADMAP.md`](docs/ROADMAP.md)
 - Store listing: [`docs/STORE_LISTING.md`](docs/STORE_LISTING.md) · Play compliance: [`docs/PLAY_COMPLIANCE.md`](docs/PLAY_COMPLIANCE.md)
 - What's left for the owner: [`docs/HANDOFF.md`](docs/HANDOFF.md)
 
