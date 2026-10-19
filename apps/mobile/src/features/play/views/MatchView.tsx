@@ -61,7 +61,8 @@ export function MatchView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
 
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.xl, paddingTop: spacing.xl },
-  pair: { flexDirection: 'row', justifyContent: 'center', gap: spacing.lg },
+  // Auto margins centre the board in the space between the prompt and the answer keys.
+  pair: { flexDirection: 'row', justifyContent: 'center', gap: spacing.lg, marginVertical: 'auto' },
   card: { padding: spacing.md, borderRadius: radii.md },
-  actions: { marginTop: 'auto', marginBottom: spacing.lg },
+  actions: { marginBottom: spacing.lg },
 });

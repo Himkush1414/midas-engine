@@ -58,7 +58,7 @@ export function PathTraceView({ trial, onInputOpen, onAnswer, locked, demo }: Ga
       <Prompt tone={trial.reverse && phase === 'repeat' ? 'warning' : 'default'} accessibilityLiveRegion="polite">
         {instruction}
       </Prompt>
-      <View style={{ width: boardSize, gap }}>
+      <View style={[styles.board, { width: boardSize, gap }]}>
         {Array.from({ length: trial.size }, (_, r) => (
           <View key={r} style={[styles.row, { gap }]}>
             {Array.from({ length: trial.size }, (_, c) => {
@@ -104,6 +104,7 @@ export function PathTraceView({ trial, onInputOpen, onAnswer, locked, demo }: Ga
 }
 
 const styles = StyleSheet.create({
+  board: { marginVertical: 'auto' },
   root: { flex: 1, alignItems: 'center', gap: spacing.xl, paddingTop: spacing.xl },
   row: { flexDirection: 'row' },
   tile: { borderRadius: radii.lg, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },

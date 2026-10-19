@@ -63,7 +63,8 @@ export function FlankView({ trial, onInputOpen, onAnswer, locked, demo }: GameVi
 
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.xl, paddingTop: spacing.xl },
-  row: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 2, minHeight: 160 },
+  // Auto margins centre the arrows in the space between the prompt and the answer keys.
+  row: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 2, minHeight: 160, marginVertical: 'auto' },
   halo: { borderWidth: 2.5, borderRadius: 6, padding: 2 },
-  actions: { marginTop: 'auto', marginBottom: spacing.lg },
+  actions: { marginBottom: spacing.lg },
 });

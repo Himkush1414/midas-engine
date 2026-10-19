@@ -58,7 +58,8 @@ export function PatternView({ trial, onInputOpen, onAnswer, locked, demo }: Game
 
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.xl, paddingTop: spacing.xl },
-  sequence: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: spacing.sm },
+  // Auto margins centre the sequence in the space between the prompt and the answer keys.
+  sequence: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: spacing.sm, marginVertical: 'auto' },
   term: { minWidth: 52, height: 64, paddingHorizontal: spacing.sm, borderRadius: radii.sm, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
-  actions: { marginTop: 'auto', marginBottom: spacing.lg },
+  actions: { marginBottom: spacing.lg },
 });

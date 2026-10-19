@@ -47,6 +47,6 @@ export function MisfitView({ trial, onInputOpen, onAnswer, locked, demo }: GameV
 
 const styles = StyleSheet.create({
   root: { flex: 1, gap: spacing.xl, paddingTop: spacing.xl },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md, justifyContent: 'center' },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md, justifyContent: 'center', marginVertical: 'auto' },
   cell: { width: '47%' },
 });

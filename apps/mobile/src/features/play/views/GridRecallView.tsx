@@ -79,7 +79,7 @@ export function GridRecallView({ trial, onInputOpen, onAnswer, locked, demo }: G
 
 const styles = StyleSheet.create({
   root: { flex: 1, alignItems: 'center', gap: spacing.xl, paddingTop: spacing.xl },
-  board: { justifyContent: 'center' },
+  board: { justifyContent: 'center', marginVertical: 'auto' },
   row: { flexDirection: 'row' },
   cell: { borderRadius: radii.md, borderWidth: 2 },
 });
