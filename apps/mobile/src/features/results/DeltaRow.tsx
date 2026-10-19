@@ -35,12 +35,18 @@ export function DeltaRow({
       >
         <View style={[styles.tab, { backgroundColor: domainColor[update.domain] }]} />
         <View style={styles.text}>
-          <Text variant="heading" numberOfLines={1}>
+          {/* Two-word names wrap on narrow phones rather than truncate ("GRID REC…"). */}
+          <Text variant="heading" numberOfLines={2}>
             {getGame(update.gameId).name}
           </Text>
-          <Text variant="micro" tone="muted" tabular numberOfLines={1}>
-            {domainLabel(t, update.domain)} · {Math.round(update.before.rating)} → {Math.round(update.after.rating)}
-          </Text>
+          <View style={styles.meta}>
+            <Text variant="micro" tone="muted" style={styles.metaPart}>
+              {domainLabel(t, update.domain)} ·
+            </Text>
+            <Text variant="micro" tone="muted" tabular style={styles.metaPart}>
+              {Math.round(update.before.rating)} → {Math.round(update.after.rating)}
+            </Text>
+          </View>
         </View>
         <View style={styles.delta}>
           {!flat ? <Icon name={up ? 'arrowUp' : 'arrowDown'} size={18} color={tone} strokeWidth={2.6} /> : null}
@@ -61,5 +67,7 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, borderRadius: radii.md, padding: spacing.md, paddingLeft: spacing.lg, overflow: 'hidden' },
   tab: { position: 'absolute', left: -4, top: 0, bottom: 0, width: 10, transform: [{ skewX: `${SLANT_DEG}deg` }] },
   text: { flex: 1, gap: 2 },
+  meta: { flexDirection: 'row', flexWrap: 'wrap', columnGap: spacing.xs },
+  metaPart: { flexShrink: 0 },
   delta: { flexDirection: 'row', alignItems: 'center', gap: 2, minWidth: 64, justifyContent: 'flex-end' },
 });
