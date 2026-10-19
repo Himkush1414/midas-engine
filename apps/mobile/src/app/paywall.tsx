@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react';
 import { Alert, Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
 import { TierBadge } from '@/components/tier';
-import { Button, Enter, LipPressable, PressableScale, Screen, SkeletonBlocks, StatusNote, Text, TextLink } from '@/components/ui';
+import { Button, Enter, fitDisplaySize, LipPressable, MAX_CONTENT_WIDTH, PressableScale, Screen, SkeletonBlocks, StatusNote, Text, TextLink } from '@/components/ui';
 import { ctaCopy, planDetail, planTitle } from '@/features/paywall/copy';
 import { useLanguage, useT, type TKey } from '@/i18n';
 import { track } from '@/lib/analytics';
 import { links } from '@/lib/links';
 import { scheduleTrialReminder } from '@/lib/notifications';
 import { applyEntitlement, purchases, type PlanOffer } from '@/lib/purchases';
-import { lips, radii, SLANT_DEG, spacing, tierColors, useTheme } from '@/theme';
+import { lips, radii, SLANT_DEG, spacing, tierColors, type, useTheme } from '@/theme';
 
 const BENEFITS: TKey[] = [
   'paywall.benefitRanked',
@@ -28,7 +28,7 @@ export default function Paywall() {
   const { colors } = useTheme();
   const t = useT();
   const language = useLanguage();
-  const { height } = useWindowDimensions();
+  const { height, width } = useWindowDimensions();
   // Short phones keep the plans above the fold: a smaller title and badge fan.
   const compact = height < 860;
   const titleSize = Math.round(Math.min(72, Math.max(48, height * (compact ? 0.07 : 0.09))));
@@ -178,7 +178,9 @@ export default function Paywall() {
                     {active ? <Icon name="check" size={14} color={colors.background} strokeWidth={3} /> : null}
                   </View>
                   <View style={styles.flex}>
-                    <Text variant="heading">{planTitle(t, p.kind)}</Text>
+                    <Text variant="heading" numberOfLines={1} style={{ fontSize: planTitleSize(planTitle(t, p.kind), p.trialDays ? t('paywall.daysFree', { days: p.trialDays }) : null, width) }}>
+                      {planTitle(t, p.kind)}
+                    </Text>
                     <Text variant="caption" tone="muted" tabular>
                       {planDetail(t, p)}
                     </Text>
@@ -218,6 +220,17 @@ export default function Paywall() {
       ) : null}
     </Screen>
   );
+}
+
+/**
+ * Plan names (ANNUALE, JÄHRLICH) share their row with the radio and the trial tag; on a 360 pt phone a long name
+ * would wrap mid-word, so it sizes to the room left: column − plate padding and border − radio − gaps − the tag,
+ * whose width follows from JetBrains Mono metrics (0.6 em + 1.3 pt tracking at 11 pt, plus its padding).
+ */
+function planTitleSize(title: string, tag: string | null, windowWidth: number) {
+  const tagWidth = tag ? [...tag].length * (11 * 0.6 + 1.3) + spacing.sm * 2 + 8 : 0;
+  const room = Math.min(windowWidth, MAX_CONTENT_WIDTH) - spacing.gutter * 2 - spacing.lg * 2 - 4 - 24 - spacing.md * (tag ? 2 : 1) - tagWidth;
+  return fitDisplaySize(title, room, type.heading[0], 18);
 }
 
 const styles = StyleSheet.create({
