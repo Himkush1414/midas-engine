@@ -2,7 +2,7 @@ import { tierInfo } from '@mindtier/core';
 import { useEffect } from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
 import { TierBadge } from '@/components/tier';
-import { Button, Card, Text } from '@/components/ui';
+import { Button, Card, Text, TextLink } from '@/components/ui';
 import { DailyScreen } from '@/features/daily/DailyScreen';
 import { useT } from '@/i18n';
 import { track } from '@/lib/analytics';
@@ -55,15 +55,11 @@ export default function Today() {
         </Text>
       </Card>
       <View style={styles.legal}>
-        <Text variant="caption" tone="faint" onPress={() => void Linking.openURL(links.privacy)} accessibilityRole="link">
-          {t('web.privacy')}
-        </Text>
+        <TextLink label={t('web.privacy')} tone="faint" onPress={() => void Linking.openURL(links.privacy)} />
         <Text variant="caption" tone="faint">
           ·
         </Text>
-        <Text variant="caption" tone="faint" onPress={() => void Linking.openURL(links.terms)} accessibilityRole="link">
-          {t('web.terms')}
-        </Text>
+        <TextLink label={t('web.terms')} tone="faint" onPress={() => void Linking.openURL(links.terms)} />
       </View>
     </>
   );

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Alert, Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
 import { TierBadge } from '@/components/tier';
-import { Button, Enter, LipPressable, PressableScale, Screen, SkeletonBlocks, StatusNote, Text } from '@/components/ui';
+import { Button, Enter, LipPressable, PressableScale, Screen, SkeletonBlocks, StatusNote, Text, TextLink } from '@/components/ui';
 import { ctaCopy, planDetail, planTitle } from '@/features/paywall/copy';
 import { useLanguage, useT, type TKey } from '@/i18n';
 import { track } from '@/lib/analytics';
@@ -116,17 +116,11 @@ export default function Paywall() {
             </Text>
           ) : null}
           <View style={styles.links}>
-            <Text variant="caption" tone="primary" onPress={restore} accessibilityRole="button">
-              {busy === 'restore' ? t('paywall.restoring') : t('paywall.restore')}
-            </Text>
+            <TextLink label={busy === 'restore' ? t('paywall.restoring') : t('paywall.restore')} onPress={() => void restore()} role="button" />
             <Text variant="caption" tone="faint">·</Text>
-            <Text variant="caption" tone="primary" onPress={() => WebBrowser.openBrowserAsync(links.terms)} accessibilityRole="link">
-              {t('paywall.terms')}
-            </Text>
+            <TextLink label={t('paywall.terms')} onPress={() => void WebBrowser.openBrowserAsync(links.terms)} />
             <Text variant="caption" tone="faint">·</Text>
-            <Text variant="caption" tone="primary" onPress={() => WebBrowser.openBrowserAsync(links.privacy)} accessibilityRole="link">
-              {t('paywall.privacy')}
-            </Text>
+            <TextLink label={t('paywall.privacy')} onPress={() => void WebBrowser.openBrowserAsync(links.privacy)} />
           </View>
         </View>
       }
@@ -245,5 +239,5 @@ const styles = StyleSheet.create({
   unskew: { transform: [{ skewX: `${-SLANT_DEG}deg` }] },
   free: { marginTop: spacing.lg },
   footer: { gap: spacing.sm },
-  links: { flexDirection: 'row', justifyContent: 'center', gap: spacing.sm },
+  links: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: spacing.sm },
 });

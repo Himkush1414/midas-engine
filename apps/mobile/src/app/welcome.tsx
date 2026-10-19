@@ -68,11 +68,11 @@ export default function Welcome() {
           <Button label={t('welcome.cta')} size="lg" iconRight="arrowRight" onPress={begin} fullWidth testID="welcome-start" />
           <Text variant="caption" tone="faint" align="center">
             {t('welcome.disclaimer')}{' '}
-            <Text variant="caption" tone="primary" onPress={() => WebBrowser.openBrowserAsync(links.terms)}>
+            <Text variant="caption" tone="primary" accessibilityRole="link" onPress={() => WebBrowser.openBrowserAsync(links.terms)}>
               {t('welcome.terms')}
             </Text>{' '}
             {t('welcome.and')}{' '}
-            <Text variant="caption" tone="primary" onPress={() => WebBrowser.openBrowserAsync(links.privacy)}>
+            <Text variant="caption" tone="primary" accessibilityRole="link" onPress={() => WebBrowser.openBrowserAsync(links.privacy)}>
               {t('welcome.privacy')}
             </Text>
             .
