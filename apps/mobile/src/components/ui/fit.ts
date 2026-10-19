@@ -10,3 +10,13 @@ export function fitDisplaySize(text: string, width: number, max: number, min = 2
   const chars = Math.max(1, [...text].length);
   return Math.max(min, Math.min(max, Math.floor(width / (chars * em))));
 }
+
+/**
+ * Largest micro-label size (8–11 pt) at which the longest word of `text` fits `width` on one line, so labels wrap
+ * between words but never inside one (TAGESRÄTSEL, SITZUNGEN). JetBrains Mono glyphs are 0.6 em wide plus 1.3 pt
+ * tracking; 4 pt of slack covers web sub-pixel rounding.
+ */
+export function fitMicroSize(text: string, width: number, max = 11, min = 8): number {
+  const longest = Math.max(1, ...text.split(/\s+/).map((w) => [...w].length));
+  return Math.max(min, Math.min(max, Math.floor((((width - 4) / longest - 1.3) / 0.6) * 2) / 2));
+}

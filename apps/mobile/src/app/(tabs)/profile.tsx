@@ -3,12 +3,12 @@ import { useT } from '@/i18n';
 import { domainLabel, tierLabel } from '@/i18n/labels';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Alert, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, StyleSheet, TextInput, View, useWindowDimensions } from 'react-native';
 import { Icon } from '@/components/icons/Icon';
 import { RatingSparkline } from '@/components/RatingSparkline';
 import { SkillRadar } from '@/components/SkillRadar';
 import { TierBadge } from '@/components/tier';
-import { Button, Enter, PressableScale, Screen, Text, Ticket } from '@/components/ui';
+import { Button, Enter, fitMicroSize, MAX_CONTENT_WIDTH, PressableScale, Screen, Text, Ticket } from '@/components/ui';
 import { domainSeries, windowDelta } from '@/features/profile/history';
 import { SeasonCard } from '@/features/seasons/SeasonCard';
 import { WeekCard } from '@/features/weekly/WeekCard';
@@ -85,12 +85,15 @@ export default function Profile() {
   const series = DOMAINS.map((d) => ({ domain: d, ...domainSeries(history, d, { isPro, startRating: ratings[d].rating }) }));
   const truncated = series.some((s) => s.truncated);
 
+  const { width } = useWindowDimensions();
   const stats = [
     { label: t('profile.gamesPlayed'), value: gamesPlayed },
     { label: t('profile.streak'), value: streak.current },
     { label: t('profile.bestStreak'), value: streak.best },
     { label: t('profile.shields'), value: streak.shields },
   ];
+  // One column per stat inside the player plate: each label's longest word must fit its column.
+  const statColumn = (Math.min(width, MAX_CONTENT_WIDTH) - spacing.gutter * 2 - spacing.lg * 2 - spacing.sm * (stats.length - 1)) / stats.length;
 
   return (
     <Screen scroll>
@@ -124,7 +127,7 @@ export default function Profile() {
                   <Text variant="heading" tabular style={i === 1 && streak.current > 0 ? { color: colors.danger } : undefined}>
                     {st.value}
                   </Text>
-                  <Text variant="micro" tone="muted" numberOfLines={2}>
+                  <Text variant="micro" tone="muted" numberOfLines={2} style={{ fontSize: fitMicroSize(st.label, statColumn) }}>
                     {st.label}
                   </Text>
                 </View>

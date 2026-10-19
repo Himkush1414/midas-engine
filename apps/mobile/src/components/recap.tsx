@@ -1,21 +1,29 @@
 import type { Domain } from '@mindtier/core';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useT } from '@/i18n';
 import { domainLabel } from '@/i18n/labels';
 import { radii, SLANT_DEG, spacing, useTheme } from '@/theme';
-import { Enter, Text } from './ui';
+import { Enter, fitMicroSize, MAX_CONTENT_WIDTH, Text } from './ui';
 
 /** Several numbers on one plate, side by side — the scoreboard alternative to a grid of stat tiles. */
 export function StatStrip({ items, testID }: { items: { label: string; value: string | number }[]; testID?: string }) {
   const { colors } = useTheme();
+  const { width } = useWindowDimensions();
+  // One column per stat inside the plate's padding, unless a label's longest word can't fit its column even at the
+  // smallest micro size (TAGESRÄTSEL in four columns on a 360 pt phone): then the strip becomes a 2 × 2 grid.
+  const inner = Math.min(width, MAX_CONTENT_WIDTH) - spacing.gutter * 2 - spacing.lg * 2;
+  const across = (n: number) => (inner - spacing.md * (n - 1)) / n;
+  const fits = (n: number) => items.every((s) => fitMicroSize(s.label, across(n), 11, 0) >= 8);
+  const perRow = items.length > 2 && !fits(items.length) ? 2 : items.length;
+  const column = across(perRow);
   return (
     <View style={[styles.strip, { backgroundColor: colors.surface }]} testID={testID}>
       {items.map((s) => (
-        <View key={s.label} style={styles.stat} accessible accessibilityLabel={`${s.label}: ${s.value}`}>
+        <View key={s.label} style={[styles.stat, perRow < items.length && styles.half]} accessible accessibilityLabel={`${s.label}: ${s.value}`}>
           <Text variant="title" tabular>
             {s.value}
           </Text>
-          <Text variant="micro" tone="muted" numberOfLines={3}>
+          <Text variant="micro" tone="muted" numberOfLines={3} style={{ fontSize: fitMicroSize(s.label, column) }}>
             {s.label}
           </Text>
         </View>
@@ -73,7 +81,8 @@ export function GainList({ gains, title }: { gains: { domain: Domain; gain: numb
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  strip: { flexDirection: 'row', borderRadius: radii.md, padding: spacing.lg, gap: spacing.md },
+  strip: { flexDirection: 'row', flexWrap: 'wrap', borderRadius: radii.md, padding: spacing.lg, gap: spacing.md },
+  half: { flexBasis: '40%' },
   stat: { flex: 1, gap: 2 },
   best: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, borderRadius: radii.md, padding: spacing.lg, paddingLeft: spacing.xl, overflow: 'hidden' },
   bar: { position: 'absolute', left: -4, top: 0, bottom: 0, width: 12, transform: [{ skewX: `${SLANT_DEG}deg` }] },
