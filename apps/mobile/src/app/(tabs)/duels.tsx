@@ -139,7 +139,8 @@ const styles = StyleSheet.create({
   challengeText: { gap: spacing.xs },
   plate: { borderRadius: radii.md, padding: spacing.lg, gap: spacing.sm },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  input: { flex: 1, minHeight: 52, borderWidth: 2, borderRadius: radii.sm, paddingHorizontal: spacing.md, fontSize: 22, letterSpacing: 3 },
+  // minWidth 0: a web <input> keeps an intrinsic width of ~20 characters and would push the Open button off-screen.
+  input: { flex: 1, minWidth: 0, minHeight: 52, borderWidth: 2, borderRadius: radii.sm, paddingHorizontal: spacing.md, fontSize: 22, letterSpacing: 3 },
   list: { gap: spacing.sm },
   duel: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.lg, overflow: 'hidden' },
   chip: { width: 8, alignSelf: 'stretch', borderRadius: 1, transform: [{ skewX: `${SLANT_DEG}deg` }] },
